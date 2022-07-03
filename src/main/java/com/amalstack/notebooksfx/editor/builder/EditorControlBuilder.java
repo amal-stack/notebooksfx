@@ -13,6 +13,7 @@ public abstract class EditorControlBuilder<C, B extends EditorControlBuilder<C, 
     protected FontAwesome.Glyph glyph;
 
     protected abstract B self();
+
     public B forEditor(StyleClassedTextArea textArea) {
         this.textArea = textArea;
         return self();
@@ -43,7 +44,7 @@ public abstract class EditorControlBuilder<C, B extends EditorControlBuilder<C, 
     protected void handleEditorCommand(ActionEvent event) {
         var selection = textArea.getSelection();
         if (selection.getLength() == 0) {
-            textArea.appendText(command.execute("").toString());
+            textArea.appendText(command.execute("Text Here").toString());
             return;
         }
         textArea.replaceText(selection, command.execute(textArea.getText(selection)).toString());

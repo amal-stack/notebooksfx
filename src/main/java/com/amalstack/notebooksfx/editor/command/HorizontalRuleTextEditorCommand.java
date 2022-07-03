@@ -8,6 +8,7 @@ public class HorizontalRuleTextEditorCommand implements TextEditorCommand {
     public void setLineCharLength(int lineCharLength) {
         this.lineCharLength = lineCharLength;
     }
+
     private int lineCharLength;
 
     public char getLineChar() {
