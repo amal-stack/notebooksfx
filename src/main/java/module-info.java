@@ -26,4 +26,5 @@ module com.amalstack.notebooksfx {
     exports com.amalstack.notebooksfx;
     opens com.amalstack.notebooksfx.editor.command to javafx.fxml;
     opens com.amalstack.notebooksfx.editor.builder to javafx.fxml;
+    opens com.amalstack.notebooksfx.editor to javafx.fxml;
 }

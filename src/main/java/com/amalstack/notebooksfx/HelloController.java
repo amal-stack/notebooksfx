@@ -12,3 +12,7 @@ public class HelloController {
         welcomeText.setText("Welcome to JavaFX Application!");
     }
 }
+
+class Constants {
+
+}
