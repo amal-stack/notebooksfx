@@ -145,12 +145,12 @@ public class DefaultEditorControlProvider implements EditorControlProvider {
                 .forEditor(editorTextArea)
                 .withId(headingSplitMenuButtonId)
                 .withGlyph(FontAwesome.Glyph.HEADER)
-                .addMenuItem(getHeadingBuilderForLevel(1, headingSplitMenuButtonId))
-                .addMenuItem(getHeadingBuilderForLevel(2, headingSplitMenuButtonId))
-                .addMenuItem(getHeadingBuilderForLevel(3, headingSplitMenuButtonId))
-                .addMenuItem(getHeadingBuilderForLevel(4, headingSplitMenuButtonId))
-                .addMenuItem(getHeadingBuilderForLevel(5, headingSplitMenuButtonId))
-                .addMenuItem(getHeadingBuilderForLevel(6, headingSplitMenuButtonId))
+                .addMenuItem(getHeadingForLevel(1, headingSplitMenuButtonId))
+                .addMenuItem(getHeadingForLevel(2, headingSplitMenuButtonId))
+                .addMenuItem(getHeadingForLevel(3, headingSplitMenuButtonId))
+                .addMenuItem(getHeadingForLevel(4, headingSplitMenuButtonId))
+                .addMenuItem(getHeadingForLevel(5, headingSplitMenuButtonId))
+                .addMenuItem(getHeadingForLevel(6, headingSplitMenuButtonId))
                 .build();
 
         var codeSplitMenuButtonId = IdUtil.combine(rootId, "splitMenuBtnCode");
@@ -190,7 +190,7 @@ public class DefaultEditorControlProvider implements EditorControlProvider {
         );
     }
 
-    private Function<MenuItemBuilder, MenuItem> getHeadingBuilderForLevel(int level, String containerId) {
+    private Function<MenuItemBuilder, MenuItem> getHeadingForLevel(int level, String containerId) {
         return item -> item.withId(IdUtil.combine(containerId, "H" + level))
                 .withText("Heading " + level)
                 .performs(new HeadingTextEditorCommand(level))
