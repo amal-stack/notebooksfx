@@ -1,6 +1,4 @@
-package com.amalstack.notebooksfx.controller;
-
-import com.amalstack.notebooksfx.editor.command.TextEditorCommand;
+package com.amalstack.notebooksfx.editor.command;
 
 public abstract class SuffixTextEditorCommand implements TextEditorCommand {
     @Override
