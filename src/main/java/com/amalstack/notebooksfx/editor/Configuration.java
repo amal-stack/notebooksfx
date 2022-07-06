@@ -10,13 +10,17 @@ import org.fxmisc.richtext.StyleClassedTextArea;
 public class Configuration {
 
     public static class DefaultEditorContextFactory implements EditorContextFactory {
+        public static final String BOOTSTRAP_STYLESHEET = "https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css";
+        public static final String BOOTSTRAP_SCRIPT = "https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js";
+
         @Override
         public EditorContext create(StyleClassedTextArea editorTextArea) {
             var htmlWrapper = new SimpleHtmlTemplateWrapper();
-            htmlWrapper.addExternalStylesheet("https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css");
-            htmlWrapper.addExternalScript("https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js");
+            htmlWrapper.addExternalStylesheet(BOOTSTRAP_STYLESHEET);
+            htmlWrapper.addExternalScript(BOOTSTRAP_SCRIPT);
             htmlWrapper.addStyle(AdmonitionExtension.getDefaultCSS());
             htmlWrapper.addScript(AdmonitionExtension.getDefaultScript());
+
             return EditorContext.builder()
                     .addExtensions(
                             TablesExtension.create(),

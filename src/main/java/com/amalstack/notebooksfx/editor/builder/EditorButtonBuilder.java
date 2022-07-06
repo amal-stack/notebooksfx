@@ -25,6 +25,7 @@ public class EditorButtonBuilder extends EditorControlBuilder<Button, EditorButt
             button.setGraphic(new Glyph("FontAwesome", glyph));
         }
         button.setTooltip(new Tooltip(command.getClass().getSimpleName().replace("TextEditorCommand", "")));
+        applyConfiguration(button);
         return button;
     }
 }

@@ -1,11 +1,18 @@
-package com.amalstack.notebooksfx.data;
+package com.amalstack.notebooksfx.data.repository;
 
 
 import com.amalstack.notebooksfx.data.model.Notebook;
 
+import java.util.Collection;
+
 public class NotebookRepository implements Repository<Notebook, Long> {
+
     @Override
-    public Notebook findById(Long id) {
+    public Notebook find(Long id) {
+        return null;
+    }
+
+    public Collection<Notebook> findByUserId(Long userId) {
         return null;
     }
 

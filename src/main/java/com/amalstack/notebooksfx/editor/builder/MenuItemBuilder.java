@@ -19,6 +19,7 @@ public class MenuItemBuilder extends EditorControlBuilder<MenuItem, MenuItemBuil
         if (glyph != null) {
             menuItem.setGraphic(new Glyph("FontAwesome", glyph));
         }
+        applyConfiguration(menuItem);
         return menuItem;
     }
 }

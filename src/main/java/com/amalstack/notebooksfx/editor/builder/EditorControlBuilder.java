@@ -1,16 +1,20 @@
 package com.amalstack.notebooksfx.editor.builder;
 
+import com.amalstack.notebooksfx.builder.ControlBuilder;
 import com.amalstack.notebooksfx.editor.command.TextEditorCommand;
 import javafx.event.ActionEvent;
 import org.controlsfx.glyphfont.FontAwesome;
 import org.fxmisc.richtext.StyleClassedTextArea;
 
-public abstract class EditorControlBuilder<C, B extends EditorControlBuilder<C, B>> {
+import java.util.function.Consumer;
+
+public abstract class EditorControlBuilder<C, B extends EditorControlBuilder<C, B>> implements ControlBuilder<C, B> {
     protected StyleClassedTextArea textArea;
     protected String id;
     protected String text = "";
     protected TextEditorCommand command;
     protected FontAwesome.Glyph glyph;
+    protected Consumer<C> config;
 
     protected abstract B self();
 
@@ -39,9 +43,14 @@ public abstract class EditorControlBuilder<C, B extends EditorControlBuilder<C, 
         return self();
     }
 
+    public B configure(Consumer<C> config) {
+        this.config = config;
+        return self();
+    }
+
     public abstract C build();
 
-    protected void handleEditorCommand(ActionEvent event) {
+    protected void handleEditorCommand(ActionEvent ignoredEvent) {
         var selection = textArea.getSelection();
         if (selection.getLength() == 0) {
             textArea.appendText(command.execute("Text Here").toString());
@@ -59,6 +68,12 @@ public abstract class EditorControlBuilder<C, B extends EditorControlBuilder<C, 
         }
         if (command == null) {
             throw new IllegalStateException("The action performed for the editor control is not set.");
+        }
+    }
+
+    protected void applyConfiguration(C control) {
+        if (config != null) {
+            config.accept(control);
         }
     }
 }
