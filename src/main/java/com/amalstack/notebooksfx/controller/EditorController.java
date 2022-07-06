@@ -6,27 +6,34 @@ import com.amalstack.notebooksfx.editor.command.CommandCode;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.web.WebView;
+import org.controlsfx.control.MasterDetailPane;
 import org.fxmisc.flowless.VirtualizedScrollPane;
 import org.fxmisc.richtext.StyleClassedTextArea;
 
 public class EditorController {
     private final EditorContextFactory factory;
 
+    public EditorController(EditorContextFactory factory) {
+        this.factory = factory;
+    }
+
     private EditorContext context;
     @FXML
-    public VirtualizedScrollPane<StyleClassedTextArea> editorScrollPane;
-
+    private VirtualizedScrollPane<StyleClassedTextArea> editorScrollPane;
+    @FXML
+    private MasterDetailPane masterDetailPane;
+    @FXML
+    private Button viewSectionsBtn;
+    @FXML
+    private Button newSectionBtn;
     @FXML
     private ToolBar mainToolbar;
-
     @FXML
     private TreeView<String> sectionTree;
-
     @FXML
     private StyleClassedTextArea editorTextArea;
-
     @FXML
-    private Button btnSave;
+    private Button saveBtn;
     @FXML
     private WebView outputWebView;
 
@@ -58,28 +65,18 @@ public class EditorController {
         items.add(context.getControl(CommandCode.URL));
         items.add(context.getControl(CommandCode.IMAGE));
         items.add(context.getControl(CommandCode.TABLE));
-
-    }
-
-    public EditorController(EditorContextFactory factory) {
-        this.factory = factory;
     }
 
     public void initialize() {
         context = factory.create(editorTextArea);
-
         addToolbarControls();
-//        mainToolbar
-//                .getItems()
-//                .addAll(context.getEditorControlProvider().getAllControls());
-
         var root = new TreeItem<>("Sections");
         sectionTree.setRoot(root);
-        btnSave.setOnAction(event -> {
+        saveBtn.setOnAction(event -> {
             String html = context.toHtml();
             System.out.println(html);
             outputWebView.getEngine().loadContent(html, "text/html");
         });
+        viewSectionsBtn.setOnAction(event -> masterDetailPane.setShowDetailNode(!masterDetailPane.isShowDetailNode()));
     }
 }
-
