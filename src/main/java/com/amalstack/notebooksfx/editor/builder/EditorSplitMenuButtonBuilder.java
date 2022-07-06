@@ -35,6 +35,7 @@ public class EditorSplitMenuButtonBuilder extends EditorControlBuilder<SplitMenu
             splitMenuButton.setGraphic(new Glyph("FontAwesome", glyph));
         }
         splitMenuButton.getItems().addAll(menuItems);
+        applyConfiguration(splitMenuButton);
         return splitMenuButton;
     }
 
