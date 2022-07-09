@@ -14,5 +14,6 @@ public enum CommandCode {
     UNORDERED_LIST,
     URL,
     IMAGE,
-    TABLE
+    TABLE,
+    WRAP
 }
