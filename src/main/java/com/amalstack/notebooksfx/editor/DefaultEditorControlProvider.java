@@ -8,6 +8,7 @@ import com.amalstack.notebooksfx.editor.command.*;
 import javafx.scene.Node;
 import javafx.scene.control.MenuItem;
 import javafx.scene.input.KeyCodeCombination;
+import org.controlsfx.control.ToggleSwitch;
 import org.controlsfx.glyphfont.FontAwesome;
 import org.fxmisc.richtext.StyleClassedTextArea;
 
@@ -73,7 +74,7 @@ public class DefaultEditorControlProvider implements EditorControlProvider {
                 .forEditor(editorTextArea)
                 .withId(IdUtil.combine(rootId, "btnUnderline"))
                 .withGlyph(FontAwesome.Glyph.UNDERLINE)
-                .performs(new EmphasizeTextEditorCommand())
+                .performs(new UnderlineTextEditorCommand())
                 .build();
 
         var superscriptButton = EditorButtonBuilder.create()
@@ -172,6 +173,10 @@ public class DefaultEditorControlProvider implements EditorControlProvider {
                 )
                 .build();
 
+        var wrapToggleSwitch = new ToggleSwitch("Wrap");
+        wrapToggleSwitch.setId(IdUtil.combine(rootId, "wrapToggle"));
+        wrapToggleSwitch.selectedProperty().bindBidirectional(editorTextArea.wrapTextProperty());
+
         return Map.ofEntries(
                 Map.entry(CommandCode.BOLD, boldButton),
                 Map.entry(CommandCode.EMPHASIZE, emphasizeButton),
@@ -186,7 +191,8 @@ public class DefaultEditorControlProvider implements EditorControlProvider {
                 Map.entry(CommandCode.UNORDERED_LIST, ulButton),
                 Map.entry(CommandCode.URL, urlButton),
                 Map.entry(CommandCode.IMAGE, imgButton),
-                Map.entry(CommandCode.TABLE, tableButton)
+                Map.entry(CommandCode.TABLE, tableButton),
+                Map.entry(CommandCode.WRAP, wrapToggleSwitch)
         );
     }
 
