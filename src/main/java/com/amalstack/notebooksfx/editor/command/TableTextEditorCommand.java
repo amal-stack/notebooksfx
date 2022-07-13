@@ -3,6 +3,7 @@ package com.amalstack.notebooksfx.editor.command;
 public class TableTextEditorCommand implements TextEditorCommand {
 
     protected final String TEXT = """
+         
                         
             | Column 1 | Column 2 | Column 3 |
             |----------|----------|----------|
