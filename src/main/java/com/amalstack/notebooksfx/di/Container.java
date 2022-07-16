@@ -6,23 +6,36 @@ import java.util.HashMap;
 import java.util.Map;
 
 public final class Container {
-    private final Map<Class<?>, Class<?>> services = new HashMap<>();
+    private final Map<Class<?>, ServiceDescriptor<?, ?>> services = new HashMap<>();
+    private final Map<Class<?>, Object> singletonInstances = new HashMap<>();
 
-
-    public <T> void addService(Class<T> abstraction, Class<? extends T> implementation) {
+    public <T> void addService(Class<T> abstraction, Class<? extends T> implementation, Lifetime lifetime) {
         validateAbstraction(abstraction);
         validateService(implementation);
-        services.put(abstraction, implementation);
+        services.put(abstraction, new ServiceDescriptor<>(abstraction, implementation, lifetime));
     }
 
     @SuppressWarnings("unchecked")
     public <T> T getService(Class<T> abstraction) {
-        Class<? extends T> implType = (Class<? extends T>) services.get(abstraction);
-        if (implType == null) {
-            throw new RuntimeException("Service not found");
+        var descriptor = (ServiceDescriptor<T, ? extends T>)services.get(abstraction);
+        if (descriptor == null) {
+            throw new ServiceNotFoundException(abstraction);
         }
+        Class<? extends T> implType = descriptor.implementationType();
+
         Constructor<? extends T> publicConstructor = (Constructor<? extends T>) implType.getConstructors()[0];
-        return newInstanceOf(publicConstructor);
+
+        return switch(descriptor.lifetime()) {
+            case TRANSIENT -> newInstanceOf(publicConstructor);
+            case SINGLETON -> {
+                T instance = (T) singletonInstances.getOrDefault(abstraction, null);
+                if (instance == null) {
+                    instance = newInstanceOf(publicConstructor);
+                    singletonInstances.put(abstraction, instance);
+                }
+                yield instance;
+            }
+        };
     }
 
     @SuppressWarnings("unchecked")
@@ -59,3 +72,4 @@ public final class Container {
         }
     }
 }
+
