@@ -1,4 +1,4 @@
-package com.amalstack.notebooksfx;
+package com.amalstack.notebooksfx.nav;
 
 import javafx.util.Callback;
 
