@@ -32,4 +32,8 @@ module com.amalstack.notebooksfx {
     exports com.amalstack.notebooksfx.editor.builder;
     exports com.amalstack.notebooksfx.builder;
     opens com.amalstack.notebooksfx.builder to javafx.fxml;
+    exports com.amalstack.notebooksfx.di;
+    opens com.amalstack.notebooksfx.di to javafx.fxml;
+    exports com.amalstack.notebooksfx.nav;
+    opens com.amalstack.notebooksfx.nav to javafx.fxml;
 }
