@@ -4,6 +4,8 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public final class Container {
 
@@ -11,34 +13,62 @@ public final class Container {
     private final Map<Class<?>, Object> singletonInstances = new HashMap<>();
 
 
-    public <T> void addService(Class<T> abstraction,
-                               Class<? extends T> implementation,
+    public <A, I extends A> void addService(Class<A> abstraction,
+                               Class<I> implementation,
                                Lifetime lifetime) {
+        addService(abstraction, implementation, lifetime, null, null);
+    }
+
+    public <A, I extends A> void addService(Class<A> abstraction,
+                               Class<I> implementation,
+                               Lifetime lifetime,
+                               Supplier<I> implementationFactory) {
+        addService(abstraction, implementation, lifetime, implementationFactory, null);
+    }
+
+    public <A, I extends A> void addService(Class<A> abstraction,
+                               Class<I> implementation,
+                               Lifetime lifetime,
+                               Consumer<A> postConstructConfig) {
+        addService(abstraction, implementation, lifetime, null, postConstructConfig);
+    }
+
+    public <A, I extends A> void addService(Class<A> abstraction,
+                                            Class<I> implementation,
+                                            Lifetime lifetime,
+                                            Supplier<I> implementationFactory,
+                                            Consumer<A> postConstructConfig) {
         validateAbstraction(abstraction);
         validateService(implementation);
-        services.put(abstraction, new ServiceDescriptor<>(abstraction, implementation, lifetime));
+
+        services.put(abstraction, new ServiceDescriptor<>(
+                abstraction,
+                implementation,
+                lifetime,
+                implementationFactory,
+                postConstructConfig));
     }
 
     @SuppressWarnings("unchecked")
-    public <T> T getService(Class<T> abstraction) {
-        var descriptor = (ServiceDescriptor<T, ? extends T>) services.get(abstraction);
+    public <T, I extends T> T getService(Class<T> abstraction) {
+        var descriptor = (ServiceDescriptor<T, I>) services.get(abstraction);
         if (descriptor == null) {
             throw new ServiceNotFoundException(abstraction);
         }
-        Class<? extends T> implType = descriptor.implementationType();
+        Class<I> implType = descriptor.implementationType();
 
-        Constructor<? extends T> publicConstructor = (Constructor<? extends T>) implType.getConstructors()[0];
+        Constructor<I> publicConstructor = (Constructor<I>) implType.getConstructors()[0];
 
         return switch (descriptor.lifetime()) {
-            case TRANSIENT -> newInstanceOf(publicConstructor);
             case SINGLETON -> {
                 T instance = (T) singletonInstances.getOrDefault(abstraction, null);
                 if (instance == null) {
-                    instance = newInstanceOf(publicConstructor);
+                    instance = newInstanceOf(descriptor, publicConstructor);
                     singletonInstances.put(abstraction, instance);
                 }
                 yield instance;
             }
+            case TRANSIENT -> newInstanceOf(descriptor, publicConstructor);
         };
     }
 
@@ -68,6 +98,16 @@ public final class Container {
         addService(abstraction, implementation, Lifetime.TRANSIENT);
     }
 
+    private <A, I extends A> A newInstanceOf(ServiceDescriptor<A, I> descriptor, Constructor<I> publicConstructor) {
+        I instance;
+        Supplier<I> factory = descriptor.factory();
+        Consumer<A> postConstructConfig = descriptor.postConstructConfig();
+        instance = factory != null ? factory.get() : newInstanceOf(publicConstructor);
+        if (postConstructConfig != null) {
+            postConstructConfig.accept(instance);
+        }
+        return instance;
+    }
 
     private <T> T newInstanceOf(Constructor<T> constructor) {
         var parameterTypes = constructor.getParameterTypes();
