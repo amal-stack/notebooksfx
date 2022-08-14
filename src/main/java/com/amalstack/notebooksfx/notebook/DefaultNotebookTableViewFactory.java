@@ -38,10 +38,8 @@ public class DefaultNotebookTableViewFactory implements NotebookTableViewFactory
             TextField searchTextField,
             Command<NotebookViewModel, Void> rowClickCommand) {
         return new TableViewBuilder<NotebookViewModel>()
-                .withId("notebooksTableView")
-                .addColumns(COLUMNS)
-                .hasPlaceholder(PLACEHOLDER)
-                .withData(data)
+                .withId("notebooksTableView").hasPlaceholder(PLACEHOLDER)
+                .addColumns(COLUMNS).withData(data)
                 .onRowClick(rowClickCommand)
                 .filter(searchTextField.textProperty(), SEARCH_PREDICATE)
                 .sort()
