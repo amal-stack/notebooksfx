@@ -20,6 +20,7 @@ module com.amalstack.notebooksfx {
     requires flexmark.util.misc;
     requires annotations;
     requires flexmark.util.html;
+    requires java.net.http;
 
     opens com.amalstack.notebooksfx to javafx.fxml;
     opens com.amalstack.notebooksfx.controller to javafx.fxml;
@@ -36,4 +37,5 @@ module com.amalstack.notebooksfx {
     opens com.amalstack.notebooksfx.di to javafx.fxml;
     exports com.amalstack.notebooksfx.nav;
     opens com.amalstack.notebooksfx.nav to javafx.fxml;
+    opens com.amalstack.notebooksfx.util to javafx.fxml;
 }
