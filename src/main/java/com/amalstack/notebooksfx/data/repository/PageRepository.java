@@ -4,40 +4,14 @@ import com.amalstack.notebooksfx.data.model.Page;
 
 import java.util.Collection;
 
-public class PageRepository implements Repository<Page, Long> {
-    @Override
-    public Page find(Long id) {
-        return null;
-    }
+public interface PageRepository extends Repository<Page, Long> {
 
-    public Collection<Page> findByNotebookId(Long notebookId) {
-        return null;
-    }
+    Collection<Page> findByNotebookId(Long notebookId);
 
-    public Collection<Page> findBySectionId(Long sectionId) {
-        return null;
-    }
-    public int countByNotebookId(Long notebookId) {
-        return 0;
-    }
+    Collection<Page> findBySectionId(Long sectionId);
 
-    public int countBySectionId(Long sectionId) {
-        throw new UnsupportedOperationException();
-    }
+    int countByNotebookId(Long notebookId);
 
-    @Override
-    public void add(Page item) {
-
-    }
-
-    @Override
-    public void update(Page item) {
-
-    }
-
-    @Override
-    public void delete(Page item) {
-
-    }
+    int countBySectionId(Long sectionId);
 }
 

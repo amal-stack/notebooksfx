@@ -4,6 +4,7 @@ package com.amalstack.notebooksfx.data.repository;
  * Defines a generic repository that manages an entity by interacting with a data source.
  * @param <T> The type of elements managed by the repository.
  * @param <I> The type of the id of the elements in the repository.
+ * @author Amal Krishna
  */
 public interface Repository<T, I> {
     /**
