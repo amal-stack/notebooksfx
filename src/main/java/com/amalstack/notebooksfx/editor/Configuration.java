@@ -1,5 +1,6 @@
 package com.amalstack.notebooksfx.editor;
 
+import com.amalstack.notebooksfx.util.SimpleHtmlTemplateWrapper;
 import com.vladsch.flexmark.ext.admonition.AdmonitionExtension;
 import com.vladsch.flexmark.ext.gfm.strikethrough.StrikethroughSubscriptExtension;
 import com.vladsch.flexmark.ext.ins.InsExtension;

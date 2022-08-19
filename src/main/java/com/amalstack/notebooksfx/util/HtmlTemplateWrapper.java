@@ -1,4 +1,4 @@
-package com.amalstack.notebooksfx.editor;
+package com.amalstack.notebooksfx.util;
 
 import org.jetbrains.annotations.NotNull;
 
