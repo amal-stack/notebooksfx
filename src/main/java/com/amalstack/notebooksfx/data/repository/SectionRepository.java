@@ -4,30 +4,11 @@ import com.amalstack.notebooksfx.data.model.Section;
 
 import java.util.Collection;
 
-public class SectionRepository implements Repository<Section, Long> {
-    @Override
-    public Section find(Long id) {
-        return null;
-    }
+public interface SectionRepository extends Repository<Section, Long> {
 
-    public Collection<Section> findByNotebookId(Long notebookId) {
-        return null;
-    }
-    public int countByNotebookId(Long notebookId) {
-        return 0;
-    }
-    @Override
-    public void add(Section item) {
+    Collection<Section> findByNotebookId(Long notebookId);
 
-    }
-
-    @Override
-    public void update(Section item) {
-
-    }
-
-    @Override
-    public void delete(Section item) {
-
-    }
+    int countByNotebookId(Long notebookId);
 }
+
+
