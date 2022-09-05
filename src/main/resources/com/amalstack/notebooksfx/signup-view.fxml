@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<VBox VBox.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.amalstack.notebooksfx.controller.SignupController">
+    <GridPane hgap="25.0" vgap="25.0" VBox.vgrow="ALWAYS">
+        <columnConstraints>
+            <ColumnConstraints halignment="RIGHT"/>
+            <ColumnConstraints hgrow="ALWAYS"/>
+        </columnConstraints>
+        <padding>
+            <Insets bottom="25.0" left="25.0" right="25.0" top="25.0"/>
+        </padding>
+        <Label text="Name"/>
+        <TextField fx:id="nameField" GridPane.columnIndex="1"/>
+
+        <Label text="Email" GridPane.rowIndex="1"/>
+        <TextField fx:id="emailField" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+        <Label text="Password" GridPane.rowIndex="2"/>
+        <PasswordField fx:id="passwordField" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+        <Label text="Confirm Password" GridPane.rowIndex="3"/>
+        <PasswordField fx:id="confirmPasswordField" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+        <ScrollPane fx:id="errorScrollPane" fitToWidth="true" visible="false" GridPane.columnSpan="2"
+                    GridPane.halignment="LEFT" GridPane.rowIndex="4" GridPane.vgrow="ALWAYS">
+            <!--            <Label fx:id="errorMessageLabel" textFill="crimson">-->
+            <!--                <font>-->
+            <!--                    <Font name="Monospaced Regular" size="16.0" />-->
+            <!--                </font>-->
+            <!--                <padding>-->
+            <!--                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />-->
+            <!--                </padding>-->
+            <!--            </Label>-->
+        </ScrollPane>
+
+    </GridPane>
+    <HBox alignment="CENTER">
+        <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+        </padding>
+        <VBox.margin>
+            <Insets/>
+        </VBox.margin>
+        <Button fx:id="signUpButton" mnemonicParsing="false" text="Sign Up"/>
+    </HBox>
+</VBox>
