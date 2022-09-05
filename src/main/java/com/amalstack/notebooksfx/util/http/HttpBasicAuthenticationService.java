@@ -1,9 +1,8 @@
 package com.amalstack.notebooksfx.util.http;
 
+import com.amalstack.notebooksfx.RouteNames;
 import com.amalstack.notebooksfx.data.model.ErrorResponse;
 import com.amalstack.notebooksfx.data.model.User;
-import com.amalstack.notebooksfx.data.model.UserRegistration;
-import com.amalstack.notebooksfx.data.repository.http.RouteNames;
 import com.amalstack.notebooksfx.util.JsonMapper;
 
 import java.io.IOException;
@@ -31,7 +30,7 @@ public class HttpBasicAuthenticationService implements AuthenticationService {
     }
 
 
-    public Result registerUser(UserRegistration user) {
+    public <U> Result registerUser(U user) {
         var request = HttpRequest.newBuilder()
                 .uri(endpointProvider.getEndpoint(RouteNames.USERS))
                 .header("Content-Type", "application/json")

@@ -2,13 +2,12 @@ package com.amalstack.notebooksfx.util.http;
 
 import com.amalstack.notebooksfx.data.model.ErrorResponse;
 import com.amalstack.notebooksfx.data.model.User;
-import com.amalstack.notebooksfx.data.model.UserRegistration;
 
 import java.util.Optional;
 
 public interface AuthenticationService {
 
-    Result registerUser(UserRegistration user);
+    <U> Result registerUser(U user);
 
     Result authenticate(String username, char[] password);
 
