@@ -11,6 +11,9 @@ public class RouteTable {
     private final BinaryOperator<String> nameCombiner;
 
     public String get(String routeName) {
+        if (!routeMap.containsKey(routeName)) {
+            throw new RouteNotFoundException(routeName);
+        }
         return routeMap.get(routeName);
     }
 
@@ -19,7 +22,7 @@ public class RouteTable {
     }
 
     public String get(RouteName routeName) {
-        return get(routeName.asArray());
+        return get(combineNames(routeName));
     }
 
     private RouteTable(Map<String, String> routeMap, BinaryOperator<String> nameCombiner) {

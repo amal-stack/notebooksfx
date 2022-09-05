@@ -21,6 +21,8 @@ module com.amalstack.notebooksfx {
     requires annotations;
     requires flexmark.util.html;
     requires java.net.http;
+    requires com.google.gson;
+    requires com.fasterxml.jackson.databind;
 
     opens com.amalstack.notebooksfx to javafx.fxml;
     opens com.amalstack.notebooksfx.controller to javafx.fxml;
@@ -38,4 +40,6 @@ module com.amalstack.notebooksfx {
     exports com.amalstack.notebooksfx.nav;
     opens com.amalstack.notebooksfx.nav to javafx.fxml;
     opens com.amalstack.notebooksfx.util to javafx.fxml;
+    exports com.amalstack.notebooksfx.data.model;
+    opens com.amalstack.notebooksfx.data.model to com.fasterxml.jackson.databind;
 }
