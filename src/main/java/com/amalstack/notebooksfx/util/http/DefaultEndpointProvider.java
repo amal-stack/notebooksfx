@@ -2,8 +2,6 @@ package com.amalstack.notebooksfx.util.http;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Arrays;
-import java.util.Base64;
 
 public class DefaultEndpointProvider implements EndpointProvider {
     private final RouteTable routeTable;
@@ -80,20 +78,6 @@ public class DefaultEndpointProvider implements EndpointProvider {
 }
 
 
-class AuthorizationHeaderProvider {
-    private char[] authHeader;
-    private String username;
 
-    public static AuthorizationHeaderProvider create(String username, char[] password) {
-        var authorizationHeader = new AuthorizationHeaderProvider();
-        authorizationHeader.authHeader = Base64
-                .getEncoder()
-                .encodeToString((username + ":" + new String(password)).getBytes())
-                .toCharArray();
 
-        Arrays.fill(password, ' ');
-        authorizationHeader.username = username;
-        return authorizationHeader;
-    }
 
-}
