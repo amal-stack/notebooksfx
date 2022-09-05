@@ -10,4 +10,7 @@ public interface NavigationManager {
     ParentParameters getParameters(String parentName);
 
     void navigateTo(String parentName, Stage stage) throws IOException;
+
+    void navigateTo(String parentName) throws IOException;
 }
+
