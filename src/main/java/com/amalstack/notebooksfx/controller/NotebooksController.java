@@ -1,6 +1,5 @@
 package com.amalstack.notebooksfx.controller;
 
-import com.amalstack.notebooksfx.data.model.User;
 import com.amalstack.notebooksfx.data.repository.NotebookRepository;
 import com.amalstack.notebooksfx.notebook.NotebookTableViewFactory;
 import com.amalstack.notebooksfx.notebook.NotebookViewModel;
@@ -21,16 +20,13 @@ import java.util.stream.Collectors;
 
 public class NotebooksController {
     private final NotebookRepository notebookRepo;
-    private final User user;
     private final NotebookTableViewFactory tableFactory;
 
     public NotebooksController(
             NotebookRepository notebookRepo,
-            NotebookTableViewFactory tableFactory,
-            User user) {
+            NotebookTableViewFactory tableFactory) {
         this.notebookRepo = notebookRepo;
         this.tableFactory = tableFactory;
-        this.user = user;
     }
 
     @FXML
@@ -82,7 +78,8 @@ public class NotebooksController {
     }
 
     private ObservableList<NotebookViewModel> getNotebooks() {
-        return notebookRepo.findByUserId(user.id())
+        //TODO: replace with actual user ID
+        return notebookRepo.findByUserId(1L)
                 .stream()
                 .map(NotebookViewModel::fromNotebook)
                 .collect(Collectors.toCollection(FXCollections::observableArrayList));
