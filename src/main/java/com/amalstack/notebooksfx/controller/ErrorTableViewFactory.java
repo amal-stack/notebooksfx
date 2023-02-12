@@ -11,15 +11,17 @@ import java.util.List;
 
 public class ErrorTableViewFactory {
 
-    public static final List<TableColumnConfig<ErrorEntry, ?>> COLUMNS = List.of(
-            new TableColumnConfig<ErrorEntry, String>(new TableColumn<>("Key"), c -> c.getValue().keyProperty(), null),
-            new TableColumnConfig<ErrorEntry, String>(new TableColumn<>("Details"), c -> c.getValue().valueProperty(), null)
-    );
+    private static List<TableColumnConfig<ErrorEntry, ?>> getColumns() {
+        return List.of(
+                new TableColumnConfig<ErrorEntry, String>(new TableColumn<>("Key"), c -> c.getValue().keyProperty(), null),
+                new TableColumnConfig<ErrorEntry, String>(new TableColumn<>("Details"), c -> c.getValue().valueProperty(), null)
+        );
+    }
 
-    public static TableView<ErrorEntry> create(ObservableList<ErrorEntry> errorEntries) {
+    public static TableView<ErrorEntry> create(ObservableList<ErrorEntry> errorEntries, String parentId) {
         return new TableViewBuilder<ErrorEntry>()
-                .withId("errorTableView")
-                .addColumns(COLUMNS)
+                .withId(IdUtil.combine(parentId, "errorTableView"))
+                .addColumns(getColumns())
                 .withData(errorEntries)
                 .configure(tv -> tv.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY))
                 .build();
