@@ -2,13 +2,9 @@ package com.amalstack.notebooksfx.util.http;
 
 import com.amalstack.notebooksfx.RouteNames;
 import com.amalstack.notebooksfx.data.model.ErrorResponse;
-import com.amalstack.notebooksfx.data.model.User;
 import com.amalstack.notebooksfx.util.JsonMapper;
 
-import java.io.IOException;
-import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.util.Arrays;
 import java.util.Base64;
 
@@ -30,24 +26,24 @@ public class HttpBasicAuthenticationService implements AuthenticationService {
     }
 
 
-    public <U> Result registerUser(U user) {
+    public <T, U> Result<U, ? extends ErrorResponse> registerUser(T user, Class<U> userType) {
         var request = HttpRequest.newBuilder()
                 .uri(endpointProvider.getEndpoint(RouteNames.USERS))
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(jsonMapper.toJson(user)))
                 .build();
 
-        var result = httpClient.send(request, User.class);
+        HttpResult<U, ? extends ErrorResponse> result = httpClient.send(request, userType);
         if (result.isSuccess()) {
-            return Result.success(result.getObject().get());
+            return Result.success(result.getObject().orElseThrow());
         }
 
-        ErrorResponse error = result.getError().get();
+        ErrorResponse error = result.getError().orElseThrow();
         return Result.failure(error);
     }
 
     @Override
-    public Result authenticate(String username, char[] password) {
+    public <U> Result<U, ? extends ErrorResponse> authenticate(String username, char[] password, Class<U> userType) {
         authenticationContext.clearAuthentication();
         String authorizationHeader = HttpBasicAuthorizationHeader.create(username, password);
         Arrays.fill(password, ' ');
@@ -58,9 +54,9 @@ public class HttpBasicAuthenticationService implements AuthenticationService {
                 .GET()
                 .build();
 
-        var result = httpClient.send(request, User.class);
+        HttpResult<U, ? extends ErrorResponse> result = httpClient.send(request, userType);
         if (result.isSuccess()) {
-            User user = result.getObject().orElseThrow();
+            U user = result.getObject().orElseThrow();
             authenticationContext.setAuthentication(Authentication.forUser(user, authorizationHeader));
             return Result.success(user);
         }
@@ -118,18 +114,6 @@ public class HttpBasicAuthenticationService implements AuthenticationService {
 //        return Result.failure(error);
 //    }
 
-
-    private HttpResponse<String> sendHttpRequest(HttpRequest request) {
-        var client = HttpClient.newHttpClient();
-
-        HttpResponse<String> response;
-        try {
-            response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        } catch (IOException | InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        return response;
-    }
 
     static class HttpBasicAuthorizationHeader {
         public static String PREFIX = "Basic ";

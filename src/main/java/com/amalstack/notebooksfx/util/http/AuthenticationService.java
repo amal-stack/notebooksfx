@@ -1,47 +1,46 @@
 package com.amalstack.notebooksfx.util.http;
 
 import com.amalstack.notebooksfx.data.model.ErrorResponse;
-import com.amalstack.notebooksfx.data.model.User;
 
 import java.util.Optional;
 
 public interface AuthenticationService {
 
-    <U> Result registerUser(U user);
+    <T, U> Result<U, ? extends ErrorResponse> registerUser(T user, Class<U> userType);
 
-    Result authenticate(String username, char[] password);
+    <U> Result<U, ? extends ErrorResponse> authenticate(String username, char[] password, Class<U> userType);
 
-    final class Result {
+    final class Result<U, E extends ErrorResponse> {
         private final boolean isSuccess;
-        private final ErrorResponse error;
-        private final User user;
+        private final E error;
+        private final U user;
 
         private Result(
                 boolean isSuccess,
-                User user,
-                ErrorResponse error) {
+                U user,
+                E error) {
             this.isSuccess = isSuccess;
             this.user = user;
             this.error = error;
         }
 
-        public static Result success(User user) {
-            return new Result(true, user, null);
+        public static <U, E extends ErrorResponse> Result<U, E> success(U user) {
+            return new Result<>(true, user, null);
         }
 
-        public static Result success() {
-            return new Result(true, null, null);
+        public static <U, E extends ErrorResponse> Result<U, E> success() {
+            return new Result<>(true, null, null);
         }
 
-        public static Result failure(ErrorResponse error) {
-            return new Result(false, null, error);
+        public static <U, E extends ErrorResponse> Result<U, E> failure(E error) {
+            return new Result<>(false, null, error);
         }
 
-        public Optional<ErrorResponse> getError() {
+        public Optional<E> getError() {
             return Optional.ofNullable(error);
         }
 
-        public Optional<User> getUser() {
+        public Optional<U> getUser() {
             return Optional.ofNullable(user);
         }
 
