@@ -38,12 +38,12 @@ public class NotebookViewModel {
     }
 
     public static NotebookViewModel fromNotebook(Notebook notebook) {
-        return new NotebookViewModel(notebook.id(),
-                notebook.name(),
-                notebook.name(),
-                notebook.creationTime().format(DateTimeFormatter.ISO_DATE_TIME),
-                notebook.sectionCount(),
-                notebook.pageCount());
+        return new NotebookViewModel(notebook.getId(),
+                notebook.getName(),
+                notebook.getName(),
+                notebook.getCreationTime().format(DateTimeFormatter.ISO_DATE_TIME),
+                notebook.getSectionCount(),
+                notebook.getPageCount());
     }
 
     public String getName() {
