@@ -5,13 +5,13 @@ import com.amalstack.notebooksfx.data.model.ErrorResponse;
 import java.net.http.HttpResponse;
 import java.util.Optional;
 
-public class HttpResult<T> {
+public class HttpResult<T, E extends ErrorResponse> {
     private final T object;
-    private final ErrorResponse error;
+    private final E error;
     private final HttpResponse<String> response;
     private final ResponseStatus status;
 
-    private HttpResult(HttpResponse<String> response, T object, ErrorResponse error) {
+    private HttpResult(HttpResponse<String> response, T object, E error) {
         this.object = object;
         this.error = error;
         this.response = response;
@@ -23,10 +23,9 @@ public class HttpResult<T> {
         return Optional.ofNullable(object);
     }
 
-    public Optional<ErrorResponse> getError() {
+    public Optional<E> getError() {
         return Optional.ofNullable(error);
     }
-
 
     public HttpResponse<String> getResponse() {
         return response;
@@ -40,49 +39,50 @@ public class HttpResult<T> {
         return status == ResponseStatus.SUCCESS;
     }
 
-    public static <T> Builder<T> builder(Class<T> type) {
+    public static <T> HttpResult<T, ? extends ErrorResponse> empty(HttpResponse<String> response) {
+        return new HttpResult<>(response, null, null);
+    }
+
+    public static <T> HttpResult<T, ? extends ErrorResponse> ofObject(HttpResponse<String> response, T object) {
+        return new HttpResult<>(response, object, null);
+    }
+
+    public static <T> HttpResult<T, ? extends ErrorResponse> ofError(HttpResponse<String> response, ErrorResponse error) {
+        return new HttpResult<>(response, null, error);
+    }
+
+    public static <T, E extends ErrorResponse> Builder<T, E> builder(Class<T> type, Class<E> errorType) {
         return new Builder<>();
     }
 
-    public static <T> Builder<T> builder() {
+    public static <T, E extends ErrorResponse> Builder<T, E> builder() {
         return new Builder<>();
     }
 
-    public static class Builder<T> {
+    public static class Builder<T, E extends ErrorResponse> {
         private HttpResponse<String> response;
         private T object;
-        private ErrorResponse error;
-        private boolean createDefaultError;
+        private E error;
 
         private Builder() {
         }
 
-        public Builder<T> withResponse(HttpResponse<String> response) {
+        public Builder<T, E> withResponse(HttpResponse<String> response) {
             this.response = response;
             return this;
         }
 
-        public Builder<T> withObject(T object) {
+        public Builder<T, E> withObject(T object) {
             this.object = object;
             return this;
         }
 
-        public Builder<T> withError(ErrorResponse error) {
+        public Builder<T, E> withError(E error) {
             this.error = error;
             return this;
         }
 
-        public Builder<T> withDefaultError() {
-            createDefaultError = true;
-            return this;
-        }
-
-        public HttpResult<T> build() {
-            if (error == null && createDefaultError) {
-                error = new ErrorResponse(
-                        response.statusCode(),
-                        ResponseStatus.of(response.statusCode()).name());
-            }
+        public HttpResult<T, E> build() {
             return new HttpResult<>(response, object, error);
         }
     }
