@@ -1,6 +1,7 @@
 package com.amalstack.notebooksfx.controller;
 
 import com.amalstack.notebooksfx.data.model.ErrorEntry;
+import com.amalstack.notebooksfx.data.model.User;
 import com.amalstack.notebooksfx.nav.NavigationManager;
 import com.amalstack.notebooksfx.nav.Parents;
 import com.amalstack.notebooksfx.util.http.AuthenticationService;
@@ -15,10 +16,10 @@ import javafx.scene.control.TextField;
 public class LoginController {
     private final AuthenticationService authenticationService;
     private final NavigationManager navigationManager;
-    private final ObservableList<ErrorEntry> errorEntries = FXCollections.observableArrayList();
+    private final ObservableList<ErrorEntry> loginErrorEntries = FXCollections.observableArrayList();
 
     @FXML
-    private ScrollPane errorScrollPane;
+    private ScrollPane loginErrorScrollPane;
     //    @FXML
 //    private Label errorMessageLabel;
     @FXML
@@ -28,31 +29,36 @@ public class LoginController {
     @FXML
     private Button loginButton;
 
-    public LoginController(AuthenticationService authenticationService, NavigationManager navigationManager) {
+    public LoginController(AuthenticationService authenticationService,
+                           NavigationManager navigationManager) {
         this.authenticationService = authenticationService;
         this.navigationManager = navigationManager;
     }
 
     @FXML
     public void initialize() {
-
         loginButton.setOnAction(event -> login());
-        errorScrollPane.setContent(ErrorTableViewFactory.create(errorEntries));
+        loginErrorScrollPane.setContent(ErrorTableViewFactory.create(loginErrorEntries, "loginView"));
     }
 
     @FXML
     public void login() {
-        errorScrollPane.setVisible(false);
+        loginErrorScrollPane.setVisible(false);
+        loginErrorEntries.clear();
         String email = emailField.getText();
         char[] password = passwordField.getText().toCharArray();
-        var result = authenticationService.authenticate(email, password);
+        var result = authenticationService.authenticate(email, password, User.class);
         if (result.isSuccess()) {
             navigationManager.navigateTo(Parents.HOME);
             return;
         }
         result.getError().ifPresent(error -> {
-            errorEntries.addAll(ErrorEntry.fromError(error));
-            errorScrollPane.setVisible(true);
+
+            if (error.status() == 401) {
+                loginErrorEntries.add(new ErrorEntry("Login Failed", "Invalid credentials"));
+            }
+            loginErrorEntries.addAll(ErrorEntry.fromError(error));
+            loginErrorScrollPane.setVisible(true);
         });
     }
 }
