@@ -1,6 +1,7 @@
 package com.amalstack.notebooksfx.controller;
 
 import com.amalstack.notebooksfx.data.model.ErrorEntry;
+import com.amalstack.notebooksfx.data.model.User;
 import com.amalstack.notebooksfx.data.model.UserRegistration;
 import com.amalstack.notebooksfx.util.http.AuthenticationService;
 import javafx.collections.FXCollections;
@@ -14,9 +15,7 @@ import javafx.scene.control.TextField;
 public class SignupController {
     private final AuthenticationService authenticationService;
     @FXML
-    private ScrollPane errorScrollPane;
-    //    @FXML
-//    private Label errorMessageLabel;
+    private ScrollPane signUpErrorScrollPane;
     @FXML
     private TextField nameField;
     @FXML
@@ -27,7 +26,7 @@ public class SignupController {
     private PasswordField confirmPasswordField;
     @FXML
     private Button signUpButton;
-    private final ObservableList<ErrorEntry> errorEntries = FXCollections.observableArrayList();
+    private final ObservableList<ErrorEntry> signUpErrorEntries = FXCollections.observableArrayList();
 
     public SignupController(AuthenticationService authenticationService) {
         this.authenticationService = authenticationService;
@@ -36,27 +35,30 @@ public class SignupController {
     public void initialize() {
         //errorMessageLabel.setWrapText(true);
         signUpButton.setOnAction(event -> signUp());
-        errorScrollPane.setContent(ErrorTableViewFactory.create(errorEntries));
+        signUpErrorScrollPane.setContent(ErrorTableViewFactory.create(signUpErrorEntries, "signUpView"));
     }
 
     public void signUp() {
+        // Hide and clear existing errors
+        signUpErrorScrollPane.setVisible(false);
+        signUpErrorEntries.clear();
 
-        errorScrollPane.setVisible(false);
-        errorEntries.clear();
+
         String name = nameField.getText();
         String email = emailField.getText();
         String password = passwordField.getText();
         String confirmPassword = confirmPasswordField.getText();
 
         var result = authenticationService
-                .registerUser(new UserRegistration(email, name, password, confirmPassword));
+                .registerUser(new UserRegistration(email, name, password, confirmPassword), User.class);
 
         if (result.isSuccess()) {
             return;
         }
+
         result.getError().ifPresent(error -> {
-            errorEntries.addAll(ErrorEntry.fromError(error));
-            errorScrollPane.setVisible(true);
+            signUpErrorEntries.addAll(ErrorEntry.fromError(error));
+            signUpErrorScrollPane.setVisible(true);
         });
     }
 }

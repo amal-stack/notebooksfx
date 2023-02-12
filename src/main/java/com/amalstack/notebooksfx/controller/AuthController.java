@@ -6,7 +6,6 @@ import javafx.scene.control.TabPane;
 import javafx.scene.layout.VBox;
 
 public class AuthController {
-
     @FXML
     private VBox signUpView;
     @FXML
@@ -22,6 +21,9 @@ public class AuthController {
 
     @FXML
     private LoginController loginViewController;
+
+    @FXML
+    private SignupController signupViewController;
 
     public void initialize() {
     }

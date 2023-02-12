@@ -13,6 +13,3 @@ public class HelloController {
     }
 }
 
-class Constants {
-
-}

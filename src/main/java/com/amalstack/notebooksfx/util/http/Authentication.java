@@ -1,27 +1,25 @@
 package com.amalstack.notebooksfx.util.http;
 
-import com.amalstack.notebooksfx.data.model.User;
-
 import java.util.Objects;
 import java.util.Optional;
 
-public final class Authentication {
-    public static final Authentication ANONYMOUS = new Authentication(false, null, null);
+public final class Authentication<U> {
+    public static final Authentication<?> ANONYMOUS = new Authentication<>(false, null, null);
     private final boolean isAuthenticated;
-    private final User user;
+    private final U user;
     private final String authorizationHeader;
 
     private Authentication(
             boolean isAuthenticated,
-            User user,
+            U user,
             String authorizationHeader) {
         this.isAuthenticated = isAuthenticated;
         this.user = user;
         this.authorizationHeader = authorizationHeader;
     }
 
-    static Authentication forUser(User user, String authorizationHeader) {
-        return new Authentication(true, user, authorizationHeader);
+    static <U> Authentication<U> forUser(U user, String authorizationHeader) {
+        return new Authentication<>(true, user, authorizationHeader);
     }
 
     @Override
@@ -35,7 +33,7 @@ public final class Authentication {
         return isAuthenticated;
     }
 
-    public Optional<User> getUser() {
+    public Optional<U> getUser() {
         return Optional.ofNullable(user);
     }
 
@@ -47,7 +45,7 @@ public final class Authentication {
     public boolean equals(Object obj) {
         if (obj == this) return true;
         if (obj == null || obj.getClass() != this.getClass()) return false;
-        var that = (Authentication) obj;
+        var that = (Authentication<?>) obj;
         return this.isAuthenticated == that.isAuthenticated &&
                 Objects.equals(this.user, that.user) &&
                 Objects.equals(this.authorizationHeader, that.authorizationHeader);
