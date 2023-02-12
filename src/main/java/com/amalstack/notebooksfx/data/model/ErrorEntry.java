@@ -16,9 +16,9 @@ public class ErrorEntry {
 
     public static ObservableList<ErrorEntry> fromError(ErrorResponse error) {
         ObservableList<ErrorEntry> errorEntries = FXCollections.observableArrayList();
-        if (error.fieldErrors() != null) {
-            for (ErrorResponse.FieldError fieldError : error.fieldErrors()) {
-                errorEntries.add(new ErrorEntry(fieldError.field(), fieldError.message()));
+        if (error.errors() != null) {
+            for (var errorEntry : error.errors().entrySet()) {
+                errorEntries.add(new ErrorEntry(errorEntry.getKey(), errorEntry.getValue()));
             }
         }
 
