@@ -24,7 +24,7 @@
 
         <Label text="Confirm Password" GridPane.rowIndex="3"/>
         <PasswordField fx:id="confirmPasswordField" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
-        <ScrollPane fx:id="errorScrollPane" fitToWidth="true" visible="false" GridPane.columnSpan="2"
+        <ScrollPane fx:id="signUpErrorScrollPane" fitToWidth="true" visible="false" GridPane.columnSpan="2"
                     GridPane.halignment="LEFT" GridPane.rowIndex="4" GridPane.vgrow="ALWAYS">
             <!--            <Label fx:id="errorMessageLabel" textFill="crimson">-->
             <!--                <font>-->
@@ -35,7 +35,6 @@
             <!--                </padding>-->
             <!--            </Label>-->
         </ScrollPane>
-
     </GridPane>
     <HBox alignment="CENTER">
         <padding>
