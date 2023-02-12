@@ -16,15 +16,19 @@ import java.util.List;
 import java.util.function.BiPredicate;
 
 public class DefaultNotebookTableViewFactory implements NotebookTableViewFactory {
-    private static final List<TableColumnConfig<NotebookViewModel, ?>> COLUMNS = List.of(
-            new TableColumnConfig<NotebookViewModel, String>(new TableColumn<>("Notebook Name"), model -> model.getValue().nameProperty(), new Glyph("FontAwesome", FontAwesome.Glyph.BOOK)),
-            new TableColumnConfig<NotebookViewModel, String>(new TableColumn<>("Username"), model -> model.getValue().usernameProperty(), new Glyph("FontAwesome", FontAwesome.Glyph.USER)),
-            new TableColumnConfig<NotebookViewModel, String>(new TableColumn<>("Created"), model -> model.getValue().creationTimeProperty(), new Glyph("FontAwesome", FontAwesome.Glyph.CLOCK_ALT)),
-            new TableColumnConfig<NotebookViewModel, String>(new TableColumn<>("Sections"), model -> model.getValue().sectionCountProperty().asString(), new Glyph("FontAwesome", FontAwesome.Glyph.SITEMAP)),
-            new TableColumnConfig<NotebookViewModel, String>(new TableColumn<>("Pages"), model -> model.getValue().pageCountProperty().asString(), new Glyph("FontAwesome", FontAwesome.Glyph.FILE))
-    );
+    private static List<TableColumnConfig<NotebookViewModel, ?>> getColumns() {
+        return List.of(
+                new TableColumnConfig<NotebookViewModel, String>(new TableColumn<>("Notebook Name"), model -> model.getValue().nameProperty(), new Glyph("FontAwesome", FontAwesome.Glyph.BOOK)),
+                new TableColumnConfig<NotebookViewModel, String>(new TableColumn<>("Username"), model -> model.getValue().usernameProperty(), new Glyph("FontAwesome", FontAwesome.Glyph.USER)),
+                new TableColumnConfig<NotebookViewModel, String>(new TableColumn<>("Created"), model -> model.getValue().creationTimeProperty(), new Glyph("FontAwesome", FontAwesome.Glyph.CLOCK_ALT)),
+                new TableColumnConfig<NotebookViewModel, String>(new TableColumn<>("Sections"), model -> model.getValue().sectionCountProperty().asString(), new Glyph("FontAwesome", FontAwesome.Glyph.SITEMAP)),
+                new TableColumnConfig<NotebookViewModel, String>(new TableColumn<>("Pages"), model -> model.getValue().pageCountProperty().asString(), new Glyph("FontAwesome", FontAwesome.Glyph.FILE))
+        );
+    }
 
-    private static final Node PLACEHOLDER = new Label("No notebooks found");
+    private static Node getPlaceHolder() {
+        return new Label("No notebooks found");
+    }
 
     private static final BiPredicate<NotebookViewModel, String> SEARCH_PREDICATE = (notebook, query) -> notebook
             .getName()
@@ -38,8 +42,8 @@ public class DefaultNotebookTableViewFactory implements NotebookTableViewFactory
             TextField searchTextField,
             Command<NotebookViewModel, Void> rowClickCommand) {
         return new TableViewBuilder<NotebookViewModel>()
-                .withId("notebooksTableView").hasPlaceholder(PLACEHOLDER)
-                .addColumns(COLUMNS).withData(data)
+                .withId("notebooksTableView").hasPlaceholder(getPlaceHolder())
+                .addColumns(getColumns()).withData(data)
                 .onRowClick(rowClickCommand)
                 .filter(searchTextField.textProperty(), SEARCH_PREDICATE)
                 .sort()
