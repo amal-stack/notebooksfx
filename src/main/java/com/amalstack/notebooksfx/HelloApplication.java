@@ -122,7 +122,7 @@ public class HelloApplication extends Application {
     }
 
     private void initServices(Container container) {
-        //container.addService(NotebookRepository.class, HttpNotebookRepository.class, Lifetime.TRANSIENT);
+        // container.addService(NotebookRepository.class, HttpNotebookRepository.class, Lifetime.TRANSIENT);
         container.addService(GraphicNodeProvider.class, DefaultGraphicNodeProvider.class, Lifetime.SINGLETON);
         container.addService(EditorContextFactory.class, Configuration.DefaultEditorContextFactory.class, Lifetime.SINGLETON);
         container.addService(NotebookTableViewFactory.class, DefaultNotebookTableViewFactory.class, Lifetime.SINGLETON);
