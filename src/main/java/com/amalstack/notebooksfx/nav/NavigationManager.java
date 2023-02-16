@@ -1,5 +1,6 @@
 package com.amalstack.notebooksfx.nav;
 
+import com.amalstack.notebooksfx.util.ControllerParameters;
 import javafx.stage.Stage;
 
 public interface NavigationManager {
@@ -9,6 +10,10 @@ public interface NavigationManager {
 
     void navigateTo(String parentName, Stage stage);
 
+    void navigateTo(String parentName, ControllerParameters parameters, Stage stage);
+
     void navigateTo(String parentName);
+
+    void navigateTo(String parentName, ControllerParameters parameters);
 }
 
