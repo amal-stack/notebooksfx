@@ -1,7 +1,6 @@
 package com.amalstack.notebooksfx;
 
 import com.amalstack.notebooksfx.data.model.User;
-import com.amalstack.notebooksfx.data.repository.NotebookRepository;
 import com.amalstack.notebooksfx.di.Container;
 import com.amalstack.notebooksfx.di.Lifetime;
 import com.amalstack.notebooksfx.editor.Configuration;
@@ -16,9 +15,12 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
@@ -26,26 +28,38 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Objects;
 
+import static com.amalstack.notebooksfx.AppRouteNames.*;
+
 public class HelloApplication extends Application {
-    public static void main(String[] args) {
-        launch();
-    }
+//    public static void main(String[] args) {
+//        launch();
+//    }
 
     @Override
     public void start(Stage stage) {
-        System.setProperty("prism.lcdtext", "false");
-        stage.setScene(new Scene(new Group()));
-        Container container = new Container();
-        initServices(container);
-        initNav(container, stage);
-        container.getService(NavigationManager.class)
-                .navigateTo(Parents.AUTH, stage);
+        try {
+            Thread.setDefaultUncaughtExceptionHandler(this::showError);
+            System.setProperty("prism.lcdtext", "false");
+            stage.setScene(new Scene(new Group()));
+            Container container = new Container();
+            initServices(container);
+            initNav(container, stage);
+            container.getService(NavigationManager.class)
+                    .navigateTo(Parents.AUTH, stage);
 
-        var endpointProvider = container.getService(EndpointProvider.class);
-        System.out.println("Notebooks::" + endpointProvider.getEndpoint(RouteNames.NOTEBOOKS));
-        System.out.println("Notebooks/User::" + endpointProvider.getEndpoint(RouteNames.NOTEBOOKS, RouteNames.USER));
-        System.out.println("Base URL::" + endpointProvider.getBaseUrl());
-        System.out.println("Auth::" + container.getService(AuthenticationService.class).authenticate("user_1", "pwd".toCharArray(), User.class));
+            var endpointProvider = container.getService(UrlProvider.class);
+            System.out.println("Notebooks::" + endpointProvider.getEndpoint(NOTEBOOKS));
+            System.out.println("Notebooks/User::" + endpointProvider.getEndpoint(Endpoint.ofName(RouteName.of(NOTEBOOKS, USER))));
+            System.out.println("Base URL::" + endpointProvider.getBaseUrl());
+            System.out.println("Auth::" + container.getService(AuthenticationService.class).authenticate("user_1", "pwd".toCharArray(), User.class));
+        } catch (HttpResponseException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.initModality(Modality.APPLICATION_MODAL);
+            alert.setTitle("Server Response Error");
+            alert.setHeaderText("Server returned an error");
+            alert.setContentText(e.getErrorResponse().orElseThrow().error());
+            alert.showAndWait();
+        }
         //        loadScene(
 //                stage,
 //                HelloApplication.class.getResource("editor-view.fxml"),
@@ -77,6 +91,19 @@ public class HelloApplication extends Application {
 //                        new User(0L, "example@example.com")));
     }
 
+    private void showError(Thread t, Throwable e) {
+        if (Platform.isFxApplicationThread()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.initModality(Modality.WINDOW_MODAL);
+            alert.setTitle("Error");
+            alert.setHeaderText("Error");
+            alert.setContentText(e.getLocalizedMessage());
+            alert.showAndWait();
+        }
+        e.printStackTrace();
+
+    }
+
     //Delete
     private void loadScene(
             Stage stage,
@@ -95,13 +122,14 @@ public class HelloApplication extends Application {
     }
 
     private void initServices(Container container) {
-        container.addService(NotebookRepository.class, MockNotebookRepository.class, Lifetime.TRANSIENT);
+        // container.addService(NotebookRepository.class, HttpNotebookRepository.class, Lifetime.TRANSIENT);
         container.addService(GraphicNodeProvider.class, DefaultGraphicNodeProvider.class, Lifetime.SINGLETON);
         container.addService(EditorContextFactory.class, Configuration.DefaultEditorContextFactory.class, Lifetime.SINGLETON);
         container.addService(NotebookTableViewFactory.class, DefaultNotebookTableViewFactory.class, Lifetime.SINGLETON);
-        container.addService(EndpointProvider.class, DefaultEndpointProvider.class, Lifetime.SINGLETON, this::createEndpointProvider);
+        container.addService(UrlProvider.class, DefaultUrlProvider.class, Lifetime.SINGLETON, this::createEndpointProvider);
         container.addService(AuthenticationContext.class, DefaultAuthenticationContext.class, Lifetime.SINGLETON);
         container.addService(AuthenticationService.class, HttpBasicAuthenticationService.class, Lifetime.SINGLETON);
+        //container.addService(JsonMapper.class, GsonMapper.class, Lifetime.TRANSIENT, () -> GsonMapper.Factory.create(builder -> {}));
         container.addService(JsonMapper.class, JacksonMapper.class, Lifetime.TRANSIENT, () -> new JacksonMapper(
                         new ObjectMapper()
                                 .configure(DeserializationFeature.FAIL_ON_MISSING_CREATOR_PROPERTIES, false)
@@ -134,25 +162,31 @@ public class HelloApplication extends Application {
                 container::injectAndConstruct));
     }
 
-    public DefaultEndpointProvider createEndpointProvider() {
+    public DefaultUrlProvider createEndpointProvider() {
+
         RouteTable routeTable = RouteTable.builder()
-                .mapGroup(RouteNames.NOTEBOOKS, "/notebooks", group -> {
+                .mapGroup(NOTEBOOKS, "/notebooks", group -> {
                     group.map("", "/");
-                    group.map(RouteNames.USER, "/user");
+                    group.map(ID, "/{0}");
+                    group.map(USER, "/user");
                 })
-                .mapGroup(RouteNames.SECTIONS, "/sections", group -> {
+                .mapGroup(SECTIONS, "/sections", group -> {
                     group.map("", "/");
-                    group.map(RouteNames.NOTEBOOK, "/notebook");
+                    group.map(ID, "/{0}");
+                    group.mapGroup(NOTEBOOK, "/notebook", subgroup
+                            -> subgroup.map(ID, "/{0}"));
                 })
-                .mapGroup(RouteNames.PAGES, "/pages", group -> {
+                .mapGroup(PAGES, "/pages", group -> {
                     group.map("", "/");
-                    group.map(RouteNames.SECTION, "/section");
+                    group.map(ID, "/{0}");
+                    group.mapGroup(SECTION, "/section", subgroup
+                            -> subgroup.map(ID, "/{0}"));
                 })
-                .map(RouteNames.USERS, "/users")
+                .map(USERS, "/users")
                 .build();
 
 
-        return new DefaultEndpointProvider(
+        return new DefaultUrlProvider(
                 "http://localhost:8080",
                 routeTable);
     }

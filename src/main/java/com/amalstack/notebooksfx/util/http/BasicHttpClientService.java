@@ -12,46 +12,46 @@ import java.util.function.Function;
 
 public class BasicHttpClientService implements HttpClientService {
     private final AuthenticationContext authenticationContext;
-    private final EndpointProvider endpointProvider;
+    private final UrlProvider urlProvider;
     private final JsonMapper jsonMapper;
     private final ErrorResponseTypeProvider errorResponseTypeProvider;
 
     public BasicHttpClientService(
             AuthenticationContext authenticationContext,
-            EndpointProvider endpointProvider,
+            UrlProvider urlProvider,
             JsonMapper jsonMapper,
             ErrorResponseTypeProvider errorResponseTypeProvider
     ) {
         this.authenticationContext = authenticationContext;
-        this.endpointProvider = endpointProvider;
+        this.urlProvider = urlProvider;
         this.jsonMapper = jsonMapper;
         this.errorResponseTypeProvider = errorResponseTypeProvider;
     }
 
 
     @Override
-    public <T> HttpResult<T, ? extends ErrorResponse> send(RouteName routeName, String method) {
-        HttpRequest request = createHttpRequest(routeName, method);
+    public <T> HttpResult<T, ? extends ErrorResponse> send(Endpoint endpoint, String method) {
+        HttpRequest request = createHttpRequest(endpoint, method);
         return send(request);
     }
 
     @Override
-    public <T> HttpResult<T, ? extends ErrorResponse> send(RouteName routeName, String method, Class<T> responseClass) {
-        HttpRequest request = createHttpRequest(routeName, method);
+    public <T> HttpResult<T, ? extends ErrorResponse> send(Endpoint endpoint, String method, Class<T> responseClass) {
+        HttpRequest request = createHttpRequest(endpoint, method);
         return send(request, responseClass);
     }
 
     @Override
-    public <T> HttpResult<T, ? extends ErrorResponse> send(RouteName routeName, String method, T object) {
+    public <T> HttpResult<T, ? extends ErrorResponse> send(Endpoint endpoint, String method, T object) {
 //        Class<T> type = (Class<T>) object.getClass();
-//        return send(routeName, method, object, type);
-        HttpRequest request = createHttpRequest(routeName, method, object);
+//        return send(endpoint, method, object, type);
+        HttpRequest request = createHttpRequest(endpoint, method, object);
         return send(request);
     }
 
     @Override
-    public <T> HttpResult<T, ? extends ErrorResponse> send(RouteName routeName, String method, T object, Class<T> responseClass) {
-        HttpRequest request = createHttpRequest(routeName, method, object);
+    public <T> HttpResult<T, ? extends ErrorResponse> send(Endpoint endpoint, String method, T object, Class<T> responseClass) {
+        HttpRequest request = createHttpRequest(endpoint, method, object);
         return send(request, responseClass);
     }
 
@@ -82,21 +82,21 @@ public class BasicHttpClientService implements HttpClientService {
         }
     }
 
-    protected <T> HttpRequest createHttpRequest(RouteName routeName, String method, T object) {
-        return createRequestBuilder(routeName)
+    protected <T> HttpRequest createHttpRequest(Endpoint endpoint, String method, T object) {
+        return createRequestBuilder(endpoint)
                 .method(method, HttpRequest.BodyPublishers.ofString(jsonMapper.toJson(object)))
                 .build();
     }
 
-    protected HttpRequest createHttpRequest(RouteName routeName, String method) {
-        return createRequestBuilder(routeName)
+    protected HttpRequest createHttpRequest(Endpoint endpoint, String method) {
+        return createRequestBuilder(endpoint)
                 .method(method, HttpRequest.BodyPublishers.noBody())
                 .build();
     }
 
-    private HttpRequest.Builder createRequestBuilder(RouteName routeName) {
+    private HttpRequest.Builder createRequestBuilder(Endpoint endpoint) {
         var builder = HttpRequest.newBuilder()
-                .uri(endpointProvider.getEndpoint(routeName))
+                .uri(urlProvider.getEndpoint(endpoint))
                 .header("Content-Type", "application/json");
 
         Authentication<?> auth = authenticationContext.getAuthentication();

@@ -39,6 +39,32 @@ public class HttpResult<T, E extends ErrorResponse> {
         return status == ResponseStatus.SUCCESS;
     }
 
+    public T getObjectOrThrow() {
+        if (isSuccess()) {
+            return object;
+        }
+        throw new HttpResponseException(getError().orElseThrow());
+    }
+
+    public T getObjectOrThrow(RuntimeException exception) {
+        if (isSuccess()) {
+            return object;
+        }
+        throw exception;
+    }
+
+    public void throwIfFailure() {
+        if (!isSuccess()) {
+            throw new HttpResponseException(getError().orElseThrow());
+        }
+    }
+
+    public void throwIfFailure(RuntimeException exception) {
+        if (!isSuccess()) {
+            throw exception;
+        }
+    }
+
     public static <T> HttpResult<T, ? extends ErrorResponse> empty(HttpResponse<String> response) {
         return new HttpResult<>(response, null, null);
     }
