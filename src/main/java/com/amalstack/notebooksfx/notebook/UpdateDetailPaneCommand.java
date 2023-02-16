@@ -16,8 +16,9 @@ public class UpdateDetailPaneCommand implements Command<NotebookViewModel, Void>
             context.masterDetailPane().setShowDetailNode(false);
             return null;
         }
+
         context.notebookTitleLabel().setText(model.getName());
-        context.notebookDescLabel().setText(model.getUsername());
+        context.notebookDescLabel().setText(model.getDescription());
         context.masterDetailPane().setShowDetailNode(true);
         return null;
     }

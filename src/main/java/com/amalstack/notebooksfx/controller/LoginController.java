@@ -20,8 +20,7 @@ public class LoginController {
 
     @FXML
     private ScrollPane loginErrorScrollPane;
-    //    @FXML
-//    private Label errorMessageLabel;
+
     @FXML
     private TextField emailField;
     @FXML
@@ -38,7 +37,8 @@ public class LoginController {
     @FXML
     public void initialize() {
         loginButton.setOnAction(event -> login());
-        loginErrorScrollPane.setContent(ErrorTableViewFactory.create(loginErrorEntries, "loginView"));
+        loginErrorScrollPane.setContent(
+                ErrorTableViewFactory.create(loginErrorEntries, "loginView"));
     }
 
     @FXML
