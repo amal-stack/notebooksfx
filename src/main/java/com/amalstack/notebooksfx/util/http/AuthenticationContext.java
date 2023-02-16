@@ -1,13 +1,12 @@
 package com.amalstack.notebooksfx.util.http;
 
 public interface AuthenticationContext {
-    Authentication getAuthentication();
+    <U> Authentication<U> getAuthentication();
 
-    void setAuthentication(Authentication authentication);
+    <U> void setAuthentication(Authentication<U> authentication);
 
     void clearAuthentication();
 
     boolean isAuthenticated();
-
 }
 
