@@ -15,21 +15,6 @@ public class MockNotebookRepository implements NotebookRepository {
 
     }
 
-    @Override
-    public Collection<Notebook> findByUserId(Long userId) {
-        return List.of(
-                new Notebook(1L,
-                        "My First Notebook",
-                        LocalDateTime.now(),
-                        random.nextInt(),
-                        random.nextInt()),
-                new Notebook(2L,
-                        "My Second Notebook",
-                        LocalDateTime.now(),
-                        random.nextInt(),
-                        random.nextInt())
-        );
-    }
 
     @Override
     public Notebook find(Long id) {
@@ -49,5 +34,30 @@ public class MockNotebookRepository implements NotebookRepository {
     @Override
     public void delete(Notebook item) {
 
+    }
+
+    @Override
+    public Collection<Notebook> findByCurrentUser() {
+        return List.of(
+                new Notebook(1L,
+                        "My First Notebook",
+                        "x",
+                        "desc",
+                        LocalDateTime.now().toString(),
+                        random.nextInt(),
+                        random.nextInt()),
+                new Notebook(2L,
+                        "My Second Notebook",
+                        "x",
+                        "desc",
+                        LocalDateTime.now().toString(),
+                        random.nextInt(),
+                        random.nextInt())
+        );
+    }
+
+    @Override
+    public Notebook.Contents getContentsById(Long notebookId) {
+        return null;
     }
 }
