@@ -10,6 +10,19 @@ public class RouteTable {
     private final Map<String, String> routeMap;
     private final BinaryOperator<String> nameCombiner;
 
+    private RouteTable(Map<String, String> routeMap, BinaryOperator<String> nameCombiner) {
+        this.routeMap = routeMap;
+        this.nameCombiner = nameCombiner;
+    }
+
+    public static Builder builder() {
+        return new Builder(new DotNameCombiner());
+    }
+
+    public static Builder builder(BinaryOperator<String> nameCombiner) {
+        return new Builder(nameCombiner);
+    }
+
     public String get(String routeName) {
         if (!routeMap.containsKey(routeName)) {
             throw new RouteNotFoundException(routeName);
@@ -23,11 +36,6 @@ public class RouteTable {
 
     public String get(RouteName routeName) {
         return get(combineNames(routeName));
-    }
-
-    private RouteTable(Map<String, String> routeMap, BinaryOperator<String> nameCombiner) {
-        this.routeMap = routeMap;
-        this.nameCombiner = nameCombiner;
     }
 
     public String combineNames(String... names) {
@@ -44,14 +52,6 @@ public class RouteTable {
 
     public HttpRequest.Builder getHttpRequestBuilder(String routeName) {
         throw new UnsupportedOperationException();
-    }
-
-    public static Builder builder() {
-        return new Builder(new DotNameCombiner());
-    }
-
-    public static Builder builder(BinaryOperator<String> nameCombiner) {
-        return new Builder(nameCombiner);
     }
 
     @Override

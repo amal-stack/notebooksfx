@@ -1,15 +1,16 @@
 package com.amalstack.notebooksfx.util.http;
 
 public class DefaultAuthenticationContext implements AuthenticationContext {
-    private Authentication authentication;
+    private Authentication<?> authentication;
 
+    @SuppressWarnings("unchecked")
     @Override
-    public Authentication getAuthentication() {
-        return authentication;
+    public <U> Authentication<U> getAuthentication() {
+        return (Authentication<U>) authentication;
     }
 
     @Override
-    public void setAuthentication(Authentication authentication) {
+    public <U> void setAuthentication(Authentication<U> authentication) {
         this.authentication = authentication;
     }
 

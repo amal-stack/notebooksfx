@@ -1,6 +1,6 @@
 package com.amalstack.notebooksfx.util.http;
 
-import com.amalstack.notebooksfx.RouteNames;
+import com.amalstack.notebooksfx.AppRouteNames;
 import com.amalstack.notebooksfx.data.model.ErrorResponse;
 import com.amalstack.notebooksfx.util.JsonMapper;
 
@@ -11,24 +11,24 @@ import java.util.Base64;
 public class HttpBasicAuthenticationService implements AuthenticationService {
     private final AuthenticationContext authenticationContext;
     private final HttpClientService httpClient;
-    private final EndpointProvider endpointProvider;
+    private final UrlProvider urlProvider;
     private final JsonMapper jsonMapper;
 
     public HttpBasicAuthenticationService(
             AuthenticationContext authenticationContext,
             HttpClientService httpClient,
-            EndpointProvider endpointProvider,
+            UrlProvider urlProvider,
             JsonMapper jsonMapper) {
         this.authenticationContext = authenticationContext;
         this.httpClient = httpClient;
-        this.endpointProvider = endpointProvider;
+        this.urlProvider = urlProvider;
         this.jsonMapper = jsonMapper;
     }
 
 
     public <T, U> Result<U, ? extends ErrorResponse> registerUser(T user, Class<U> userType) {
         var request = HttpRequest.newBuilder()
-                .uri(endpointProvider.getEndpoint(RouteNames.USERS))
+                .uri(urlProvider.getEndpoint(AppRouteNames.USERS))
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(jsonMapper.toJson(user)))
                 .build();
@@ -49,7 +49,7 @@ public class HttpBasicAuthenticationService implements AuthenticationService {
         Arrays.fill(password, ' ');
 
         var request = HttpRequest.newBuilder()
-                .uri(endpointProvider.getEndpoint(RouteName.of(RouteNames.USERS)))
+                .uri(urlProvider.getEndpoint(Endpoint.ofName(AppRouteNames.USERS)))
                 .header("Authorization", authorizationHeader)
                 .GET()
                 .build();
