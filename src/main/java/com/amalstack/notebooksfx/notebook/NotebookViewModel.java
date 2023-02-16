@@ -6,6 +6,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class NotebookViewModel {
@@ -14,6 +15,9 @@ public class NotebookViewModel {
     private final StringProperty name = new SimpleStringProperty(this, "name");
 
     private final StringProperty username = new SimpleStringProperty(this, "username");
+
+
+    private final StringProperty description = new SimpleStringProperty(this, "description");
 
     private final StringProperty creationTime = new SimpleStringProperty(this, "creationTime");
 
@@ -25,12 +29,14 @@ public class NotebookViewModel {
             long id,
             String name,
             String username,
+            String description,
             String creationTime,
             int sectionCount,
             int pageCount) {
         this.id = id;
         this.name.set(name);
         this.username.set(username);
+        this.description.set(description);
         this.creationTime.set(creationTime);
         this.sectionCount.set(sectionCount);
         this.pageCount.set(pageCount);
@@ -38,12 +44,13 @@ public class NotebookViewModel {
     }
 
     public static NotebookViewModel fromNotebook(Notebook notebook) {
-        return new NotebookViewModel(notebook.getId(),
-                notebook.getName(),
-                notebook.getName(),
-                notebook.getCreationTime().format(DateTimeFormatter.ISO_DATE_TIME),
-                notebook.getSectionCount(),
-                notebook.getPageCount());
+        return new NotebookViewModel(notebook.id(),
+                notebook.name(),
+                notebook.username(),
+                notebook.description(),
+                LocalDateTime.parse(notebook.creationTime()).format(DateTimeFormatter.ISO_LOCAL_TIME),
+                notebook.sectionCount(),
+                notebook.pageCount());
     }
 
     public String getName() {
@@ -62,10 +69,6 @@ public class NotebookViewModel {
         return username.get();
     }
 
-    public void setUsername(String username) {
-        this.username.set(username);
-    }
-
     public StringProperty usernameProperty() {
         return username;
     }
@@ -74,9 +77,6 @@ public class NotebookViewModel {
         return creationTime.get();
     }
 
-    public void setCreationTime(String creationTime) {
-        this.creationTime.set(creationTime);
-    }
 
     public StringProperty creationTimeProperty() {
         return creationTime;
@@ -86,9 +86,6 @@ public class NotebookViewModel {
         return sectionCount.get();
     }
 
-    public void setSectionCount(int sectionCount) {
-        this.sectionCount.set(sectionCount);
-    }
 
     public IntegerProperty sectionCountProperty() {
         return sectionCount;
@@ -105,4 +102,13 @@ public class NotebookViewModel {
     public long getId() {
         return id;
     }
+
+    public String getDescription() {
+        return description.get();
+    }
+
+    public StringProperty descriptionProperty() {
+        return description;
+    }
+
 }

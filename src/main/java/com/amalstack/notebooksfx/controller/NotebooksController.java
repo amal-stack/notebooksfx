@@ -1,9 +1,13 @@
 package com.amalstack.notebooksfx.controller;
 
 import com.amalstack.notebooksfx.data.repository.NotebookRepository;
+import com.amalstack.notebooksfx.nav.NavigationManager;
+import com.amalstack.notebooksfx.nav.Parents;
 import com.amalstack.notebooksfx.notebook.NotebookTableViewFactory;
 import com.amalstack.notebooksfx.notebook.NotebookViewModel;
+import com.amalstack.notebooksfx.notebook.OpenNotebookCommand;
 import com.amalstack.notebooksfx.notebook.UpdateDetailPaneCommand;
+import com.amalstack.notebooksfx.util.http.AuthenticationContext;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -21,20 +25,14 @@ import java.util.stream.Collectors;
 public class NotebooksController {
     private final NotebookRepository notebookRepo;
     private final NotebookTableViewFactory tableFactory;
-
-    public NotebooksController(
-            NotebookRepository notebookRepo,
-            NotebookTableViewFactory tableFactory) {
-        this.notebookRepo = notebookRepo;
-        this.tableFactory = tableFactory;
-    }
-
+    private final AuthenticationContext authenticationContext;
+    private final NavigationManager navigationManager;
+    @FXML
+    public Button searchTextClearButton;
     @FXML
     private MasterDetailPane masterDetailPane;
     @FXML
     private TextField searchTextField;
-    @FXML
-    public Button searchTextClearButton;
     @FXML
     private Button notebookCreateButton;
     @FXML
@@ -48,14 +46,30 @@ public class NotebooksController {
     @FXML
     private Label notebookDescLabel;
 
+    public NotebooksController(
+            NotebookRepository notebookRepo,
+            NotebookTableViewFactory tableFactory,
+            AuthenticationContext authenticationContext,
+            NavigationManager navigationManager) {
+        this.notebookRepo = notebookRepo;
+        this.tableFactory = tableFactory;
+        this.authenticationContext = authenticationContext;
+        this.navigationManager = navigationManager;
+    }
+
     @FXML
     public void initialize() {
+
+        if (!authenticationContext.isAuthenticated()) {
+            navigationManager.navigateTo(Parents.AUTH);
+        }
         setButtonGraphics();
         TableView<NotebookViewModel> notebooksTableView = tableFactory.create(
                 getNotebooks(),
                 searchTextField,
                 newUpdateDetailPaneCommand()
         );
+        notebookOpenButton.setOnAction(x -> new OpenNotebookCommand(navigationManager).execute(notebooksTableView.getSelectionModel().getSelectedItem()));
         masterDetailPane.setMasterNode(notebooksTableView);
         masterDetailPane.setShowDetailNode(false);
     }
@@ -78,8 +92,8 @@ public class NotebooksController {
     }
 
     private ObservableList<NotebookViewModel> getNotebooks() {
-        //TODO: replace with actual user ID
-        return notebookRepo.findByUserId(1L)
+
+        return notebookRepo.findByCurrentUser()
                 .stream()
                 .map(NotebookViewModel::fromNotebook)
                 .collect(Collectors.toCollection(FXCollections::observableArrayList));

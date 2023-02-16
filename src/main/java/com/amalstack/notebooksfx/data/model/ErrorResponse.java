@@ -25,13 +25,13 @@ public class ErrorResponse {
             @JsonProperty("message") String message,
             @JsonProperty("path") String path,
             @JsonProperty("timestamp") String timestamp,
-            @JsonProperty("errors") HashMap<String, String> errors) {
+            @JsonProperty("errors") Map<String, String> errors) {
         this.status = status;
         this.error = error;
         this.message = message;
         this.path = path;
         this.timestamp = timestamp;
-        this.errors = Collections.unmodifiableMap(errors);
+        this.errors = errors == null ? null : Collections.unmodifiableMap(errors);
     }
 
 
@@ -97,6 +97,3 @@ public class ErrorResponse {
     }
 
 }
-
-
-
