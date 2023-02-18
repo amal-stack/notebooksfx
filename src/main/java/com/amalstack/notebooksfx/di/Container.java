@@ -83,6 +83,13 @@ public final class Container {
         return newInstanceOf(publicConstructor);
     }
 
+    @SuppressWarnings("unchecked")
+    public <T> T injectAndConstruct(Class<T> clazz, Object... services) {
+        validateService(clazz);
+        Constructor<? extends T> publicConstructor = (Constructor<? extends T>) clazz.getConstructors()[0];
+        return newInstanceOf(publicConstructor, services);
+    }
+
     public Lifetime getServiceLifetime(Class<?> abstraction) {
         var descriptor = services.get(abstraction);
         if (descriptor == null) {
@@ -139,6 +146,44 @@ public final class Container {
         } catch (ReflectiveOperationException exception) {
             throw new RuntimeException(exception);
         }
+    }
+
+    private <T> T newInstanceOf(Constructor<T> constructor, Object... serviceInstances) {
+        var parameterTypes = constructor.getParameterTypes();
+        System.out.println("1. Requested instance of " + constructor.getDeclaringClass().getName());
+        Object[] parameters = new Object[parameterTypes.length];
+        for (int i = 0; i < parameterTypes.length; i++) {
+            var desc = services.get(parameterTypes[i]);
+            parameters[i] = getServiceIfSupplied(desc, serviceInstances);
+            if (parameters[i] == null) {
+                if (desc != null && visitChain.requested(desc)) {
+                    throw new CircularServiceDependencyException(visitChain.toString());
+                }
+                System.out.println("2. Resolving parameter " + parameterTypes[i].getName());
+
+                parameters[i] = getService(parameterTypes[i]);
+                visitChain.resolved(parameterTypes[i]);
+                System.out.println("3. Resolved parameter " + parameterTypes[i].getName());
+            } else {
+                System.out.println("Resolved parameter " + parameterTypes[i].getName() + " of type " + parameterTypes[i].getSimpleName() + " using supplied service instance of " + parameters[i].getClass());
+            }
+        }
+        System.out.println("4. Creating instance of " + constructor.getDeclaringClass().getName());
+        System.out.println();
+        try {
+            return constructor.newInstance(parameters);
+        } catch (ReflectiveOperationException exception) {
+            throw new RuntimeException(exception);
+        }
+    }
+
+    private static Object getServiceIfSupplied(ServiceDescriptor<?, ?> desc, Object[] serviceInstances) {
+        for (var serviceInstance : serviceInstances) {
+            if (desc.abstractionType().isInstance(serviceInstance)) {
+                return serviceInstance;
+            }
+        }
+        return null;
     }
 
     private void validateService(Class<?> service) {
