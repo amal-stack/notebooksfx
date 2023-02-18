@@ -27,7 +27,6 @@ import java.util.stream.IntStream;
 public class EditorController implements ParameterizedController {
     private final EditorContextFactory factory;
     private final GraphicNodeProvider graphic;
-
     private final NotebookRepository notebookRepository;
 
     private EditorContext context;
@@ -142,6 +141,8 @@ public class EditorController implements ParameterizedController {
 
     private TreeView<TreeItemModel> createTreeView(NotebookTreeItemModel model) {
         return NotebookTreeViewBuilder.forModel(model)
+                .withId("notebookTreeView")
+                .withGraphicNodeProvider(graphic)
                 .onTreeItemSelect(this::onTreeItemSelect)
                 .onEditCommit(this::onTreeViewEditCommit)
                 .configure(treeView -> {
@@ -173,6 +174,7 @@ public class EditorController implements ParameterizedController {
                             return model;
                         })
                         .toList());
+
         return notebookTreeItemModel;
     }
 
@@ -218,10 +220,12 @@ public class EditorController implements ParameterizedController {
     private void toggleDetailPane(ActionEvent event) {
         boolean shouldShow = !masterDetailPane.isShowDetailNode();
         if (shouldShow) {
+            // show
             masterDetailPane.setShowDetailNode(true);
             viewSectionsBtn.setGraphic(graphic.getNode(Graphic.HIDE));
             return;
         }
+        // hide
         masterDetailPane.setShowDetailNode(false);
         viewSectionsBtn.setGraphic(graphic.getNode(Graphic.SHOW));
     }
