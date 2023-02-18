@@ -44,6 +44,7 @@ public class EditorSplitMenuButtonBuilder extends EditorControlBuilder<SplitMenu
         try {
             super.validateState();
         } catch (IllegalStateException e) {
+            //TODO: Remove silent catch
             System.out.println(e.getMessage());
         }
     }
