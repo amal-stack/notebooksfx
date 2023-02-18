@@ -60,14 +60,14 @@ public abstract class EditorControlBuilder<C, B extends EditorControlBuilder<C, 
     }
 
     protected void validateState() {
-        if (textArea == null) {
-            throw new IllegalStateException("The editor for the editor control is not set.");
-        }
         if (id == null) {
             throw new IllegalStateException("The id for the editor control is not set.");
         }
+        if (textArea == null) {
+            throw new IllegalStateException("The editor for the editor control with id '" + id + "' is not set.");
+        }
         if (command == null) {
-            throw new IllegalStateException("The action performed for the editor control is not set.");
+            throw new IllegalStateException("The action performed for the editor control with id '" + id + "' is not set.");
         }
     }
 
