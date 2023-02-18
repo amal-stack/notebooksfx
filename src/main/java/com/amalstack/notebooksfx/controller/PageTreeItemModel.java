@@ -1,12 +1,13 @@
 package com.amalstack.notebooksfx.controller;
 
+import com.amalstack.notebooksfx.data.model.Page;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 public class PageTreeItemModel extends TreeItemModel {
     private final StringProperty content = new SimpleStringProperty(this, "content");
 
-    public PageTreeItemModel(int id, String name, String content) {
+    public PageTreeItemModel(long id, String name, String content) {
         super(id, name);
         this.content.set(content);
     }
@@ -21,5 +22,9 @@ public class PageTreeItemModel extends TreeItemModel {
 
     public StringProperty contentProperty() {
         return content;
+    }
+
+    public static PageTreeItemModel fromPage(Page page) {
+        return new PageTreeItemModel(page.id(), page.title(), page.content());
     }
 }

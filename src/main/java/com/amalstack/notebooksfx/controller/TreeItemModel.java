@@ -6,15 +6,15 @@ import javafx.scene.control.TreeView;
 import javafx.util.StringConverter;
 
 public abstract class TreeItemModel {
-    private final int id;
+    private final long id;
     private final StringProperty name = new SimpleStringProperty(this, "name");
 
-    public TreeItemModel(int id, String name) {
+    public TreeItemModel(long id, String name) {
         this.id = id;
         this.name.set(name);
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
