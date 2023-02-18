@@ -1,7 +1,7 @@
 package com.amalstack.notebooksfx.controller;
 
-import com.amalstack.notebooksfx.DefaultGraphicNodeProvider;
 import com.amalstack.notebooksfx.Graphic;
+import com.amalstack.notebooksfx.GraphicNodeProvider;
 import com.amalstack.notebooksfx.builder.ControlBuilder;
 import javafx.beans.value.ChangeListener;
 import javafx.event.EventHandler;
@@ -13,7 +13,7 @@ import java.util.function.Consumer;
 
 public class NotebookTreeViewBuilder implements ControlBuilder<TreeView<TreeItemModel>, NotebookTreeViewBuilder> {
     private final NotebookTreeItemModel model;
-    private final DefaultGraphicNodeProvider graphicProvider = new DefaultGraphicNodeProvider();
+    private GraphicNodeProvider graphicNodeProvider;
     private ChangeListener<TreeItem<TreeItemModel>> selectListener;
     private EventHandler<TreeView.EditEvent<TreeItemModel>> editCommitEvent;
     private Consumer<TreeView<TreeItemModel>> config;
@@ -43,13 +43,21 @@ public class NotebookTreeViewBuilder implements ControlBuilder<TreeView<TreeItem
         return this;
     }
 
+    public NotebookTreeViewBuilder withGraphicNodeProvider(GraphicNodeProvider graphicNodeProvider) {
+        this.graphicNodeProvider = graphicNodeProvider;
+        return this;
+    }
+
     public NotebookTreeViewBuilder configure(Consumer<TreeView<TreeItemModel>> config) {
         this.config = config;
         return this;
     }
 
     public TreeView<TreeItemModel> build() {
-        TreeItem<TreeItemModel> root = new TreeItem<>(model, graphicProvider.getNode(Graphic.NOTEBOOK));
+        if (graphicNodeProvider == null) {
+            throw new IllegalStateException("GraphicNodeProvider instance must be set.");
+        }
+        TreeItem<TreeItemModel> root = new TreeItem<>(model, graphicNodeProvider.getNode(Graphic.NOTEBOOK));
         addSections(root);
 
         TreeView<TreeItemModel> treeView = new TreeView<>(root);
@@ -69,7 +77,7 @@ public class NotebookTreeViewBuilder implements ControlBuilder<TreeView<TreeItem
 
     private void addSections(TreeItem<TreeItemModel> root) {
         for (var section : model.getSections()) {
-            TreeItem<TreeItemModel> sectionTreeItem = new TreeItem<>(section, graphicProvider.getNode(Graphic.SECTION));
+            TreeItem<TreeItemModel> sectionTreeItem = new TreeItem<>(section, graphicNodeProvider.getNode(Graphic.SECTION));
             addPages(sectionTreeItem, section);
             root.getChildren().add(sectionTreeItem);
         }
@@ -77,7 +85,7 @@ public class NotebookTreeViewBuilder implements ControlBuilder<TreeView<TreeItem
 
     private void addPages(TreeItem<TreeItemModel> sectionTreeItem, SectionTreeItemModel section) {
         for (var page : section.getPages()) {
-            TreeItem<TreeItemModel> pageTreeItem = new TreeItem<>(page, graphicProvider.getNode(Graphic.PAGE));
+            TreeItem<TreeItemModel> pageTreeItem = new TreeItem<>(page, graphicNodeProvider.getNode(Graphic.PAGE));
             sectionTreeItem.getChildren().add(pageTreeItem);
         }
     }
