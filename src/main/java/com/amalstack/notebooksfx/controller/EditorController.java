@@ -2,9 +2,12 @@ package com.amalstack.notebooksfx.controller;
 
 import com.amalstack.notebooksfx.Graphic;
 import com.amalstack.notebooksfx.GraphicNodeProvider;
+import com.amalstack.notebooksfx.data.repository.NotebookRepository;
 import com.amalstack.notebooksfx.editor.EditorContext;
 import com.amalstack.notebooksfx.editor.EditorContextFactory;
 import com.amalstack.notebooksfx.editor.command.CommandCode;
+import com.amalstack.notebooksfx.util.ControllerParameters;
+import com.amalstack.notebooksfx.util.ParameterizedController;
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -21,11 +24,15 @@ import org.fxmisc.richtext.StyleClassedTextArea;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class EditorController {
+public class EditorController implements ParameterizedController {
     private final EditorContextFactory factory;
     private final GraphicNodeProvider graphic;
 
+    private final NotebookRepository notebookRepository;
+
     private EditorContext context;
+
+    private ControllerParameters parameters;
 
     @FXML
     private VirtualizedScrollPane<StyleClassedTextArea> editorScrollPane;
@@ -54,16 +61,18 @@ public class EditorController {
     @FXML
     private ToolBar treeToolbar;
 
-    public EditorController(EditorContextFactory factory, GraphicNodeProvider graphic) {
+    public EditorController(EditorContextFactory factory,
+                            GraphicNodeProvider graphic,
+                            NotebookRepository notebookRepository) {
         this.factory = factory;
         this.graphic = graphic;
+        this.notebookRepository = notebookRepository;
     }
 
     public void initialize() {
         context = factory.create(editorTextArea);
         addEditorToolbarControls();
         initOutputWebView();
-        initNotebookTreeView();
     }
 
     private void addEditorToolbarControls() {
@@ -117,8 +126,8 @@ public class EditorController {
     }
 
 
-    private void initNotebookTreeView() {
-        var treeView = createTreeView();
+    private void initNotebookTreeView(NotebookTreeItemModel model) {
+        var treeView = createTreeView(model);
         detailPaneContainer.getChildren().add(treeView);
         masterDetailPane.setShowDetailNode(false);
         viewSectionsBtn.setGraphic(graphic.getNode(Graphic.SHOW));
@@ -131,8 +140,8 @@ public class EditorController {
         outputWebView.getEngine().loadContent(html, "text/html");
     }
 
-    private TreeView<TreeItemModel> createTreeView() {
-        return NotebookTreeViewBuilder.forModel(getModel())
+    private TreeView<TreeItemModel> createTreeView(NotebookTreeItemModel model) {
+        return NotebookTreeViewBuilder.forModel(model)
                 .onTreeItemSelect(this::onTreeItemSelect)
                 .onEditCommit(this::onTreeViewEditCommit)
                 .configure(treeView -> {
@@ -143,7 +152,31 @@ public class EditorController {
                 .build();
     }
 
-    private NotebookTreeItemModel getModel() {
+    private NotebookTreeItemModel getModel(long notebookId) {
+        var notebookContents = notebookRepository.getContentsById(notebookId);
+
+        var notebookTreeItemModel = new NotebookTreeItemModel(
+                notebookContents.id(),
+                notebookContents.name());
+
+        notebookTreeItemModel.getSections()
+                .addAll(notebookContents.sections()
+                        .stream()
+                        .map(c -> {
+                            var model
+                                    = SectionTreeItemModel.fromSectionContents(c);
+                            model.getPages().addAll(c
+                                    .pages()
+                                    .stream()
+                                    .map(PageTreeItemModel::fromPage)
+                                    .toList());
+                            return model;
+                        })
+                        .toList());
+        return notebookTreeItemModel;
+    }
+
+    private NotebookTreeItemModel getTestModel() {
         var treeItem = new NotebookTreeItemModel(1, "Current");
         treeItem.getSections()
                 .addAll(IntStream.rangeClosed(1, 5).mapToObj(i -> {
@@ -191,6 +224,23 @@ public class EditorController {
         }
         masterDetailPane.setShowDetailNode(false);
         viewSectionsBtn.setGraphic(graphic.getNode(Graphic.SHOW));
+    }
+
+    @Override
+    public ControllerParameters getParameters() {
+        return parameters;
+    }
+
+    @Override
+    public void setParameters(ControllerParameters parameters) {
+        this.parameters = parameters;
+        onParametersSet();
+    }
+
+    private void onParametersSet() {
+        Long notebookId = parameters.<Long>get("notebook.id").orElseThrow();
+        NotebookTreeItemModel model = getModel(notebookId);
+        initNotebookTreeView(model);
     }
 }
 
