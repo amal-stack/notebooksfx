@@ -9,6 +9,8 @@ on:
   pull_request:
     branches: [ "master" ]
 
+permissions: write
+
 jobs:
   build:
 
