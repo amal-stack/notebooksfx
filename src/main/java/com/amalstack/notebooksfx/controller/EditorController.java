@@ -2,6 +2,7 @@ package com.amalstack.notebooksfx.controller;
 
 import com.amalstack.notebooksfx.Graphic;
 import com.amalstack.notebooksfx.GraphicNodeProvider;
+import com.amalstack.notebooksfx.data.model.Notebook;
 import com.amalstack.notebooksfx.data.repository.NotebookRepository;
 import com.amalstack.notebooksfx.editor.EditorContext;
 import com.amalstack.notebooksfx.editor.EditorContextFactory;
@@ -112,10 +113,12 @@ public class EditorController implements ParameterizedController {
         saveBtn.setGraphic(graphic.getNode(Graphic.REFRESH));
 
         var progressProperty = webViewProgress.progressProperty();
+        // Bind progress to web engine load worker's progress
         progressProperty.bind(outputWebView
                 .getEngine()
                 .getLoadWorker()
                 .progressProperty());
+        // Show progress only if value is greater than 0 and less than 1
         webViewProgress.visibleProperty()
                 .bind(Bindings
                         .when(progressProperty.lessThan(0)
@@ -154,7 +157,7 @@ public class EditorController implements ParameterizedController {
     }
 
     private NotebookTreeItemModel getModel(long notebookId) {
-        var notebookContents = notebookRepository.getContentsById(notebookId);
+        Notebook.Contents notebookContents = notebookRepository.getContentsById(notebookId);
 
         var notebookTreeItemModel = new NotebookTreeItemModel(
                 notebookContents.id(),
