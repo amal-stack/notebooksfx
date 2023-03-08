@@ -53,6 +53,7 @@
                     <ToolBar fx:id="editorToolbar">
                     </ToolBar>
                     <VirtualizedScrollPane fx:id="editorScrollPane" VBox.vgrow="ALWAYS">
+                        <!--suppress JavaFxDefaultTag -->
                         <content>
                             <StyleClassedTextArea fx:id="editorTextArea" styleClass="editor-rich-text-area">
                                 <padding>

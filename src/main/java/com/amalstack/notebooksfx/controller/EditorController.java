@@ -2,6 +2,7 @@ package com.amalstack.notebooksfx.controller;
 
 import com.amalstack.notebooksfx.Graphic;
 import com.amalstack.notebooksfx.GraphicNodeProvider;
+import com.amalstack.notebooksfx.data.model.Notebook;
 import com.amalstack.notebooksfx.data.repository.NotebookRepository;
 import com.amalstack.notebooksfx.editor.EditorContext;
 import com.amalstack.notebooksfx.editor.EditorContextFactory;
@@ -27,7 +28,6 @@ import java.util.stream.IntStream;
 public class EditorController implements ParameterizedController {
     private final EditorContextFactory factory;
     private final GraphicNodeProvider graphic;
-
     private final NotebookRepository notebookRepository;
 
     private EditorContext context;
@@ -113,10 +113,12 @@ public class EditorController implements ParameterizedController {
         saveBtn.setGraphic(graphic.getNode(Graphic.REFRESH));
 
         var progressProperty = webViewProgress.progressProperty();
+        // Bind progress to web engine load worker's progress
         progressProperty.bind(outputWebView
                 .getEngine()
                 .getLoadWorker()
                 .progressProperty());
+        // Show progress only if value is greater than 0 and less than 1
         webViewProgress.visibleProperty()
                 .bind(Bindings
                         .when(progressProperty.lessThan(0)
@@ -142,6 +144,8 @@ public class EditorController implements ParameterizedController {
 
     private TreeView<TreeItemModel> createTreeView(NotebookTreeItemModel model) {
         return NotebookTreeViewBuilder.forModel(model)
+                .withId("notebookTreeView")
+                .withGraphicNodeProvider(graphic)
                 .onTreeItemSelect(this::onTreeItemSelect)
                 .onEditCommit(this::onTreeViewEditCommit)
                 .configure(treeView -> {
@@ -153,7 +157,7 @@ public class EditorController implements ParameterizedController {
     }
 
     private NotebookTreeItemModel getModel(long notebookId) {
-        var notebookContents = notebookRepository.getContentsById(notebookId);
+        Notebook.Contents notebookContents = notebookRepository.getContentsById(notebookId);
 
         var notebookTreeItemModel = new NotebookTreeItemModel(
                 notebookContents.id(),
@@ -173,6 +177,7 @@ public class EditorController implements ParameterizedController {
                             return model;
                         })
                         .toList());
+
         return notebookTreeItemModel;
     }
 
@@ -218,10 +223,12 @@ public class EditorController implements ParameterizedController {
     private void toggleDetailPane(ActionEvent event) {
         boolean shouldShow = !masterDetailPane.isShowDetailNode();
         if (shouldShow) {
+            // show
             masterDetailPane.setShowDetailNode(true);
             viewSectionsBtn.setGraphic(graphic.getNode(Graphic.HIDE));
             return;
         }
+        // hide
         masterDetailPane.setShowDetailNode(false);
         viewSectionsBtn.setGraphic(graphic.getNode(Graphic.SHOW));
     }
