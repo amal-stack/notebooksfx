@@ -43,4 +43,5 @@ module com.amalstack.notebooksfx {
     exports com.amalstack.notebooksfx.data.model;
     opens com.amalstack.notebooksfx.data.model to com.fasterxml.jackson.databind;
     exports com.amalstack.notebooksfx.util.http;
+    opens com.amalstack.notebooksfx.editor.controller to javafx.fxml;
 }

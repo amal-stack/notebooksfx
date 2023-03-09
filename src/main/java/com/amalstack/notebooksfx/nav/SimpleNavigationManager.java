@@ -23,11 +23,22 @@ public class SimpleNavigationManager implements NavigationManager {
     }
 
     private static void supplyParameters(ControllerParameters parameters, FXMLLoader fxmlLoader) {
+        boolean set = false;
         if (fxmlLoader.getController() instanceof ParameterizedController controller) {
             controller.setParameters(parameters);
-            return;
+            set = true;
         }
-        throw new NavigationException("ControllerParameters instance was passed but target controller does not implement ParameterizedController");
+
+        // Set parameters for all controllers in the namespace
+        for (var value : fxmlLoader.getNamespace().values()) {
+            if (value instanceof ParameterizedController controller) {
+                controller.setParameters(parameters);
+                set = true;
+            }
+        }
+        if (!set) {
+            throw new NavigationException("ControllerParameters instance was passed but target controller does not implement ParameterizedController");
+        }
     }
 
     @Override

@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-      xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1"
+      xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.amalstack.notebooksfx.controller.AuthController">
     <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="94.0" prefWidth="600.0" text="NotebooksFX"
            textAlignment="CENTER" VBox.vgrow="ALWAYS">

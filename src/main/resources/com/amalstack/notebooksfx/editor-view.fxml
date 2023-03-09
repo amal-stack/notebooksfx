@@ -9,8 +9,8 @@
 <?import org.controlsfx.control.MasterDetailPane?>
 <?import org.fxmisc.flowless.VirtualizedScrollPane?>
 <?import org.fxmisc.richtext.StyleClassedTextArea?>
-<VBox prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.amalstack.notebooksfx.controller.EditorController">
+<VBox prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.amalstack.notebooksfx.editor.controller.EditorController">
     <MenuBar VBox.vgrow="NEVER">
         <Menu mnemonicParsing="false" text="File">
             <MenuItem mnemonicParsing="false" text="New"/>
@@ -75,11 +75,7 @@
             </SplitPane>
         </masterNode>
         <detailNode>
-            <VBox fx:id="detailPaneContainer">
-                <ToolBar fx:id="treeToolbar">
-                    <Button fx:id="newSectionBtn" mnemonicParsing="false" text="New Section..."/>
-                </ToolBar>
-            </VBox>
+            <fx:include fx:id="notebookTreeView" source="editor-tree-view.fxml" />
         </detailNode>
     </MasterDetailPane>
     <HBox id="HBox" alignment="CENTER_LEFT" spacing="5.0" VBox.vgrow="NEVER">
