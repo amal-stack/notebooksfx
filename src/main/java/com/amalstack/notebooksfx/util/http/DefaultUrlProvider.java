@@ -27,6 +27,7 @@ public class DefaultUrlProvider implements UrlProvider {
         return createURI(endpoint);
     }
 
+    //TODO: Remove:
     @Override
     public URI getEndpoint(String endpoint) {
         return createURI(endpoint);

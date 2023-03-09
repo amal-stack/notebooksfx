@@ -28,7 +28,7 @@ public class HttpBasicAuthenticationService implements AuthenticationService {
 
     public <T, U> Result<U, ? extends ErrorResponse> registerUser(T user, Class<U> userType) {
         var request = HttpRequest.newBuilder()
-                .uri(urlProvider.getEndpoint(AppRouteNames.USERS))
+                .uri(urlProvider.getEndpoint(Endpoint.ofName(AppRouteNames.USERS)))
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(jsonMapper.toJson(user)))
                 .build();

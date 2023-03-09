@@ -3,6 +3,7 @@ package com.amalstack.notebooksfx.data.repository.http;
 import com.amalstack.notebooksfx.AppRouteNames;
 import com.amalstack.notebooksfx.data.model.User;
 import com.amalstack.notebooksfx.data.repository.UserRepository;
+import com.amalstack.notebooksfx.util.http.Endpoint;
 import com.amalstack.notebooksfx.util.http.UrlProvider;
 
 import java.io.IOException;
@@ -45,7 +46,7 @@ public class HttpUserRepository implements UserRepository {
     @Override
     public void add(User user) {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(urlProvider.getEndpoint(AppRouteNames.USERS))
+                .uri(urlProvider.getEndpoint(Endpoint.ofName(AppRouteNames.USERS)))
                 .POST(BodyPublishers.noBody())
                 .build();
 
