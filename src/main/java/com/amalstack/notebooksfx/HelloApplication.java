@@ -50,7 +50,7 @@ public class HelloApplication extends Application {
                     .navigateTo(Parents.AUTH, stage);
 
             var endpointProvider = container.getService(UrlProvider.class);
-            System.out.println("Notebooks::" + endpointProvider.getEndpoint(NOTEBOOKS));
+            System.out.println("Notebooks::" + endpointProvider.getEndpoint(Endpoint.ofName(NOTEBOOKS)));
             System.out.println("Notebooks/User::" + endpointProvider.getEndpoint(Endpoint.ofName(RouteName.of(NOTEBOOKS, USER))));
             System.out.println("Base URL::" + endpointProvider.getBaseUrl());
             System.out.println("Auth::" + container.getService(AuthenticationService.class).authenticate("user_1", "pwd".toCharArray(), User.class));
