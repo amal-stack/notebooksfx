@@ -28,7 +28,7 @@ public class HttpBasicAuthenticationService implements AuthenticationService {
 
     public <T, U> Result<U, ? extends ErrorResponse> registerUser(T user, Class<U> userType) {
         var request = HttpRequest.newBuilder()
-                .uri(urlProvider.getEndpoint(Endpoint.ofName(AppRouteNames.USERS)))
+                .uri(urlProvider.getEndpoint(Endpoint.named(AppRouteNames.USERS)))
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(jsonMapper.toJson(user)))
                 .build();
@@ -49,7 +49,7 @@ public class HttpBasicAuthenticationService implements AuthenticationService {
         Arrays.fill(password, ' ');
 
         var request = HttpRequest.newBuilder()
-                .uri(urlProvider.getEndpoint(Endpoint.ofName(AppRouteNames.USERS)))
+                .uri(urlProvider.getEndpoint(Endpoint.named(AppRouteNames.USERS)))
                 .header("Authorization", authorizationHeader)
                 .GET()
                 .build();

@@ -1,6 +1,5 @@
 package com.amalstack.notebooksfx;
 
-import com.amalstack.notebooksfx.data.model.User;
 import com.amalstack.notebooksfx.data.repository.NotebookRepository;
 import com.amalstack.notebooksfx.data.repository.http.HttpNotebookRepository;
 import com.amalstack.notebooksfx.di.Container;
@@ -40,7 +39,7 @@ public class HelloApplication extends Application {
     @Override
     public void start(Stage stage) {
         try {
-            Thread.setDefaultUncaughtExceptionHandler(this::showError);
+            //Thread.setDefaultUncaughtExceptionHandler(this::showError);
             System.setProperty("prism.lcdtext", "false");
             stage.setScene(new Scene(new Group()));
             Container container = new Container();
@@ -50,10 +49,10 @@ public class HelloApplication extends Application {
                     .navigateTo(Parents.AUTH, stage);
 
             var endpointProvider = container.getService(UrlProvider.class);
-            System.out.println("Notebooks::" + endpointProvider.getEndpoint(Endpoint.ofName(NOTEBOOKS)));
-            System.out.println("Notebooks/User::" + endpointProvider.getEndpoint(Endpoint.ofName(RouteName.of(NOTEBOOKS, USER))));
+            System.out.println("Notebooks::" + endpointProvider.getEndpoint(Endpoint.named(NOTEBOOKS)));
+            System.out.println("Notebooks/User::" + endpointProvider.getEndpoint(Endpoint.named(NOTEBOOKS, USER)));
             System.out.println("Base URL::" + endpointProvider.getBaseUrl());
-            System.out.println("Auth::" + container.getService(AuthenticationService.class).authenticate("user_1", "pwd".toCharArray(), User.class));
+            //System.out.println("Auth::" + container.getService(AuthenticationService.class).authenticate("user_1", "pwd".toCharArray(), User.class));
         } catch (HttpResponseException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);
