@@ -2,33 +2,40 @@ package com.amalstack.notebooksfx.data.repository;
 
 /**
  * Defines a generic repository that manages an entity by interacting with a data source.
- * @param <T> The type of elements managed by the repository.
- * @param <I> The type of the id of the elements in the repository.
+ *
  * @author Amal Krishna
  */
-public interface Repository<T, I> {
+public interface Repository {
     /**
      * Finds an element by the provided id.
-     * @param id The id of the element.
+     *
+     * @param <T> The type of the element.
+     * @param <I> The type of the id.
+     * @param id  The id of the element.
      * @return The element with the specified id.
      */
-    T find(I id);
+    <T, I> T findById(I id);
 
     /**
      * Persists a new item.
+     *
+     * @param <T>  The type of the item.
      * @param item The item to persist.
      */
-    void add(T item);
+    <T> void add(T item);
 
     /**
      * Updates an existing item.
+     *
+     * @param <T>  The type of the item.
      * @param item The item to update.
      */
-    void update(T item);
+    <T> void update(T item);
 
     /**
      * Deletes an existing item.
-     * @param item The item to delete.
+     *
+     * @param id The id of the item to delete.
      */
-    void delete(T item);
+    <I> void deleteById(I id);
 }
