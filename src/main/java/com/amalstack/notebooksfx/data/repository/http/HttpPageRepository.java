@@ -1,15 +1,16 @@
 package com.amalstack.notebooksfx.data.repository.http;
 
 import com.amalstack.notebooksfx.data.model.Page;
+import com.amalstack.notebooksfx.data.model.PageInput;
 import com.amalstack.notebooksfx.data.repository.PageRepository;
 import com.amalstack.notebooksfx.util.http.Endpoint;
 import com.amalstack.notebooksfx.util.http.HttpClientService;
-import com.amalstack.notebooksfx.util.http.RouteName;
 
 import java.util.Collection;
 import java.util.List;
 
 import static com.amalstack.notebooksfx.AppRouteNames.*;
+
 
 public class HttpPageRepository implements PageRepository {
 
@@ -26,37 +27,32 @@ public class HttpPageRepository implements PageRepository {
 
     @Override
     public Collection<Page> findBySectionId(Long sectionId) {
-        Endpoint endpoint = Endpoint.ofName(RouteName.of(PAGES, SECTION, ID), sectionId);
-        return List.of(httpClient.get(endpoint, Page[].class).getObjectOrThrow());
+        Endpoint endpoint = Endpoint.named(PAGES, SECTION, ID)
+                .pathParameters(sectionId);
+
+        return List.of(httpClient
+                .get(endpoint, Page[].class)
+                .getObjectOrThrow());
     }
 
     @Override
     public int countByNotebookId(Long notebookId) {
-        return 0;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public int countBySectionId(Long sectionId) {
-        return 0;
+        throw new UnsupportedOperationException();
     }
 
     @Override
-    public Page find(Long id) {
-        return null;
+    public void create(PageInput pageInput) {
+        throw new UnsupportedOperationException();
     }
 
     @Override
-    public void add(Page item) {
-
+    public void update(PageInput pageInput) {
+        throw new UnsupportedOperationException();
     }
 
-    @Override
-    public void update(Page item) {
-
-    }
-
-    @Override
-    public void delete(Page item) {
-
-    }
 }
