@@ -2,7 +2,7 @@ package com.amalstack.notebooksfx.editor.controller;
 
 import com.amalstack.notebooksfx.GraphicNodeProvider;
 import com.amalstack.notebooksfx.controller.*;
-import com.amalstack.notebooksfx.data.model.Notebook;
+import com.amalstack.notebooksfx.data.model.NotebookContents;
 import com.amalstack.notebooksfx.data.repository.NotebookRepository;
 import com.amalstack.notebooksfx.util.ControllerParameters;
 import com.amalstack.notebooksfx.util.ParameterizedController;
@@ -62,7 +62,7 @@ public class NotebookTreeViewController implements ParameterizedController {
     }
 
     private NotebookTreeItemModel getModel(long notebookId) {
-        Notebook.Contents notebookContents = notebookRepository.getContentsById(notebookId);
+        NotebookContents notebookContents = notebookRepository.getContentsById(notebookId);
 
         var notebookTreeItemModel = new NotebookTreeItemModel(
                 notebookContents.id(),
@@ -136,12 +136,23 @@ public class NotebookTreeViewController implements ParameterizedController {
 //            String content = page.getContent();
 //            editorTextArea.replaceText(content);
 //            previewHtml();
-
         }
     }
 
     private void onTreeViewEditCommit(TreeView.EditEvent<TreeItemModel> treeItemModelEditEvent) {
         //TODO: Save name change
+        var oldValue = treeItemModelEditEvent.getOldValue();
+        var newValue = treeItemModelEditEvent.getNewValue();
+        if (oldValue.getName().equals(newValue.getName())) {
+            return;
+        }
+        if (newValue instanceof NotebookTreeItemModel notebook) {
+            //notebookRepository.update();
+        } else if (newValue instanceof SectionTreeItemModel section) {
+            //notebookRepository.updateSectionName(section.getId(), section.getName());
+        } else if (newValue instanceof PageTreeItemModel page) {
+            // notebookRepository.updatePageName(page.getId(), page.getName());
+        }
     }
 
     private NotebookTreeItemModel getTestModel() {

@@ -1,13 +1,14 @@
 package com.amalstack.notebooksfx.data.model;
 
-public record Notebook(
+import java.util.Collection;
+
+public record NotebookContents(
         long id,
         String name,
         String username,
         String description,
         String creationTime,
-        int sectionCount,
-        int pageCount) {
+        Collection<SectionContents> sections
+) {
 
 }
-

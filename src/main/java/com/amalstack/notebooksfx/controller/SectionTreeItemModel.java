@@ -1,6 +1,6 @@
 package com.amalstack.notebooksfx.controller;
 
-import com.amalstack.notebooksfx.data.model.Section;
+import com.amalstack.notebooksfx.data.model.SectionContents;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -11,11 +11,11 @@ public class SectionTreeItemModel extends TreeItemModel {
         super(id, name);
     }
 
-    public ObservableList<PageTreeItemModel> getPages() {
-        return pages;
+    public static SectionTreeItemModel fromSectionContents(SectionContents sectionContents) {
+        return new SectionTreeItemModel(sectionContents.id(), sectionContents.name());
     }
 
-    public static SectionTreeItemModel fromSectionContents(Section.Contents sectionContents) {
-        return new SectionTreeItemModel(sectionContents.id(), sectionContents.name());
+    public ObservableList<PageTreeItemModel> getPages() {
+        return pages;
     }
 }
