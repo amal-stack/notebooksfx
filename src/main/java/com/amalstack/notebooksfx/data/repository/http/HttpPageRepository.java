@@ -55,4 +55,18 @@ public class HttpPageRepository implements PageRepository {
         throw new UnsupportedOperationException();
     }
 
+
+    @Override
+    public void rename(Long pageId, String pageName) {
+        Endpoint endpoint = Endpoint.named(PAGES, ID)
+                .pathParameters(pageId);
+
+        Page page = httpClient.get(endpoint, Page.class)
+                .getObjectOrThrow();
+
+        PageInput input = new PageInput(pageName, page.content(), page.sectionId());
+
+        httpClient.put(endpoint, input)
+                .throwIfFailure();
+    }
 }

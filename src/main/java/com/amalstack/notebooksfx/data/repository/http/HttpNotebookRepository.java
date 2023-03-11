@@ -62,6 +62,21 @@ public class HttpNotebookRepository implements NotebookRepository {
     }
 
     @Override
+    public void rename(long notebookId, String newName) {
+        var endpoint = Endpoint.named(NOTEBOOKS, ID)
+                .pathParameters(notebookId);
+
+        Notebook notebook = httpClient.get(endpoint, Notebook.class)
+                .getObjectOrThrow();
+
+        NotebookInput notebookInput = new NotebookInput(newName,
+                notebook.description());
+
+        httpClient.put(endpoint, notebookInput)
+                .throwIfFailure();
+    }
+
+    @Override
     public void delete(Long notebookId) {
 
     }

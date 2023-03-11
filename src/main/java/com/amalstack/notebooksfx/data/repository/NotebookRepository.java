@@ -18,6 +18,8 @@ public interface NotebookRepository {
 
     void update(NotebookInput notebookInput);
 
+    void rename(long notebookId, String newName);
+
     void delete(Long notebookId);
 }
 

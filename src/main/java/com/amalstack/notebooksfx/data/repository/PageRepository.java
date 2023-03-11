@@ -18,5 +18,7 @@ public interface PageRepository {
     void create(PageInput pageInput);
 
     void update(PageInput pageInput);
+
+    void rename(Long pageId, String pageName);
 }
 

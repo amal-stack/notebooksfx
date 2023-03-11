@@ -15,6 +15,7 @@ public interface SectionRepository {
 
     void update(SectionInput sectionInput);
 
+    void rename(Long sectionId, String name);
 }
 
 

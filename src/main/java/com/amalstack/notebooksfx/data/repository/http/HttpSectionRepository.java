@@ -44,4 +44,19 @@ public class HttpSectionRepository implements SectionRepository {
     public void update(SectionInput sectionInput) {
 
     }
+
+    @Override
+    public void rename(Long sectionId, String newSectionName) {
+        var endpoint = Endpoint.named(SECTIONS, ID)
+                .pathParameters(sectionId);
+
+        Section section = httpClient.get(endpoint, Section.class)
+                .getObjectOrThrow();
+
+        SectionInput input = new SectionInput(newSectionName,
+                section.notebookId());
+
+        httpClient.put(endpoint, input)
+                .throwIfFailure();
+    }
 }
