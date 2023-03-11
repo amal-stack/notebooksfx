@@ -1,7 +1,15 @@
 package com.amalstack.notebooksfx;
 
+import com.amalstack.notebooksfx.data.DataAccessService;
+import com.amalstack.notebooksfx.data.HttpDataAccessService;
 import com.amalstack.notebooksfx.data.repository.NotebookRepository;
+import com.amalstack.notebooksfx.data.repository.PageRepository;
+import com.amalstack.notebooksfx.data.repository.SectionRepository;
+import com.amalstack.notebooksfx.data.repository.UserRepository;
 import com.amalstack.notebooksfx.data.repository.http.HttpNotebookRepository;
+import com.amalstack.notebooksfx.data.repository.http.HttpPageRepository;
+import com.amalstack.notebooksfx.data.repository.http.HttpSectionRepository;
+import com.amalstack.notebooksfx.data.repository.http.HttpUserRepository;
 import com.amalstack.notebooksfx.di.Container;
 import com.amalstack.notebooksfx.di.Lifetime;
 import com.amalstack.notebooksfx.editor.Configuration;
@@ -123,24 +131,32 @@ public class HelloApplication extends Application {
     }
 
     private void initServices(Container container) {
-        container.addService(NotebookRepository.class, HttpNotebookRepository.class, Lifetime.TRANSIENT);
+
         container.addService(GraphicNodeProvider.class, DefaultGraphicNodeProvider.class, Lifetime.SINGLETON);
         container.addService(EditorContextFactory.class, Configuration.DefaultEditorContextFactory.class, Lifetime.SINGLETON);
         container.addService(NotebookTableViewFactory.class, DefaultNotebookTableViewFactory.class, Lifetime.SINGLETON);
+
         container.addService(UrlProvider.class, DefaultUrlProvider.class, Lifetime.SINGLETON, this::createEndpointProvider);
-        container.addService(AuthenticationContext.class, DefaultAuthenticationContext.class, Lifetime.SINGLETON);
-        container.addService(AuthenticationService.class, HttpBasicAuthenticationService.class, Lifetime.SINGLETON);
+
         //container.addService(JsonMapper.class, GsonMapper.class, Lifetime.TRANSIENT, () -> GsonMapper.Factory.create(builder -> {}));
-        container.addService(JsonMapper.class, JacksonMapper.class, Lifetime.TRANSIENT, () -> new JacksonMapper(
-                        new ObjectMapper()
-                                .configure(DeserializationFeature.FAIL_ON_MISSING_CREATOR_PROPERTIES, false)
-                                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-                                .configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true)
-                                .configure(JsonParser.Feature.AUTO_CLOSE_SOURCE, true)
-                )
-        );
+        container.addService(JsonMapper.class, JacksonMapper.class, Lifetime.TRANSIENT, () -> new JacksonMapper(createObjectMapper()));
         container.addService(HttpClientService.class, BasicHttpClientService.class, Lifetime.SINGLETON);
         container.addService(ErrorResponseTypeProvider.class, DefaultErrorResponseTypeProvider.class, Lifetime.SINGLETON);
+
+        container.addService(AuthenticationContext.class, DefaultAuthenticationContext.class, Lifetime.SINGLETON);
+        container.addService(AuthenticationService.class, HttpBasicAuthenticationService.class, Lifetime.SINGLETON);
+
+        addDataAccess(container);
+
+    }
+
+    private static void addDataAccess(Container container) {
+        container.addService(NotebookRepository.class, HttpNotebookRepository.class, Lifetime.TRANSIENT);
+        container.addService(SectionRepository.class, HttpSectionRepository.class, Lifetime.TRANSIENT);
+        container.addService(PageRepository.class, HttpPageRepository.class, Lifetime.TRANSIENT);
+        container.addService(UserRepository.class, HttpUserRepository.class, Lifetime.TRANSIENT);
+
+        container.addService(DataAccessService.class, HttpDataAccessService.class, Lifetime.TRANSIENT);
     }
 
     private void initNav(Container container, Stage stage) {
@@ -190,6 +206,14 @@ public class HelloApplication extends Application {
         return new DefaultUrlProvider(
                 "http://localhost:8080",
                 routeTable);
+    }
+
+    private ObjectMapper createObjectMapper() {
+        return new ObjectMapper()
+                .configure(DeserializationFeature.FAIL_ON_MISSING_CREATOR_PROPERTIES, false)
+                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+                .configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true)
+                .configure(JsonParser.Feature.AUTO_CLOSE_SOURCE, true);
     }
 }
 
