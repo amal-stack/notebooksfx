@@ -1,7 +1,7 @@
 package com.amalstack.notebooksfx.editor.command;
 
-import com.amalstack.notebooksfx.Command;
+import com.amalstack.notebooksfx.command.ParameterizedResultCommand;
 
 @FunctionalInterface
-public interface TextEditorCommand extends Command<CharSequence, CharSequence> {
+public interface TextEditorCommand extends ParameterizedResultCommand<CharSequence, CharSequence> {
 }

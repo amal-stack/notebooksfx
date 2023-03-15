@@ -1,8 +1,8 @@
 package com.amalstack.notebooksfx.notebook;
 
-import com.amalstack.notebooksfx.Command;
 import com.amalstack.notebooksfx.builder.TableColumnConfig;
 import com.amalstack.notebooksfx.builder.TableViewBuilder;
+import com.amalstack.notebooksfx.command.ParameterizedCommand;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -40,7 +40,7 @@ public class DefaultNotebookTableViewFactory implements NotebookTableViewFactory
     public TableView<NotebookViewModel> create(
             ObservableList<NotebookViewModel> data,
             TextField searchTextField,
-            Command<NotebookViewModel, Void> rowClickCommand) {
+            ParameterizedCommand<NotebookViewModel> rowClickCommand) {
         return new TableViewBuilder<NotebookViewModel>()
                 .withId("notebooksTableView").hasPlaceholder(getPlaceHolder())
                 .addColumns(getColumns()).withData(data)

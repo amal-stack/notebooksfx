@@ -1,6 +1,6 @@
 package com.amalstack.notebooksfx.builder;
 
-import com.amalstack.notebooksfx.Command;
+import com.amalstack.notebooksfx.command.ParameterizedCommand;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
@@ -23,7 +23,7 @@ public class TableViewBuilder<T> implements ControlBuilder<TableView<T>, TableVi
     private String id;
     private Node placeholder;
     private ObservableList<T> data;
-    private Command<T, Void> rowClickCommand;
+    private ParameterizedCommand<T> rowClickCommand;
     private boolean isFilteringEnabled;
     private boolean isSortingEnabled;
     private StringProperty filterQuery;
@@ -123,7 +123,7 @@ public class TableViewBuilder<T> implements ControlBuilder<TableView<T>, TableVi
         return this;
     }
 
-    public TableViewBuilder<T> onRowClick(Command<T, Void> command) {
+    public TableViewBuilder<T> onRowClick(ParameterizedCommand<T> command) {
         this.rowClickCommand = command;
         return this;
     }

@@ -5,7 +5,9 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 public class PageTreeItemModel extends TreeItemModel {
+
     private final StringProperty content = new SimpleStringProperty(this, "content");
+
 
     public PageTreeItemModel(long id, String name, String content) {
         super(id, name);
