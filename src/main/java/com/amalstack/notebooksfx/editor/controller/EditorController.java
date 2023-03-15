@@ -4,13 +4,11 @@ import com.amalstack.notebooksfx.Graphic;
 import com.amalstack.notebooksfx.GraphicNodeProvider;
 import com.amalstack.notebooksfx.editor.EditorContext;
 import com.amalstack.notebooksfx.editor.EditorContextFactory;
-import com.amalstack.notebooksfx.editor.command.CommandCode;
 import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ProgressBar;
-import javafx.scene.control.Separator;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.VBox;
 import javafx.scene.web.WebView;
@@ -64,15 +62,16 @@ public class EditorController {
         context = factory.create(editorTextArea);
         addEditorToolbarControls();
         initOutputWebView();
-
         // default initial state
         masterDetailPane.setShowDetailNode(true);
         viewSectionsBtn.setGraphic(graphic.getNode(Graphic.SHOW));
         viewSectionsBtn.setOnAction(this::toggleDetailPane);
         editorTextArea.setEditable(false);
         editorTextArea.replaceText("Select a page to edit");
+
         notebookTreeViewController.currentPageProperty().addListener((observable, previousPage, newPage) -> {
             if (previousPage != null) {
+
                 //TODO: Save contents of previous page
             }
             if (newPage != null) {
@@ -87,36 +86,7 @@ public class EditorController {
     }
 
     private void addEditorToolbarControls() {
-        var items = editorToolbar.getItems();
-        items.add(context.getControl(CommandCode.BOLD));
-        items.add(context.getControl(CommandCode.EMPHASIZE));
-        items.add(context.getControl(CommandCode.UNDERLINE));
-
-        items.add(new Separator());
-
-        items.add(context.getControl(CommandCode.STRIKETHROUGH));
-        items.add(context.getControl(CommandCode.SUPERSCRIPT));
-        items.add(context.getControl(CommandCode.SUBSCRIPT));
-
-        items.add(new Separator());
-
-        items.add(context.getControl(CommandCode.HEADING));
-        items.add(context.getControl(CommandCode.CODE));
-
-        items.add(new Separator());
-
-        items.add(context.getControl(CommandCode.UNORDERED_LIST));
-        items.add(context.getControl(CommandCode.ORDERED_LIST));
-
-        items.add(new Separator());
-
-        items.add(context.getControl(CommandCode.URL));
-        items.add(context.getControl(CommandCode.IMAGE));
-        items.add(context.getControl(CommandCode.TABLE));
-
-        items.add(new Separator());
-
-        items.add(context.getControl(CommandCode.WRAP));
+        new EditorToolbarInitializer(context, editorToolbar).addControls();
     }
 
     private void initOutputWebView() {
