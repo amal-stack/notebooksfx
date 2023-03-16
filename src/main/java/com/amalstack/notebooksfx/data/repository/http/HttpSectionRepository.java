@@ -53,6 +53,10 @@ public class HttpSectionRepository implements SectionRepository {
         Section section = httpClient.get(endpoint, Section.class)
                 .getObjectOrThrow();
 
+        if (section.name().equals(newSectionName)) {
+            return;
+        }
+
         SectionInput input = new SectionInput(newSectionName,
                 section.notebookId());
 

@@ -69,6 +69,10 @@ public class HttpNotebookRepository implements NotebookRepository {
         Notebook notebook = httpClient.get(endpoint, Notebook.class)
                 .getObjectOrThrow();
 
+        if (notebook.name().equals(newName)) {
+            return;
+        }
+
         NotebookInput notebookInput = new NotebookInput(newName,
                 notebook.description());
 
@@ -81,4 +85,3 @@ public class HttpNotebookRepository implements NotebookRepository {
 
     }
 }
-
