@@ -98,7 +98,7 @@ public class EditorController {
                                PageTreeItemModel currentPage) {
         if (previousPage != null) {
             //TODO: Save contents of previous page
-
+            CommandExecutor.execute(new SavePageCommand(dataAccessService, context), previousPage);
         }
         if (currentPage != null) {
             editorTextArea.setEditable(true);
