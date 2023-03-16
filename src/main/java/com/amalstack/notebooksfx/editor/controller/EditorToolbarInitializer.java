@@ -5,7 +5,7 @@ import com.amalstack.notebooksfx.editor.command.CommandCode;
 import javafx.scene.control.Separator;
 import javafx.scene.control.ToolBar;
 
-class EditorToolbarInitializer {
+class EditorToolbarInitializer implements Initializer {
     private final EditorContext context;
     private final ToolBar editorToolbar;
 
@@ -14,7 +14,12 @@ class EditorToolbarInitializer {
         this.editorToolbar = editorToolbar;
     }
 
-    public void addControls() {
+    @Override
+    public void initialize() {
+        addControls();
+    }
+
+    private void addControls() {
         var items = editorToolbar.getItems();
         items.add(context.getControl(CommandCode.BOLD));
         items.add(context.getControl(CommandCode.EMPHASIZE));
