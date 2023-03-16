@@ -21,6 +21,15 @@ public class HttpPageRepository implements PageRepository {
     }
 
     @Override
+    public Page findById(Long pageId) {
+        Endpoint endpoint = Endpoint.named(PAGES, ID)
+                .pathParameters(pageId);
+
+        return httpClient.get(endpoint, Page.class)
+                .getObjectOrThrow();
+    }
+
+    @Override
     public Collection<Page> findByNotebookId(Long notebookId) {
         return null;
     }
@@ -58,13 +67,31 @@ public class HttpPageRepository implements PageRepository {
 
     @Override
     public void rename(Long pageId, String pageName) {
+
+        Page page = findById(pageId);
+
+        if (pageName.equals(page.title())) {
+            return;
+        }
+
         Endpoint endpoint = Endpoint.named(PAGES, ID)
                 .pathParameters(pageId);
-
-        Page page = httpClient.get(endpoint, Page.class)
-                .getObjectOrThrow();
-
         PageInput input = new PageInput(pageName, page.content(), page.sectionId());
+
+        httpClient.put(endpoint, input)
+                .throwIfFailure();
+    }
+
+    @Override
+    public void setContent(Long pageId, String content) {
+        Page page = findById(pageId);
+        if (content.equals(page.content())) {
+            return;
+        }
+
+        Endpoint endpoint = Endpoint.named(PAGES, ID)
+                .pathParameters(pageId);
+        PageInput input = new PageInput(page.title(), content, page.sectionId());
 
         httpClient.put(endpoint, input)
                 .throwIfFailure();

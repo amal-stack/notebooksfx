@@ -2,8 +2,9 @@ package com.amalstack.notebooksfx.editor.controller;
 
 import com.amalstack.notebooksfx.GraphicNodeProvider;
 import com.amalstack.notebooksfx.controller.*;
+import com.amalstack.notebooksfx.data.DataAccessService;
 import com.amalstack.notebooksfx.data.model.NotebookContents;
-import com.amalstack.notebooksfx.data.repository.NotebookRepository;
+import com.amalstack.notebooksfx.editor.RenameTreeItemCommand;
 import com.amalstack.notebooksfx.util.ControllerParameters;
 import com.amalstack.notebooksfx.util.ParameterizedController;
 import javafx.beans.property.ReadOnlyObjectProperty;
@@ -25,7 +26,7 @@ public class NotebookTreeViewController implements ParameterizedController {
 
     private final GraphicNodeProvider graphic;
 
-    private final NotebookRepository notebookRepository;
+    private final DataAccessService dataAccessService;
 
     private final ReadOnlyObjectWrapper<PageTreeItemModel> currentPage = new ReadOnlyObjectWrapper<>();
 
@@ -38,9 +39,9 @@ public class NotebookTreeViewController implements ParameterizedController {
     @FXML
     private ToolBar treeToolbar;
 
-    public NotebookTreeViewController(NotebookRepository notebookRepository,
+    public NotebookTreeViewController(DataAccessService dataAccessService,
                                       GraphicNodeProvider graphic) {
-        this.notebookRepository = notebookRepository;
+        this.dataAccessService = dataAccessService;
         this.graphic = graphic;
     }
 
@@ -62,7 +63,9 @@ public class NotebookTreeViewController implements ParameterizedController {
     }
 
     private NotebookTreeItemModel getModel(long notebookId) {
-        NotebookContents notebookContents = notebookRepository.getContentsById(notebookId);
+        NotebookContents notebookContents = dataAccessService
+                .notebooks()
+                .getContentsById(notebookId);
 
         var notebookTreeItemModel = new NotebookTreeItemModel(
                 notebookContents.id(),
@@ -140,19 +143,7 @@ public class NotebookTreeViewController implements ParameterizedController {
     }
 
     private void onTreeViewEditCommit(TreeView.EditEvent<TreeItemModel> treeItemModelEditEvent) {
-        //TODO: Save name change
-        var oldValue = treeItemModelEditEvent.getOldValue();
-        var newValue = treeItemModelEditEvent.getNewValue();
-        if (oldValue.getName().equals(newValue.getName())) {
-            return;
-        }
-        if (newValue instanceof NotebookTreeItemModel notebook) {
-            //notebookRepository.update();
-        } else if (newValue instanceof SectionTreeItemModel section) {
-            //notebookRepository.updateSectionName(section.getId(), section.getName());
-        } else if (newValue instanceof PageTreeItemModel page) {
-            // notebookRepository.updatePageName(page.getId(), page.getName());
-        }
+        new RenameTreeItemCommand(dataAccessService).execute(treeItemModelEditEvent.getOldValue());
     }
 
     private NotebookTreeItemModel getTestModel() {

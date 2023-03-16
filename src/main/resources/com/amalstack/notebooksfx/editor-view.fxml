@@ -43,7 +43,7 @@
         </Menu>
     </MenuBar>
     <ToolBar fx:id="mainToolbar" prefHeight="40.0" prefWidth="200.0">
-        <Button fx:id="viewSectionsBtn" mnemonicParsing="false" text="Sections"/>
+        <ToggleButton fx:id="viewSectionsBtn" mnemonicParsing="false" text="Sections"/>
     </ToolBar>
     <MasterDetailPane fx:id="masterDetailPane" detailSide="LEFT" dividerPosition="0.2" dividerSizeHint="0.2"
                       showDetailNode="false" VBox.vgrow="ALWAYS">
@@ -65,7 +65,7 @@
                 </VBox>
                 <VBox SplitPane.resizableWithParent="false">
                     <ToolBar fx:id="webViewToolbar">
-                        <Button fx:id="saveBtn" mnemonicParsing="false" />
+                        <Button fx:id="refreshBtn" mnemonicParsing="false"/>
                         <Separator />
                         <ProgressBar fx:id="webViewProgress" progress="0.0" />
                     </ToolBar>
