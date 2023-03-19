@@ -146,22 +146,6 @@ public class NotebookTreeViewController implements ParameterizedController {
         new RenameTreeItemCommand(dataAccessService).execute(treeItemModelEditEvent.getOldValue());
     }
 
-    private NotebookTreeItemModel getTestModel() {
-        var treeItem = new NotebookTreeItemModel(1, "Current");
-        treeItem.getSections()
-                .addAll(IntStream.rangeClosed(1, 5).mapToObj(i -> {
-                    var section = new SectionTreeItemModel(i, "Section " + i);
-                    section.getPages()
-                            .addAll(IntStream.rangeClosed(1, 5)
-                                    .mapToObj(j ->
-                                            new PageTreeItemModel(j,
-                                                    "Page " + i + " . " + j,
-                                                    "Content of Page **" + i + "." + j + "**. ++Hello++"))
-                                    .collect(Collectors.toCollection(FXCollections::observableArrayList)));
-                    return section;
-                }).toList());
-        return treeItem;
-    }
 
     public PageTreeItemModel getCurrentPage() {
         return currentPage.get();
