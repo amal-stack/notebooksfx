@@ -13,7 +13,7 @@ public interface HttpClientService {
 
     <T> HttpResult<T, ? extends ErrorResponse> send(Endpoint endpoint, String method, Class<T> responseClass);
 
-    <T> HttpResult<T, ? extends ErrorResponse> send(Endpoint endpoint, String method, T object, Class<T> responseClass);
+    <S, T> HttpResult<T, ? extends ErrorResponse> send(Endpoint endpoint, String method, S object, Class<T> responseClass);
 
     <T> HttpResult<T, ? extends ErrorResponse> send(HttpRequest request, Class<T> responseClass);
 

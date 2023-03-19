@@ -50,7 +50,7 @@ public class BasicHttpClientService implements HttpClientService {
     }
 
     @Override
-    public <T> HttpResult<T, ? extends ErrorResponse> send(Endpoint endpoint, String method, T object, Class<T> responseClass) {
+    public <S, T> HttpResult<T, ? extends ErrorResponse> send(Endpoint endpoint, String method, S object, Class<T> responseClass) {
         HttpRequest request = createHttpRequest(endpoint, method, object);
         return send(request, responseClass);
     }

@@ -11,7 +11,7 @@ public interface SectionRepository {
 
     int countByNotebookId(Long notebookId);
 
-    void create(SectionInput sectionInput);
+    Section create(SectionInput sectionInput);
 
     void update(SectionInput sectionInput);
 

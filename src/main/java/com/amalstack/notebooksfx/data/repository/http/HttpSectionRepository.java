@@ -36,8 +36,11 @@ public class HttpSectionRepository implements SectionRepository {
     }
 
     @Override
-    public void create(SectionInput sectionInput) {
+    public Section create(SectionInput sectionInput) {
+        var endpoint = Endpoint.named(SECTIONS);
 
+        return httpClient.send(endpoint, "POST", sectionInput, Section.class)
+                .getObjectOrThrow();
     }
 
     @Override

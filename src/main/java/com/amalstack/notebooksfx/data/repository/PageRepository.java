@@ -17,7 +17,7 @@ public interface PageRepository {
 
     int countBySectionId(Long sectionId);
 
-    void create(PageInput pageInput);
+    Page create(PageInput pageInput);
 
     void update(PageInput pageInput);
 
