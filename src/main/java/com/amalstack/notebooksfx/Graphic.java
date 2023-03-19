@@ -7,5 +7,10 @@ public enum Graphic {
     PAGE,
     REFRESH,
     SECTION,
-    SHOW
+    SHOW,
+    CREATE,
+    EDIT,
+    DELETE,
+    SAVE,
+
 }
