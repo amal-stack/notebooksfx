@@ -18,6 +18,10 @@ public class DefaultGraphicNodeProvider implements GraphicNodeProvider {
             case REFRESH -> new Glyph(FONT_FAMILY, FontAwesome.Glyph.REFRESH);
             case SHOW -> new Glyph(FONT_FAMILY, FontAwesome.Glyph.EYE);
             case HIDE -> new Glyph(FONT_FAMILY, FontAwesome.Glyph.EYE_SLASH);
+            case CREATE -> new Glyph(FONT_FAMILY, FontAwesome.Glyph.PLUS);
+            case EDIT -> new Glyph(FONT_FAMILY, FontAwesome.Glyph.PENCIL);
+            case DELETE -> new Glyph(FONT_FAMILY, FontAwesome.Glyph.TRASH);
+            case SAVE -> new Glyph(FONT_FAMILY, FontAwesome.Glyph.SAVE);
             case ERROR -> new Glyph(FONT_FAMILY, FontAwesome.Glyph.EXCLAMATION_TRIANGLE).color(Color.CRIMSON);
         };
     }

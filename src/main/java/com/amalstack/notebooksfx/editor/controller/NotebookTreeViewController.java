@@ -1,6 +1,7 @@
 package com.amalstack.notebooksfx.editor.controller;
 
 import com.amalstack.notebooksfx.GraphicNodeProvider;
+import com.amalstack.notebooksfx.command.Commands;
 import com.amalstack.notebooksfx.controller.*;
 import com.amalstack.notebooksfx.data.DataAccessService;
 import com.amalstack.notebooksfx.data.model.NotebookContents;
@@ -10,7 +11,6 @@ import com.amalstack.notebooksfx.util.ParameterizedController;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ToolBar;
@@ -18,9 +18,6 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class NotebookTreeViewController implements ParameterizedController {
 
@@ -93,6 +90,8 @@ public class NotebookTreeViewController implements ParameterizedController {
         var treeView = createTreeView(model);
         parent.getChildren().add(treeView);
         selectFirstPageIfPresent(treeView);
+        newSectionBtn.setOnAction(Commands.eventHandler(
+                new CreateSectionCommand(dataAccessService, treeView, graphic)));
     }
 
     private void selectFirstPageIfPresent(TreeView<TreeItemModel> treeView) {
@@ -101,9 +100,10 @@ public class NotebookTreeViewController implements ParameterizedController {
         sections.stream()
                 .filter(section -> !section.getChildren().isEmpty())
                 .findFirst()
-                .ifPresent(section -> treeView
+                .map(section -> section.getChildren().get(0))
+                .ifPresent(page -> treeView
                         .getSelectionModel()
-                        .select(section.getChildren().get(0)));
+                        .select(page));                    // selecting also expands
     }
 
     private TreeView<TreeItemModel> createTreeView(NotebookTreeItemModel model) {
@@ -111,7 +111,9 @@ public class NotebookTreeViewController implements ParameterizedController {
                 .withId("notebookTreeView")
                 .withGraphicNodeProvider(graphic)
                 .onTreeItemSelect(this::onTreeItemSelect)
-                .onEditCommit(this::onTreeViewEditCommit)
+                .onEditCommit(Commands.eventHandlerWithEventArg(
+                        new RenameTreeItemCommand(dataAccessService),
+                        TreeView.EditEvent::getOldValue))
                 .configure(treeView -> {
                     VBox.setVgrow(treeView, Priority.ALWAYS);
                     treeView.setShowRoot(true);
@@ -124,21 +126,9 @@ public class NotebookTreeViewController implements ParameterizedController {
             ObservableValue<? extends TreeItem<TreeItemModel>> observableValue,
             TreeItem<TreeItemModel> previousItem,
             TreeItem<TreeItemModel> currentItem) {
-        if (previousItem != null && previousItem.getValue() instanceof PageTreeItemModel page) {
-            /// Update content of previous page if changed
-//            String previousContent = page.getContent();
-//            String currentContent = editorTextArea.getText();
-//            if (!previousContent.equals(currentContent)) {
-//
-//                page.setContent(currentContent);
-//            }
-        }
+
         if (currentItem != null && currentItem.getValue() instanceof PageTreeItemModel page) {
             currentPage.set(page);
-            /// Update editor with content of current page
-//            String content = page.getContent();
-//            editorTextArea.replaceText(content);
-//            previewHtml();
         }
     }
 
@@ -146,22 +136,6 @@ public class NotebookTreeViewController implements ParameterizedController {
         new RenameTreeItemCommand(dataAccessService).execute(treeItemModelEditEvent.getOldValue());
     }
 
-    private NotebookTreeItemModel getTestModel() {
-        var treeItem = new NotebookTreeItemModel(1, "Current");
-        treeItem.getSections()
-                .addAll(IntStream.rangeClosed(1, 5).mapToObj(i -> {
-                    var section = new SectionTreeItemModel(i, "Section " + i);
-                    section.getPages()
-                            .addAll(IntStream.rangeClosed(1, 5)
-                                    .mapToObj(j ->
-                                            new PageTreeItemModel(j,
-                                                    "Page " + i + " . " + j,
-                                                    "Content of Page **" + i + "." + j + "**. ++Hello++"))
-                                    .collect(Collectors.toCollection(FXCollections::observableArrayList)));
-                    return section;
-                }).toList());
-        return treeItem;
-    }
 
     public PageTreeItemModel getCurrentPage() {
         return currentPage.get();

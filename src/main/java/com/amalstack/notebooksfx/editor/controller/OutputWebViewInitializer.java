@@ -30,7 +30,7 @@ class OutputWebViewInitializer implements Initializer {
     }
 
     public void initialize() {
-        refreshButton.setOnAction(Commands.actionEventHandler(new PreviewHtmlCommand(editorContext, outputWebView)));
+        refreshButton.setOnAction(Commands.eventHandler(new PreviewHtmlCommand(editorContext, outputWebView)));
         refreshButton.setGraphic(graphic.getNode(Graphic.REFRESH));
 
         var progressProperty = webViewProgress.progressProperty();
