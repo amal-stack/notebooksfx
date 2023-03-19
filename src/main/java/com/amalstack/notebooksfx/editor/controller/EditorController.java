@@ -35,8 +35,6 @@ public class EditorController {
     @FXML
     private ToggleButton viewSectionsBtn;
     @FXML
-    private Button newSectionBtn;
-    @FXML
     private ToolBar editorToolbar;
     @FXML
     private VBox detailPaneContainer;
@@ -50,8 +48,6 @@ public class EditorController {
     private ToolBar webViewToolbar;
     @FXML
     private ProgressBar webViewProgress;
-    @FXML
-    private ToolBar treeToolbar;
 
     @FXML
     private NotebookTreeViewController notebookTreeViewController;
@@ -97,17 +93,16 @@ public class EditorController {
                                PageTreeItemModel previousPage,
                                PageTreeItemModel currentPage) {
         if (previousPage != null) {
-            //TODO: Save contents of previous page
             CommandExecutor.execute(new SavePageCommand(dataAccessService, context), previousPage);
         }
         if (currentPage != null) {
-            editorTextArea.setEditable(true);
-            editorTextArea.replaceText(currentPage.getContent());
-            CommandExecutor.execute(new PreviewHtmlCommand(context, outputWebView));
+            CommandExecutor.execute(
+                    new LoadPageIntoEditorCommand(editorTextArea, currentPage),
+                    new PreviewHtmlCommand(context, outputWebView)
+            );
             return;
         }
         CommandExecutor.execute(new DisableEditorCommand(editorTextArea));
     }
 }
-
 
