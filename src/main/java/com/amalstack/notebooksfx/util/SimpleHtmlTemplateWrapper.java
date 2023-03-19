@@ -27,7 +27,7 @@ public class SimpleHtmlTemplateWrapper implements HtmlTemplateWrapper {
 
     public static final String TITLE_END = "</title>";
 
-    public static final String BODY_START = "<body>";
+    public static final String BODY_START = "<body style=\"padding: 10px\">";
 
     public static final String BODY_END = "</body>";
 
@@ -43,7 +43,7 @@ public class SimpleHtmlTemplateWrapper implements HtmlTemplateWrapper {
 
     public static final String SCRIPT_FORMAT = "<script src=\"{0}\" crossorigin=\"anonymous\"></script>";
 
-    public static final String INDENT = "   ";
+    public static final String INDENT = "    ";
 
     private final List<String> externalStylesheets;
 
@@ -84,7 +84,6 @@ public class SimpleHtmlTemplateWrapper implements HtmlTemplateWrapper {
         builder.append(DTD).append('\n');
         builder.append(HTML_START).append('\n');
 
-
         builder.append(HEAD_START).append('\n');
         builder.append(INDENT).append(TITLE_START);
         builder.append(title);
@@ -102,7 +101,7 @@ public class SimpleHtmlTemplateWrapper implements HtmlTemplateWrapper {
         builder.append(HEAD_END).append('\n');
 
         builder.append(BODY_START).append('\n');
-        builder.append(body).append('\n');
+        builder.append(INDENT).append(body).append('\n');
 
         for (var script : externalScripts) {
             builder.append(INDENT).append(MessageFormat.format(SCRIPT_FORMAT, script)).append('\n');
@@ -110,7 +109,7 @@ public class SimpleHtmlTemplateWrapper implements HtmlTemplateWrapper {
 
         builder.append(INDENT).append(SCRIPT_START).append('\n');
         for (var script : scripts) {
-            builder.append(INDENT).append(script).append('\n');
+            builder.append(INDENT).append(INDENT).append(script).append('\n');
         }
         builder.append(INDENT).append(SCRIPT_END).append('\n');
         builder.append(BODY_END).append('\n');
