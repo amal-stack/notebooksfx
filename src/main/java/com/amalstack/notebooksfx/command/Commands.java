@@ -1,7 +1,9 @@
 package com.amalstack.notebooksfx.command;
 
-import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
+
+import java.util.function.Function;
 
 public class Commands {
 
@@ -22,8 +24,12 @@ public class Commands {
         };
     }
 
-    public static EventHandler<ActionEvent> actionEventHandler(Command command) {
+    public static <T extends Event> EventHandler<T> eventHandler(Command command) {
         return event -> command.execute();
+    }
+
+    public static <T extends Event, A> EventHandler<T> eventHandlerWithEventArg(ParameterizedCommand<A> command, Function<T, A> argProvider) {
+        return event -> command.execute(argProvider.apply(event));
     }
 
 }
