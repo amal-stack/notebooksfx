@@ -1,6 +1,7 @@
 package com.amalstack.notebooksfx.util.http;
 
 import java.text.MessageFormat;
+import java.util.Arrays;
 
 public final class NamedEndpoint extends Endpoint {
     private final RouteName routeName;
@@ -12,7 +13,7 @@ public final class NamedEndpoint extends Endpoint {
     }
 
     public NamedEndpoint pathParameters(Object... pathParameters) {
-        this.pathParameters = pathParameters;
+        this.pathParameters = Arrays.stream(pathParameters).map(Object::toString).toArray();
         return this;
     }
 
