@@ -1,6 +1,7 @@
 package com.amalstack.notebooksfx.editor.controller;
 
 import com.amalstack.notebooksfx.GraphicNodeProvider;
+import com.amalstack.notebooksfx.command.Commands;
 import com.amalstack.notebooksfx.controller.*;
 import com.amalstack.notebooksfx.data.DataAccessService;
 import com.amalstack.notebooksfx.data.model.NotebookContents;
@@ -10,7 +11,6 @@ import com.amalstack.notebooksfx.util.ParameterizedController;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ToolBar;
@@ -18,9 +18,6 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class NotebookTreeViewController implements ParameterizedController {
 
@@ -114,7 +111,9 @@ public class NotebookTreeViewController implements ParameterizedController {
                 .withId("notebookTreeView")
                 .withGraphicNodeProvider(graphic)
                 .onTreeItemSelect(this::onTreeItemSelect)
-                .onEditCommit(this::onTreeViewEditCommit)
+                .onEditCommit(Commands.eventHandlerWithEventArg(
+                        new RenameTreeItemCommand(dataAccessService),
+                        TreeView.EditEvent::getOldValue))
                 .configure(treeView -> {
                     VBox.setVgrow(treeView, Priority.ALWAYS);
                     treeView.setShowRoot(true);
@@ -127,21 +126,9 @@ public class NotebookTreeViewController implements ParameterizedController {
             ObservableValue<? extends TreeItem<TreeItemModel>> observableValue,
             TreeItem<TreeItemModel> previousItem,
             TreeItem<TreeItemModel> currentItem) {
-        if (previousItem != null && previousItem.getValue() instanceof PageTreeItemModel page) {
-            /// Update content of previous page if changed
-//            String previousContent = page.getContent();
-//            String currentContent = editorTextArea.getText();
-//            if (!previousContent.equals(currentContent)) {
-//
-//                page.setContent(currentContent);
-//            }
-        }
+
         if (currentItem != null && currentItem.getValue() instanceof PageTreeItemModel page) {
             currentPage.set(page);
-            /// Update editor with content of current page
-//            String content = page.getContent();
-//            editorTextArea.replaceText(content);
-//            previewHtml();
         }
     }
 
