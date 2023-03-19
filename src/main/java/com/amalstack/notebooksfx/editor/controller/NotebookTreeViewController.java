@@ -93,6 +93,8 @@ public class NotebookTreeViewController implements ParameterizedController {
         var treeView = createTreeView(model);
         parent.getChildren().add(treeView);
         selectFirstPageIfPresent(treeView);
+        newSectionBtn.setOnAction(Commands.eventHandler(
+                new CreateSectionCommand(dataAccessService, treeView, graphic)));
     }
 
     private void selectFirstPageIfPresent(TreeView<TreeItemModel> treeView) {
@@ -101,9 +103,10 @@ public class NotebookTreeViewController implements ParameterizedController {
         sections.stream()
                 .filter(section -> !section.getChildren().isEmpty())
                 .findFirst()
-                .ifPresent(section -> treeView
+                .map(section -> section.getChildren().get(0))
+                .ifPresent(page -> treeView
                         .getSelectionModel()
-                        .select(section.getChildren().get(0)));
+                        .select(page));                    // selecting also expands
     }
 
     private TreeView<TreeItemModel> createTreeView(NotebookTreeItemModel model) {
