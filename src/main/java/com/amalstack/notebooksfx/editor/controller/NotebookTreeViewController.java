@@ -1,16 +1,19 @@
 package com.amalstack.notebooksfx.editor.controller;
 
 import com.amalstack.notebooksfx.GraphicNodeProvider;
+import com.amalstack.notebooksfx.builder.TreeViewBuilder;
 import com.amalstack.notebooksfx.command.Commands;
-import com.amalstack.notebooksfx.controller.*;
+import com.amalstack.notebooksfx.controller.NotebookTreeViewContext;
+import com.amalstack.notebooksfx.controller.PageTreeItemModel;
+import com.amalstack.notebooksfx.controller.TreeItemModel;
 import com.amalstack.notebooksfx.data.DataAccessService;
-import com.amalstack.notebooksfx.data.model.NotebookContents;
 import com.amalstack.notebooksfx.editor.RenameTreeItemCommand;
 import com.amalstack.notebooksfx.util.ControllerParameters;
 import com.amalstack.notebooksfx.util.ParameterizedController;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ToolBar;
@@ -31,10 +34,13 @@ public class NotebookTreeViewController implements ParameterizedController {
 
     @FXML
     private VBox parent;
+
     @FXML
     private Button newSectionBtn;
+
     @FXML
     private ToolBar treeToolbar;
+
 
     public NotebookTreeViewController(DataAccessService dataAccessService,
                                       GraphicNodeProvider graphic) {
@@ -55,65 +61,27 @@ public class NotebookTreeViewController implements ParameterizedController {
 
     private void onParametersSet() {
         Long notebookId = parameters.<Long>get("notebook.id").orElseThrow();
-        NotebookTreeItemModel model = getModel(notebookId);
-        initNotebookTreeView(model);
+        initNotebookTreeView(notebookId);
     }
 
-    private NotebookTreeItemModel getModel(long notebookId) {
-        NotebookContents notebookContents = dataAccessService
-                .notebooks()
-                .getContentsById(notebookId);
+    private void initNotebookTreeView(long notebookId) {
+        var treeView = buildTreeView();
+        NotebookTreeViewContext context = new NotebookTreeViewContext(
+                treeView,
+                dataAccessService,
+                graphic);
 
-        var notebookTreeItemModel = new NotebookTreeItemModel(
-                notebookContents.id(),
-                notebookContents.name());
-
-        notebookTreeItemModel.getSections()
-                .addAll(notebookContents.sections()
-                        .stream()
-                        .map(c -> {
-                            var model
-                                    = SectionTreeItemModel.fromSectionContents(c);
-                            model.getPages().addAll(c
-                                    .pages()
-                                    .stream()
-                                    .map(PageTreeItemModel::fromPage)
-                                    .toList());
-                            return model;
-                        })
-                        .toList());
-
-        return notebookTreeItemModel;
-    }
-
-    private void initNotebookTreeView(NotebookTreeItemModel model) {
-        var treeView = createTreeView(model);
+        context.initialize(notebookId);
         parent.getChildren().add(treeView);
-        selectFirstPageIfPresent(treeView);
         newSectionBtn.setOnAction(Commands.eventHandler(
-                new CreateSectionCommand(dataAccessService, treeView, graphic)));
+                new CreateSectionCommand(context)));
     }
 
-    private void selectFirstPageIfPresent(TreeView<TreeItemModel> treeView) {
-        treeView.getRoot().setExpanded(true);
-        var sections = treeView.getRoot().getChildren();
-        sections.stream()
-                .filter(section -> !section.getChildren().isEmpty())
-                .findFirst()
-                .map(section -> section.getChildren().get(0))
-                .ifPresent(page -> treeView
-                        .getSelectionModel()
-                        .select(page));                    // selecting also expands
-    }
-
-    private TreeView<TreeItemModel> createTreeView(NotebookTreeItemModel model) {
-        return NotebookTreeViewBuilder.forModel(model)
+    private TreeView<TreeItemModel> buildTreeView() {
+        return new TreeViewBuilder<TreeItemModel>()
                 .withId("notebookTreeView")
-                .withGraphicNodeProvider(graphic)
                 .onTreeItemSelect(this::onTreeItemSelect)
-                .onEditCommit(Commands.eventHandlerWithEventArg(
-                        new RenameTreeItemCommand(dataAccessService),
-                        TreeView.EditEvent::getOldValue))
+                .onEditCommit(onTreeViewEditCommitEventHandler())
                 .configure(treeView -> {
                     VBox.setVgrow(treeView, Priority.ALWAYS);
                     treeView.setShowRoot(true);
@@ -132,8 +100,10 @@ public class NotebookTreeViewController implements ParameterizedController {
         }
     }
 
-    private void onTreeViewEditCommit(TreeView.EditEvent<TreeItemModel> treeItemModelEditEvent) {
-        new RenameTreeItemCommand(dataAccessService).execute(treeItemModelEditEvent.getOldValue());
+    private EventHandler<TreeView.EditEvent<TreeItemModel>> onTreeViewEditCommitEventHandler() {
+        return Commands.eventHandlerWithEventArg(
+                new RenameTreeItemCommand(dataAccessService),
+                TreeView.EditEvent::getOldValue);
     }
 
 
@@ -144,4 +114,5 @@ public class NotebookTreeViewController implements ParameterizedController {
     public ReadOnlyObjectProperty<PageTreeItemModel> currentPageProperty() {
         return currentPage;
     }
+
 }

@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.VBox?>
-
-<VBox fx:id="parent" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1"
+<VBox xmlns:fx="http://javafx.com/fxml/1" fx:id="parent" xmlns="http://javafx.com/javafx/18"
       fx:controller="com.amalstack.notebooksfx.editor.controller.NotebookTreeViewController">
     <ToolBar fx:id="treeToolbar">
         <Button fx:id="newSectionBtn" mnemonicParsing="false" text="New Section..."/>

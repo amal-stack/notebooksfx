@@ -29,6 +29,16 @@ public class DefaultEditorControlProvider implements EditorControlProvider {
     private final StyleClassedTextArea editorTextArea;
     private final String rootId;
 
+    public DefaultEditorControlProvider(StyleClassedTextArea editorTextArea) {
+        this(editorTextArea, editorTextArea.getId());
+    }
+
+    public DefaultEditorControlProvider(StyleClassedTextArea editorTextArea, String rootId) {
+        this.editorTextArea = editorTextArea;
+        this.rootId = rootId;
+        cmdControlMap = createControls();
+    }
+
     @Override
     public Node getControl(CommandCode op) {
         return cmdControlMap.get(op);
@@ -42,16 +52,6 @@ public class DefaultEditorControlProvider implements EditorControlProvider {
     @Override
     public StyleClassedTextArea getEditorTextArea() {
         return editorTextArea;
-    }
-
-    public DefaultEditorControlProvider(StyleClassedTextArea editorTextArea) {
-        this(editorTextArea, editorTextArea.getId());
-    }
-
-    public DefaultEditorControlProvider(StyleClassedTextArea editorTextArea, String rootId) {
-        this.editorTextArea = editorTextArea;
-        this.rootId = rootId;
-        cmdControlMap = createControls();
     }
 
     protected Map<CommandCode, Node> createControls() {

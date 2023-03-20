@@ -22,6 +22,16 @@ public class Configuration {
                     .attributeProviderFactory(new BootstrapAttributeProvider.Factory());
         }
 
+        @NotNull
+        protected static SimpleHtmlTemplateWrapper createHtmlTemplateWrapper() {
+            var htmlWrapper = new SimpleHtmlTemplateWrapper();
+            htmlWrapper.addExternalStylesheet(BOOTSTRAP_STYLESHEET);
+            htmlWrapper.addExternalScript(BOOTSTRAP_SCRIPT);
+            htmlWrapper.addStyle(AdmonitionExtension.getDefaultCSS());
+            htmlWrapper.addScript(AdmonitionExtension.getDefaultScript());
+            return htmlWrapper;
+        }
+
         @Override
         public EditorContext create(StyleClassedTextArea editorTextArea) {
 
@@ -38,16 +48,6 @@ public class Configuration {
                     .controlProvider(new DefaultEditorControlProvider(editorTextArea))
                     .templateWrapper(createHtmlTemplateWrapper())
                     .build();
-        }
-
-        @NotNull
-        protected static SimpleHtmlTemplateWrapper createHtmlTemplateWrapper() {
-            var htmlWrapper = new SimpleHtmlTemplateWrapper();
-            htmlWrapper.addExternalStylesheet(BOOTSTRAP_STYLESHEET);
-            htmlWrapper.addExternalScript(BOOTSTRAP_SCRIPT);
-            htmlWrapper.addStyle(AdmonitionExtension.getDefaultCSS());
-            htmlWrapper.addScript(AdmonitionExtension.getDefaultScript());
-            return htmlWrapper;
         }
 
 

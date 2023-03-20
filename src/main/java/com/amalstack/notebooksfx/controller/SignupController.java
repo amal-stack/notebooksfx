@@ -14,19 +14,26 @@ import javafx.scene.control.TextField;
 
 public class SignupController {
     private final AuthenticationService authenticationService;
+
+    private final ObservableList<ErrorEntry> signUpErrorEntries = FXCollections.observableArrayList();
+
     @FXML
     private ScrollPane signUpErrorScrollPane;
+
     @FXML
     private TextField nameField;
+
     @FXML
     private TextField emailField;
+
     @FXML
     private PasswordField passwordField;
+
     @FXML
     private PasswordField confirmPasswordField;
+
     @FXML
     private Button signUpButton;
-    private final ObservableList<ErrorEntry> signUpErrorEntries = FXCollections.observableArrayList();
 
     public SignupController(AuthenticationService authenticationService) {
         this.authenticationService = authenticationService;

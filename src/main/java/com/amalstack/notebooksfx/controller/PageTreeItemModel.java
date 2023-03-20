@@ -14,6 +14,10 @@ public class PageTreeItemModel extends TreeItemModel {
         this.content.set(content);
     }
 
+    public static PageTreeItemModel fromPage(Page page) {
+        return new PageTreeItemModel(page.id(), page.title(), page.content());
+    }
+
     public String getContent() {
         return content.get();
     }
@@ -24,9 +28,5 @@ public class PageTreeItemModel extends TreeItemModel {
 
     public StringProperty contentProperty() {
         return content;
-    }
-
-    public static PageTreeItemModel fromPage(Page page) {
-        return new PageTreeItemModel(page.id(), page.title(), page.content());
     }
 }

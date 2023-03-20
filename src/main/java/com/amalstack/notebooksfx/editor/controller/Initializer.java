@@ -2,8 +2,6 @@ package com.amalstack.notebooksfx.editor.controller;
 
 @FunctionalInterface
 interface Initializer {
-    void initialize();
-
     static Initializer empty() {
         return () -> {
         };
@@ -26,6 +24,8 @@ interface Initializer {
             initializer.initialize();
         }
     }
+
+    void initialize();
 
 }
 

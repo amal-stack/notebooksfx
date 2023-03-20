@@ -10,9 +10,8 @@ import org.fxmisc.richtext.StyleClassedTextArea;
  */
 class DisableEditorCommand implements Command {
 
-    String PLACEHOLDER_TEXT = "Select a page to edit";
-
     private final StyleClassedTextArea editorTextArea;
+    String PLACEHOLDER_TEXT = "Select a page to edit";
 
     DisableEditorCommand(StyleClassedTextArea editorTextArea) {
         this.editorTextArea = editorTextArea;

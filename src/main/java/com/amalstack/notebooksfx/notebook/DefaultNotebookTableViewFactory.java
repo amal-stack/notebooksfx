@@ -16,6 +16,11 @@ import java.util.List;
 import java.util.function.BiPredicate;
 
 public class DefaultNotebookTableViewFactory implements NotebookTableViewFactory {
+    private static final BiPredicate<NotebookViewModel, String> SEARCH_PREDICATE = (notebook, query) -> notebook
+            .getName()
+            .toLowerCase()
+            .contains(query);
+
     private static List<TableColumnConfig<NotebookViewModel, ?>> getColumns() {
         return List.of(
                 new TableColumnConfig<NotebookViewModel, String>(new TableColumn<>("Notebook Name"), model -> model.getValue().nameProperty(), new Glyph("FontAwesome", FontAwesome.Glyph.BOOK)),
@@ -29,12 +34,6 @@ public class DefaultNotebookTableViewFactory implements NotebookTableViewFactory
     private static Node getPlaceHolder() {
         return new Label("No notebooks found");
     }
-
-    private static final BiPredicate<NotebookViewModel, String> SEARCH_PREDICATE = (notebook, query) -> notebook
-            .getName()
-            .toLowerCase()
-            .contains(query);
-
 
     @Override
     public TableView<NotebookViewModel> create(

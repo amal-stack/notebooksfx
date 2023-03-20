@@ -15,25 +15,25 @@ public record ServiceDescriptor<A, I extends A>(
         Consumer<A> postConstructConfig) {
 
     public ServiceDescriptor(
-        @NotNull Class<A> abstractionType,
-        @NotNull Class<I> implementationType,
-        @NotNull Lifetime lifetime) {
+            @NotNull Class<A> abstractionType,
+            @NotNull Class<I> implementationType,
+            @NotNull Lifetime lifetime) {
         this(abstractionType, implementationType, lifetime, null, null);
     }
 
     public ServiceDescriptor(
-        @NotNull Class<A> abstractionType,
-        @NotNull Class<I> implementationType,
-        @NotNull Lifetime lifetime,
-        Supplier<I> factory) {
+            @NotNull Class<A> abstractionType,
+            @NotNull Class<I> implementationType,
+            @NotNull Lifetime lifetime,
+            Supplier<I> factory) {
         this(abstractionType, implementationType, lifetime, factory, null);
     }
 
     public ServiceDescriptor(
-        @NotNull Class<A> abstractionType,
-        @NotNull Class<I> implementationType,
-        @NotNull Lifetime lifetime,
-        Consumer<A> postConstructConfig) {
+            @NotNull Class<A> abstractionType,
+            @NotNull Class<I> implementationType,
+            @NotNull Lifetime lifetime,
+            Consumer<A> postConstructConfig) {
         this(abstractionType, implementationType, lifetime, null, postConstructConfig);
     }
 }
