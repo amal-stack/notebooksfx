@@ -6,7 +6,9 @@ import javafx.scene.control.TreeView;
 import javafx.util.StringConverter;
 
 public abstract class TreeItemModel {
+
     private final long id;
+
     private final StringProperty name = new SimpleStringProperty(this, "name");
 
     public TreeItemModel(long id, String name) {

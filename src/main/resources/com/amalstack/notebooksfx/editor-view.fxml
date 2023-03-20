@@ -9,7 +9,7 @@
 <?import org.controlsfx.control.MasterDetailPane?>
 <?import org.fxmisc.flowless.VirtualizedScrollPane?>
 <?import org.fxmisc.richtext.StyleClassedTextArea?>
-<VBox prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1"
+<VBox xmlns:fx="http://javafx.com/fxml/1" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/19"
       fx:controller="com.amalstack.notebooksfx.editor.controller.EditorController">
     <MenuBar VBox.vgrow="NEVER">
         <Menu mnemonicParsing="false" text="File">
@@ -66,8 +66,8 @@
                 <VBox SplitPane.resizableWithParent="false">
                     <ToolBar fx:id="webViewToolbar">
                         <Button fx:id="refreshBtn" mnemonicParsing="false"/>
-                        <Separator />
-                        <ProgressBar fx:id="webViewProgress" progress="0.0" />
+                        <Separator/>
+                        <ProgressBar fx:id="webViewProgress" progress="0.0"/>
                     </ToolBar>
                     <WebView fx:id="outputWebView" layoutX="14.0" layoutY="42.0" prefHeight="516.8" prefWidth="356.8"
                              VBox.vgrow="ALWAYS"/>
@@ -75,7 +75,7 @@
             </SplitPane>
         </masterNode>
         <detailNode>
-            <fx:include fx:id="notebookTreeView" source="editor-tree-view.fxml" />
+            <fx:include fx:id="notebookTreeView" source="editor-tree-view.fxml"/>
         </detailNode>
     </MasterDetailPane>
     <HBox id="HBox" alignment="CENTER_LEFT" spacing="5.0" VBox.vgrow="NEVER">

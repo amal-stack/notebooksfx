@@ -3,10 +3,11 @@ package com.amalstack.notebooksfx.di;
 import java.text.MessageFormat;
 
 public final class CircularServiceDependencyException extends RuntimeException {
-    private final Class<?> service1;
-    private final Class<?> service2;
-
     private final static String ERR_MSG_FORMAT = "Circular dependency between service \"{0}\" and service \"{1}\"";
+
+    private final Class<?> service1;
+
+    private final Class<?> service2;
 
 
     public CircularServiceDependencyException(Class<?> service1, Class<?> service2) {

@@ -12,9 +12,19 @@ import java.util.stream.Collectors;
 public final class Container {
 
     private final Map<Class<?>, ServiceDescriptor<?, ?>> services = new HashMap<>();
+
     private final Map<Class<?>, Object> singletonInstances = new HashMap<>();
 
     private final VisitChain visitChain = new VisitChain();
+
+    private static Object getServiceIfSupplied(ServiceDescriptor<?, ?> desc, Object[] serviceInstances) {
+        for (var serviceInstance : serviceInstances) {
+            if (desc.abstractionType().isInstance(serviceInstance)) {
+                return serviceInstance;
+            }
+        }
+        return null;
+    }
 
     public <A, I extends A> void addService(Class<A> abstraction,
                                             Class<I> implementation,
@@ -74,7 +84,6 @@ public final class Container {
             case TRANSIENT -> newInstanceOf(descriptor, publicConstructor);
         };
     }
-
 
     @SuppressWarnings("unchecked")
     public <T> T injectAndConstruct(Class<T> clazz) {
@@ -175,15 +184,6 @@ public final class Container {
         } catch (ReflectiveOperationException exception) {
             throw new RuntimeException(exception);
         }
-    }
-
-    private static Object getServiceIfSupplied(ServiceDescriptor<?, ?> desc, Object[] serviceInstances) {
-        for (var serviceInstance : serviceInstances) {
-            if (desc.abstractionType().isInstance(serviceInstance)) {
-                return serviceInstance;
-            }
-        }
-        return null;
     }
 
     private void validateService(Class<?> service) {

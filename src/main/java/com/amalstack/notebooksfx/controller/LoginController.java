@@ -15,7 +15,9 @@ import javafx.scene.control.TextField;
 
 public class LoginController {
     private final AuthenticationService authenticationService;
+
     private final NavigationManager navigationManager;
+
     private final ObservableList<ErrorEntry> loginErrorEntries = FXCollections.observableArrayList();
 
     @FXML
@@ -23,8 +25,10 @@ public class LoginController {
 
     @FXML
     private TextField emailField;
+
     @FXML
     private PasswordField passwordField;
+
     @FXML
     private Button loginButton;
 

@@ -3,8 +3,9 @@ package com.amalstack.notebooksfx.di;
 import java.text.MessageFormat;
 
 public final class ServiceNotFoundException extends RuntimeException {
-    private final Class<?> service;
     private final static String ERR_MSG_FORMAT = "Service \"{0}\" could not be resolved by the container";
+
+    private final Class<?> service;
 
     public ServiceNotFoundException(Class<?> service) {
         super(MessageFormat.format(ERR_MSG_FORMAT, service.getName()));
