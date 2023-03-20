@@ -82,6 +82,10 @@ public class HttpNotebookRepository implements NotebookRepository {
 
     @Override
     public void delete(Long notebookId) {
+        var endpoint = Endpoint.named(NOTEBOOKS, ID)
+                .pathParameters(notebookId);
 
+        httpClient.delete(endpoint)
+                .throwIfFailure();
     }
 }
