@@ -1,6 +1,7 @@
 package com.amalstack.notebooksfx.controller;
 
-import com.amalstack.notebooksfx.data.repository.NotebookRepository;
+import com.amalstack.notebooksfx.command.CommandExecutor;
+import com.amalstack.notebooksfx.data.DataAccessService;
 import com.amalstack.notebooksfx.nav.NavigationManager;
 import com.amalstack.notebooksfx.nav.Parents;
 import com.amalstack.notebooksfx.notebook.NotebookTableViewFactory;
@@ -23,35 +24,48 @@ import org.jetbrains.annotations.NotNull;
 import java.util.stream.Collectors;
 
 public class NotebooksController {
-    private final NotebookRepository notebookRepo;
+    private final DataAccessService dataAccessService;
+
     private final NotebookTableViewFactory tableFactory;
+
     private final AuthenticationContext authenticationContext;
+
     private final NavigationManager navigationManager;
+
     @FXML
     public Button searchTextClearButton;
+
     @FXML
     private MasterDetailPane masterDetailPane;
+
     @FXML
     private TextField searchTextField;
+
     @FXML
     private Button notebookCreateButton;
+
     @FXML
     private Label notebookTitleLabel;
+
     @FXML
     private Button notebookOpenButton;
+
     @FXML
     private Button notebookEditButton;
+
     @FXML
     private Button notebookDeleteButton;
+
     @FXML
     private Label notebookDescLabel;
 
+
     public NotebooksController(
-            NotebookRepository notebookRepo,
+            DataAccessService dataAccessService,
             NotebookTableViewFactory tableFactory,
             AuthenticationContext authenticationContext,
             NavigationManager navigationManager) {
-        this.notebookRepo = notebookRepo;
+        this.dataAccessService = dataAccessService;
         this.tableFactory = tableFactory;
         this.authenticationContext = authenticationContext;
         this.navigationManager = navigationManager;
@@ -69,7 +83,16 @@ public class NotebooksController {
                 searchTextField,
                 newUpdateDetailPaneCommand()
         );
-        notebookOpenButton.setOnAction(x -> new OpenNotebookCommand(navigationManager).execute(notebooksTableView.getSelectionModel().getSelectedItem()));
+        notebookOpenButton.setOnAction(x -> CommandExecutor.execute(
+                new OpenNotebookCommand(navigationManager),
+                notebooksTableView.getSelectionModel().getSelectedItem()));
+        notebookDeleteButton.setOnAction(x -> {
+            var notebook = notebooksTableView.getSelectionModel().getSelectedItem();
+            CommandExecutor.execute(new DeleteNotebookCommand(
+                    notebook.getId(),
+                    notebook.getName(),
+                    dataAccessService));
+        });
         masterDetailPane.setMasterNode(notebooksTableView);
         masterDetailPane.setShowDetailNode(false);
     }
@@ -93,7 +116,7 @@ public class NotebooksController {
 
     private ObservableList<NotebookViewModel> getNotebooks() {
 
-        return notebookRepo.findByCurrentUser()
+        return dataAccessService.notebooks().findByCurrentUser()
                 .stream()
                 .map(NotebookViewModel::fromNotebook)
                 .collect(Collectors.toCollection(FXCollections::observableArrayList));
