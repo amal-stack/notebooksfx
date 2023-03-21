@@ -8,6 +8,7 @@ public enum Graphic {
     REFRESH,
     SECTION,
     SHOW,
+    OPEN,
     CREATE,
     EDIT,
     DELETE,
