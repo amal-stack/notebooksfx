@@ -26,9 +26,13 @@ class DeleteNotebookCommand implements Command {
                 ButtonType.NO);
         alert.showAndWait().ifPresent(buttonType -> {
             if (buttonType == ButtonType.YES) {
-                dataAccessService.notebooks().delete(notebookId);
+                deleteNotebook();
             }
         });
 
+    }
+
+    protected void deleteNotebook() {
+        dataAccessService.notebooks().delete(notebookId);
     }
 }
