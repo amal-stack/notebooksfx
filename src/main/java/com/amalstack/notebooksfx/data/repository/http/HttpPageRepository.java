@@ -63,12 +63,6 @@ public class HttpPageRepository implements PageRepository {
     }
 
     @Override
-    public void update(PageInput pageInput) {
-        throw new UnsupportedOperationException();
-    }
-
-
-    @Override
     public void rename(Long pageId, String pageName) {
 
         Page page = findById(pageId);
@@ -97,6 +91,15 @@ public class HttpPageRepository implements PageRepository {
         PageInput input = new PageInput(page.title(), content, page.sectionId());
 
         httpClient.put(endpoint, input)
+                .throwIfFailure();
+    }
+
+    @Override
+    public void delete(Long pageId) {
+        Endpoint endpoint = Endpoint.named(PAGES, ID)
+                .pathParameters(pageId);
+
+        httpClient.delete(endpoint)
                 .throwIfFailure();
     }
 }

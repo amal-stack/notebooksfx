@@ -32,7 +32,7 @@ public class HttpSectionRepository implements SectionRepository {
 
     @Override
     public int countByNotebookId(Long notebookId) {
-        return 0;
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -41,11 +41,6 @@ public class HttpSectionRepository implements SectionRepository {
 
         return httpClient.send(endpoint, "POST", sectionInput, Section.class)
                 .getObjectOrThrow();
-    }
-
-    @Override
-    public void update(SectionInput sectionInput) {
-
     }
 
     @Override
@@ -64,6 +59,15 @@ public class HttpSectionRepository implements SectionRepository {
                 section.notebookId());
 
         httpClient.put(endpoint, input)
+                .throwIfFailure();
+    }
+
+    @Override
+    public void delete(Long sectionId) {
+        var endpoint = Endpoint.named(SECTIONS, ID)
+                .pathParameters(sectionId);
+
+        httpClient.delete(endpoint)
                 .throwIfFailure();
     }
 }

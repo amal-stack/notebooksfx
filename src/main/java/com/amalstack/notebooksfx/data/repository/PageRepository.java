@@ -19,10 +19,10 @@ public interface PageRepository {
 
     Page create(PageInput pageInput);
 
-    void update(PageInput pageInput);
-
     void rename(Long pageId, String pageName);
 
     void setContent(Long pageId, String content);
+
+    void delete(Long pageId);
 }
 
