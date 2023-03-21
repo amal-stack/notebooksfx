@@ -1,29 +1,24 @@
 package com.amalstack.notebooksfx.controller;
 
+import com.amalstack.notebooksfx.GraphicNodeProvider;
 import com.amalstack.notebooksfx.command.CommandExecutor;
 import com.amalstack.notebooksfx.data.DataAccessService;
 import com.amalstack.notebooksfx.nav.NavigationManager;
 import com.amalstack.notebooksfx.nav.Parents;
 import com.amalstack.notebooksfx.notebook.NotebookTableViewFactory;
-import com.amalstack.notebooksfx.notebook.NotebookViewModel;
-import com.amalstack.notebooksfx.notebook.OpenNotebookCommand;
 import com.amalstack.notebooksfx.notebook.UpdateDetailPaneCommand;
 import com.amalstack.notebooksfx.util.http.AuthenticationContext;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import org.controlsfx.control.MasterDetailPane;
 import org.controlsfx.glyphfont.FontAwesome;
 import org.controlsfx.glyphfont.Glyph;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.stream.Collectors;
-
 public class NotebooksController {
+
     private final DataAccessService dataAccessService;
 
     private final NotebookTableViewFactory tableFactory;
@@ -31,6 +26,8 @@ public class NotebooksController {
     private final AuthenticationContext authenticationContext;
 
     private final NavigationManager navigationManager;
+
+    private final GraphicNodeProvider graphicNodeProvider;
 
     @FXML
     public Button searchTextClearButton;
@@ -64,11 +61,13 @@ public class NotebooksController {
             DataAccessService dataAccessService,
             NotebookTableViewFactory tableFactory,
             AuthenticationContext authenticationContext,
-            NavigationManager navigationManager) {
+            NavigationManager navigationManager,
+            GraphicNodeProvider graphicNodeProvider) {
         this.dataAccessService = dataAccessService;
         this.tableFactory = tableFactory;
         this.authenticationContext = authenticationContext;
         this.navigationManager = navigationManager;
+        this.graphicNodeProvider = graphicNodeProvider;
     }
 
     @FXML
@@ -77,24 +76,39 @@ public class NotebooksController {
         if (!authenticationContext.isAuthenticated()) {
             navigationManager.navigateTo(Parents.AUTH);
         }
+
+        NotebookTableViewContext context = new NotebookTableViewContext(
+                tableFactory,
+                dataAccessService,
+                navigationManager,
+                graphicNodeProvider);
+
+        context.initialize(searchTextField);
+
         setButtonGraphics();
-        TableView<NotebookViewModel> notebooksTableView = tableFactory.create(
-                getNotebooks(),
-                searchTextField,
-                newUpdateDetailPaneCommand()
-        );
-        notebookOpenButton.setOnAction(x -> CommandExecutor.execute(
-                new OpenNotebookCommand(navigationManager),
-                notebooksTableView.getSelectionModel().getSelectedItem()));
-        notebookDeleteButton.setOnAction(x -> {
-            var notebook = notebooksTableView.getSelectionModel().getSelectedItem();
-            CommandExecutor.execute(new DeleteNotebookCommand(
-                    notebook.getId(),
-                    notebook.getName(),
-                    dataAccessService));
-        });
-        masterDetailPane.setMasterNode(notebooksTableView);
+
+        setButtonEventHandlers(context);
+
+        masterDetailPane.setMasterNode(context.getTableView());
         masterDetailPane.setShowDetailNode(false);
+
+        context.currentNotebookProperty().addListener(((observableValue, oldValue, newValue) ->
+                CommandExecutor.execute(newUpdateDetailPaneCommand(), newValue)));
+    }
+
+    private void setButtonEventHandlers(NotebookTableViewContext context) {
+        notebookCreateButton.setOnAction(context.eventHandlers().create());
+        notebookOpenButton.setOnAction(context.eventHandlers().open());
+        notebookEditButton.setOnAction(context.eventHandlers().edit());
+        notebookDeleteButton.setOnAction(context.eventHandlers().delete());
+    }
+
+    private void setButtonGraphics() {
+        //TODO: Replace with graphic node provider calls
+        notebookCreateButton.setGraphic(new Glyph("FontAwesome", FontAwesome.Glyph.PLUS));
+        notebookOpenButton.setGraphic(new Glyph("FontAwesome", FontAwesome.Glyph.FOLDER_OPEN));
+        notebookEditButton.setGraphic(new Glyph("FontAwesome", FontAwesome.Glyph.EDIT));
+        notebookDeleteButton.setGraphic(new Glyph("FontAwesome", FontAwesome.Glyph.REMOVE));
     }
 
     @NotNull
@@ -106,21 +120,4 @@ public class NotebooksController {
                         notebookDescLabel)
         );
     }
-
-    private void setButtonGraphics() {
-        notebookCreateButton.setGraphic(new Glyph("FontAwesome", FontAwesome.Glyph.PLUS));
-        notebookOpenButton.setGraphic(new Glyph("FontAwesome", FontAwesome.Glyph.FOLDER_OPEN));
-        notebookEditButton.setGraphic(new Glyph("FontAwesome", FontAwesome.Glyph.EDIT));
-        notebookDeleteButton.setGraphic(new Glyph("FontAwesome", FontAwesome.Glyph.REMOVE));
-    }
-
-    private ObservableList<NotebookViewModel> getNotebooks() {
-
-        return dataAccessService.notebooks().findByCurrentUser()
-                .stream()
-                .map(NotebookViewModel::fromNotebook)
-                .collect(Collectors.toCollection(FXCollections::observableArrayList));
-    }
 }
-
-
