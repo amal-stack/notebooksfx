@@ -7,6 +7,8 @@ import com.amalstack.notebooksfx.controller.PageTreeItemModel;
 import com.amalstack.notebooksfx.data.DataAccessService;
 import com.amalstack.notebooksfx.editor.EditorContext;
 import com.amalstack.notebooksfx.editor.EditorContextFactory;
+import com.amalstack.notebooksfx.nav.NavigationManager;
+import com.amalstack.notebooksfx.nav.Parents;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -23,6 +25,7 @@ public class EditorController {
     private final EditorContextFactory factory;
     private final GraphicNodeProvider graphic;
     private final DataAccessService dataAccessService;
+    private final NavigationManager navigationManager;
 
     private EditorContext context;
 
@@ -34,6 +37,8 @@ public class EditorController {
     private ToolBar mainToolbar;
     @FXML
     private ToggleButton viewSectionsBtn;
+    @FXML
+    private Button backToNotebooksBtn;
     @FXML
     private ToolBar editorToolbar;
     @FXML
@@ -54,10 +59,12 @@ public class EditorController {
 
     public EditorController(EditorContextFactory factory,
                             GraphicNodeProvider graphic,
-                            DataAccessService dataAccessService) {
+                            DataAccessService dataAccessService,
+                            NavigationManager navigationManager) {
         this.factory = factory;
         this.graphic = graphic;
         this.dataAccessService = dataAccessService;
+        this.navigationManager = navigationManager;
     }
 
     public void initialize() {
@@ -70,6 +77,12 @@ public class EditorController {
 
         viewSectionsBtn.selectedProperty().bindBidirectional(masterDetailPane.showDetailNodeProperty());
         viewSectionsBtn.selectedProperty().addListener(this::toggleGraphic);
+
+        backToNotebooksBtn.setGraphic(graphic.getNode(Graphic.BACK));
+        backToNotebooksBtn.setOnAction(event -> {
+            savePage(notebookTreeViewController.getCurrentPage());
+            navigationManager.navigateTo(Parents.HOME);
+        });
 
         // default initial state
         //masterDetailPane.setShowDetailNode(true);
@@ -93,7 +106,7 @@ public class EditorController {
                                PageTreeItemModel previousPage,
                                PageTreeItemModel currentPage) {
         if (previousPage != null) {
-            CommandExecutor.execute(new SavePageCommand(dataAccessService, context), previousPage);
+            savePage(previousPage);
         }
         if (currentPage != null) {
             CommandExecutor.execute(
@@ -103,6 +116,10 @@ public class EditorController {
             return;
         }
         CommandExecutor.execute(new DisableEditorCommand(editorTextArea));
+    }
+
+    private void savePage(PageTreeItemModel previousPage) {
+        CommandExecutor.execute(new SavePageCommand(dataAccessService, context), previousPage);
     }
 }
 
