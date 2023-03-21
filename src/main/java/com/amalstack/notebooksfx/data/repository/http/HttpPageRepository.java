@@ -99,4 +99,13 @@ public class HttpPageRepository implements PageRepository {
         httpClient.put(endpoint, input)
                 .throwIfFailure();
     }
+
+    @Override
+    public void delete(Long pageId) {
+        Endpoint endpoint = Endpoint.named(PAGES, ID)
+                .pathParameters(pageId);
+
+        httpClient.delete(endpoint)
+                .throwIfFailure();
+    }
 }

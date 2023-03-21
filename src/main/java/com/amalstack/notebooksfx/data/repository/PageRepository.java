@@ -24,5 +24,7 @@ public interface PageRepository {
     void rename(Long pageId, String pageName);
 
     void setContent(Long pageId, String content);
+
+    void delete(Long pageId);
 }
 
