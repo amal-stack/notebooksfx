@@ -13,5 +13,6 @@ public enum Graphic {
     EDIT,
     DELETE,
     SAVE,
+    BACK,
 
 }
