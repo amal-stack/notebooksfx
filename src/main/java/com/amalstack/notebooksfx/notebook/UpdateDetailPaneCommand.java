@@ -14,11 +14,13 @@ public class UpdateDetailPaneCommand implements ParameterizedCommand<NotebookVie
     public void execute(NotebookViewModel model) {
         if (model == null) {
             context.masterDetailPane().setShowDetailNode(false);
+            context.notebookTitleLabel().textProperty().unbind();
+            context.notebookDescLabel().textProperty().unbind();
             return;
         }
 
-        context.notebookTitleLabel().setText(model.getName());
-        context.notebookDescLabel().setText(model.getDescription());
+        context.notebookTitleLabel().textProperty().bind(model.nameProperty());
+        context.notebookDescLabel().textProperty().bind(model.descriptionProperty());
         context.masterDetailPane().setShowDetailNode(true);
     }
 
