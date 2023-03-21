@@ -154,18 +154,24 @@ public class NotebookTreeViewContext {
         public static ContextMenu sectionContextMenu(NotebookTreeViewContext context, TreeItem<TreeItemModel> treeItem) {
             return new ContextMenu(
                     createMenuItem("Edit", context.getGraphicNode(Graphic.EDIT), editTreeItem(context.getTreeView(), treeItem)),
-                    createMenuItem("New Page", context.getGraphicNode(Graphic.PAGE), createPage(treeItem, context))
+                    createMenuItem("New Page", context.getGraphicNode(Graphic.PAGE), createPage(treeItem, context)),
+                    createMenuItem("Delete", context.getGraphicNode(Graphic.DELETE), deleteTreeItem(context, treeItem))
             );
         }
 
         public static ContextMenu pageContextMenu(NotebookTreeViewContext context, TreeItem<TreeItemModel> treeItem) {
             return new ContextMenu(
-                    createMenuItem("Edit", context.getGraphicNode(Graphic.EDIT), editTreeItem(context.getTreeView(), treeItem))
+                    createMenuItem("Edit", context.getGraphicNode(Graphic.EDIT), editTreeItem(context.getTreeView(), treeItem)),
+                    createMenuItem("Delete", context.getGraphicNode(Graphic.DELETE), deleteTreeItem(context, treeItem))
             );
         }
 
         public static EventHandler<ActionEvent> editTreeItem(TreeView<TreeItemModel> treeView, TreeItem<TreeItemModel> treeItem) {
             return event -> CommandExecutor.execute(new EditTreeItemCommand(treeView, treeItem));
+        }
+
+        public static EventHandler<ActionEvent> deleteTreeItem(NotebookTreeViewContext context, TreeItem<TreeItemModel> treeItem) {
+            return event -> CommandExecutor.execute(new DeleteTreeItemCommand(context, treeItem));
         }
 
         public static EventHandler<ActionEvent> createSection(NotebookTreeViewContext context) {
