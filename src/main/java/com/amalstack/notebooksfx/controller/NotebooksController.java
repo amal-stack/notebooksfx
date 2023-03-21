@@ -1,5 +1,6 @@
 package com.amalstack.notebooksfx.controller;
 
+import com.amalstack.notebooksfx.Graphic;
 import com.amalstack.notebooksfx.GraphicNodeProvider;
 import com.amalstack.notebooksfx.command.CommandExecutor;
 import com.amalstack.notebooksfx.data.DataAccessService;
@@ -13,8 +14,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import org.controlsfx.control.MasterDetailPane;
-import org.controlsfx.glyphfont.FontAwesome;
-import org.controlsfx.glyphfont.Glyph;
 import org.jetbrains.annotations.NotNull;
 
 public class NotebooksController {
@@ -104,11 +103,10 @@ public class NotebooksController {
     }
 
     private void setButtonGraphics() {
-        //TODO: Replace with graphic node provider calls
-        notebookCreateButton.setGraphic(new Glyph("FontAwesome", FontAwesome.Glyph.PLUS));
-        notebookOpenButton.setGraphic(new Glyph("FontAwesome", FontAwesome.Glyph.FOLDER_OPEN));
-        notebookEditButton.setGraphic(new Glyph("FontAwesome", FontAwesome.Glyph.EDIT));
-        notebookDeleteButton.setGraphic(new Glyph("FontAwesome", FontAwesome.Glyph.REMOVE));
+        notebookCreateButton.setGraphic(graphicNodeProvider.getNode(Graphic.CREATE));
+        notebookOpenButton.setGraphic(graphicNodeProvider.getNode(Graphic.OPEN));
+        notebookEditButton.setGraphic(graphicNodeProvider.getNode(Graphic.EDIT));
+        notebookDeleteButton.setGraphic(graphicNodeProvider.getNode(Graphic.DELETE));
     }
 
     @NotNull
