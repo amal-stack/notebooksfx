@@ -6,6 +6,17 @@ import java.util.Map;
 public class QueryParameterMap {
     private final Map<String, String> parameters = new HashMap<>();
 
+    public static QueryParameterMap of(String... keysAndValues) {
+        if (keysAndValues.length % 2 != 0) {
+            throw new IllegalArgumentException("keysAndValues must have an even number of elements");
+        }
+        QueryParameterMap queryParameters = new QueryParameterMap();
+        for (int i = 0; i < keysAndValues.length; i += 2) {
+            queryParameters.add(keysAndValues[i], keysAndValues[i + 1]);
+        }
+        return queryParameters;
+    }
+
     private void add(String key, String value) {
         parameters.put(key, value);
     }
@@ -22,11 +33,9 @@ public class QueryParameterMap {
         return parameters.containsKey(key);
     }
 
-
     public int size() {
         return parameters.size();
     }
-
 
     public Map<String, String> asMap() {
         return parameters;
@@ -43,17 +52,6 @@ public class QueryParameterMap {
             }
         }
         return b.toString();
-    }
-
-    public static QueryParameterMap of(String... keysAndValues) {
-        if (keysAndValues.length % 2 != 0) {
-            throw new IllegalArgumentException("keysAndValues must have an even number of elements");
-        }
-        QueryParameterMap queryParameters = new QueryParameterMap();
-        for (int i = 0; i < keysAndValues.length; i += 2) {
-            queryParameters.add(keysAndValues[i], keysAndValues[i + 1]);
-        }
-        return queryParameters;
     }
 }
 
