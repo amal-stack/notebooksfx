@@ -50,15 +50,19 @@ public class HttpNotebookRepository implements NotebookRepository {
     }
 
     @Override
-    public void create(NotebookInput notebookInput) {
+    public Notebook create(NotebookInput notebookInput) {
         var endpoint = Endpoint.named(NOTEBOOKS);
-        httpClient.post(endpoint, notebookInput)
-                .throwIfFailure();
+        return httpClient.send(endpoint, "POST", notebookInput, Notebook.class)
+                .getObjectOrThrow();
     }
 
     @Override
-    public void update(NotebookInput notebookInput) {
+    public void update(long notebookId, NotebookInput notebookInput) {
+        var endpoint = Endpoint.named(NOTEBOOKS, ID)
+                .pathParameters(notebookId);
 
+        httpClient.put(endpoint, notebookInput)
+                .getObjectOrThrow();
     }
 
     @Override
@@ -82,6 +86,10 @@ public class HttpNotebookRepository implements NotebookRepository {
 
     @Override
     public void delete(Long notebookId) {
+        var endpoint = Endpoint.named(NOTEBOOKS, ID)
+                .pathParameters(notebookId);
 
+        httpClient.delete(endpoint)
+                .throwIfFailure();
     }
 }

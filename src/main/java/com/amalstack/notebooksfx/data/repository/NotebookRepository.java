@@ -14,9 +14,9 @@ public interface NotebookRepository {
 
     NotebookContents getContentsById(Long notebookId);
 
-    void create(NotebookInput notebookInput);
+    Notebook create(NotebookInput notebookInput);
 
-    void update(NotebookInput notebookInput);
+    void update(long notebookId, NotebookInput notebookInput);
 
     void rename(long notebookId, String newName);
 

@@ -4,6 +4,7 @@ import com.amalstack.notebooksfx.data.model.ErrorResponse;
 
 import java.net.http.HttpResponse;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 public class HttpResult<T, E extends ErrorResponse> {
     private final T object;
@@ -18,6 +19,17 @@ public class HttpResult<T, E extends ErrorResponse> {
         this.status = ResponseStatus.of(response.statusCode());
     }
 
+    public static <T> HttpResult<T, ? extends ErrorResponse> empty(HttpResponse<String> response) {
+        return new HttpResult<>(response, null, null);
+    }
+
+    public static <T> HttpResult<T, ? extends ErrorResponse> ofObject(HttpResponse<String> response, T object) {
+        return new HttpResult<>(response, object, null);
+    }
+
+    public static <T> HttpResult<T, ? extends ErrorResponse> ofError(HttpResponse<String> response, ErrorResponse error) {
+        return new HttpResult<>(response, null, error);
+    }
 
     public Optional<T> getObject() {
         return Optional.ofNullable(object);
@@ -46,11 +58,11 @@ public class HttpResult<T, E extends ErrorResponse> {
         throw new HttpResponseException(getError().orElseThrow());
     }
 
-    public T getObjectOrThrow(RuntimeException exception) {
+    public T getObjectOrThrow(Supplier<RuntimeException> exceptionSupplier) {
         if (isSuccess()) {
             return object;
         }
-        throw exception;
+        throw exceptionSupplier.get();
     }
 
     public void throwIfFailure() {
@@ -59,21 +71,9 @@ public class HttpResult<T, E extends ErrorResponse> {
         }
     }
 
-    public void throwIfFailure(RuntimeException exception) {
+    public void throwIfFailure(Supplier<RuntimeException> exceptionSupplier) {
         if (!isSuccess()) {
-            throw exception;
+            throw exceptionSupplier.get();
         }
-    }
-
-    public static <T> HttpResult<T, ? extends ErrorResponse> empty(HttpResponse<String> response) {
-        return new HttpResult<>(response, null, null);
-    }
-
-    public static <T> HttpResult<T, ? extends ErrorResponse> ofObject(HttpResponse<String> response, T object) {
-        return new HttpResult<>(response, object, null);
-    }
-
-    public static <T> HttpResult<T, ? extends ErrorResponse> ofError(HttpResponse<String> response, ErrorResponse error) {
-        return new HttpResult<>(response, null, error);
     }
 }
