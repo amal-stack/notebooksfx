@@ -9,7 +9,8 @@ public record TableColumnConfig<T, S>(
         TableColumn<T, S> column,
         Callback<TableColumn.CellDataFeatures<T, S>, ObservableValue<S>> cellValueFactory,
         Node graphic) {
-    public TableColumn<T, S> toTableColumn() {
+
+    public TableColumn<T, S> applyAndGetColumn() {
         column.setCellValueFactory(cellValueFactory);
         column.setGraphic(graphic);
         return column;

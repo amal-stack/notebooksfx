@@ -39,7 +39,7 @@ public class TableViewBuilder<T> implements ControlBuilder<TableView<T>, TableVi
         }
 
         tableView.getColumns().addAll(tableColumnConfigs.stream()
-                .map(TableColumnConfig::toTableColumn)
+                .map(TableColumnConfig::applyAndGetColumn)
                 .toList());
 
         if (rowClickCommand != null) {
@@ -69,7 +69,7 @@ public class TableViewBuilder<T> implements ControlBuilder<TableView<T>, TableVi
     }
 
     private ObservableList<T> addFiltering(ObservableList<T> tableItems) {
-        FilteredList<T> filteredList = new FilteredList<>(data);
+        FilteredList<T> filteredList = new FilteredList<>(tableItems);
         filterQuery.addListener((observableValue, previous, current) -> {
             if (current == null || current.isBlank()) {
                 filteredList.setPredicate(TRUE_FILTER);
