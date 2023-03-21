@@ -66,4 +66,13 @@ public class HttpSectionRepository implements SectionRepository {
         httpClient.put(endpoint, input)
                 .throwIfFailure();
     }
+
+    @Override
+    public void delete(Long sectionId) {
+        var endpoint = Endpoint.named(SECTIONS, ID)
+                .pathParameters(sectionId);
+
+        httpClient.delete(endpoint)
+                .throwIfFailure();
+    }
 }
