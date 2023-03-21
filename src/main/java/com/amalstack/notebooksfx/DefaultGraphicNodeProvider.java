@@ -23,6 +23,7 @@ public class DefaultGraphicNodeProvider implements GraphicNodeProvider {
             case EDIT -> new Glyph(FONT_FAMILY, FontAwesome.Glyph.PENCIL); // Alt: FontAwesome.Glyph.EDIT
             case DELETE -> new Glyph(FONT_FAMILY, FontAwesome.Glyph.TRASH); // Alt: FontAwesome.Glyph.REMOVE
             case SAVE -> new Glyph(FONT_FAMILY, FontAwesome.Glyph.SAVE);
+            case BACK -> new Glyph(FONT_FAMILY, FontAwesome.Glyph.ARROW_LEFT);
             case ERROR -> new Glyph(FONT_FAMILY, FontAwesome.Glyph.EXCLAMATION_TRIANGLE).color(Color.CRIMSON);
         };
     }
