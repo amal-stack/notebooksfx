@@ -9,7 +9,7 @@
 <?import org.controlsfx.control.MasterDetailPane?>
 <?import org.fxmisc.flowless.VirtualizedScrollPane?>
 <?import org.fxmisc.richtext.StyleClassedTextArea?>
-<VBox xmlns:fx="http://javafx.com/fxml/1" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/19"
+<VBox prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.amalstack.notebooksfx.editor.controller.EditorController">
     <MenuBar VBox.vgrow="NEVER">
         <Menu mnemonicParsing="false" text="File">
@@ -44,6 +44,8 @@
     </MenuBar>
     <ToolBar fx:id="mainToolbar" prefHeight="40.0" prefWidth="200.0">
         <ToggleButton fx:id="viewSectionsBtn" mnemonicParsing="false" text="Sections"/>
+        <Separator orientation="VERTICAL"/>
+        <Button fx:id="backToNotebooksBtn" mnemonicParsing="false" text="Notebooks"/>
     </ToolBar>
     <MasterDetailPane fx:id="masterDetailPane" detailSide="LEFT" dividerPosition="0.2" dividerSizeHint="0.2"
                       showDetailNode="false" VBox.vgrow="ALWAYS">
