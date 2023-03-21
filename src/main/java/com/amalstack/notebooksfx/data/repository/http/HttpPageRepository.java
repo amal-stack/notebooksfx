@@ -63,12 +63,6 @@ public class HttpPageRepository implements PageRepository {
     }
 
     @Override
-    public void update(PageInput pageInput) {
-        throw new UnsupportedOperationException();
-    }
-
-
-    @Override
     public void rename(Long pageId, String pageName) {
 
         Page page = findById(pageId);

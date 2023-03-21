@@ -13,8 +13,6 @@ public interface SectionRepository {
 
     Section create(SectionInput sectionInput);
 
-    void update(SectionInput sectionInput);
-
     void rename(Long sectionId, String name);
 
     void delete(Long sectionId);
