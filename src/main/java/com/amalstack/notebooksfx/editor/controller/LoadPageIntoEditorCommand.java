@@ -1,7 +1,7 @@
 package com.amalstack.notebooksfx.editor.controller;
 
 import com.amalstack.notebooksfx.command.Command;
-import com.amalstack.notebooksfx.controller.PageTreeItemModel;
+import com.amalstack.notebooksfx.editor.nav.PageTreeItemModel;
 import org.fxmisc.richtext.StyleClassedTextArea;
 
 /**

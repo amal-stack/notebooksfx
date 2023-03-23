@@ -1,9 +1,9 @@
 package com.amalstack.notebooksfx.editor.controller;
 
-import com.amalstack.notebooksfx.Graphic;
-import com.amalstack.notebooksfx.GraphicNodeProvider;
 import com.amalstack.notebooksfx.command.Command;
 import com.amalstack.notebooksfx.command.ParameterizedCommand;
+import com.amalstack.notebooksfx.util.controls.Graphic;
+import com.amalstack.notebooksfx.util.controls.GraphicNodeProvider;
 import javafx.scene.control.ToggleButton;
 import org.controlsfx.control.MasterDetailPane;
 

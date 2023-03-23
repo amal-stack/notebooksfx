@@ -1,8 +1,8 @@
 package com.amalstack.notebooksfx.notebook;
 
-import com.amalstack.notebooksfx.builder.TableColumnConfig;
-import com.amalstack.notebooksfx.builder.TableViewBuilder;
 import com.amalstack.notebooksfx.command.ParameterizedCommand;
+import com.amalstack.notebooksfx.util.controls.builder.TableColumnConfig;
+import com.amalstack.notebooksfx.util.controls.builder.TableViewBuilder;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.Label;

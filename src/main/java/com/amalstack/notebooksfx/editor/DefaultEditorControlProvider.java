@@ -1,10 +1,10 @@
 package com.amalstack.notebooksfx.editor;
 
-import com.amalstack.notebooksfx.controller.IdUtil;
 import com.amalstack.notebooksfx.editor.builder.EditorButtonBuilder;
 import com.amalstack.notebooksfx.editor.builder.EditorSplitMenuButtonBuilder;
 import com.amalstack.notebooksfx.editor.builder.MenuItemBuilder;
-import com.amalstack.notebooksfx.editor.command.*;
+import com.amalstack.notebooksfx.editor.command.text.*;
+import com.amalstack.notebooksfx.util.controls.IdUtil;
 import javafx.scene.Node;
 import javafx.scene.control.MenuItem;
 import javafx.scene.input.KeyCodeCombination;

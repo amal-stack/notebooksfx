@@ -1,9 +1,9 @@
 package com.amalstack.notebooksfx.editor.controller;
 
 import com.amalstack.notebooksfx.command.ParameterizedCommand;
-import com.amalstack.notebooksfx.controller.PageTreeItemModel;
 import com.amalstack.notebooksfx.data.DataAccessService;
 import com.amalstack.notebooksfx.editor.EditorContext;
+import com.amalstack.notebooksfx.editor.nav.PageTreeItemModel;
 
 class SavePageCommand implements ParameterizedCommand<PageTreeItemModel> {
 

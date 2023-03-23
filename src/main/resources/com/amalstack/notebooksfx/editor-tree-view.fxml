@@ -4,7 +4,7 @@
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.VBox?>
 <VBox xmlns:fx="http://javafx.com/fxml/1" fx:id="parent" xmlns="http://javafx.com/javafx/18"
-      fx:controller="com.amalstack.notebooksfx.editor.controller.NotebookTreeViewController">
+      fx:controller="com.amalstack.notebooksfx.editor.nav.NotebookTreeViewController">
     <ToolBar fx:id="treeToolbar">
         <Button fx:id="newSectionBtn" mnemonicParsing="false" text="New Section..."/>
     </ToolBar>
