@@ -1,10 +1,11 @@
-package com.amalstack.notebooksfx.editor.nav;
+package com.amalstack.notebooksfx.editor.nav.command;
 
 import com.amalstack.notebooksfx.command.Command;
+import com.amalstack.notebooksfx.editor.nav.*;
 import com.amalstack.notebooksfx.util.controls.Alerts;
 import javafx.scene.control.TreeItem;
 
-class DeleteTreeItemCommand implements Command {
+public class DeleteTreeItemCommand implements Command {
     private final NotebookTreeViewContext context;
     private final TreeItem<TreeItemModel> treeItem;
 
