@@ -35,7 +35,7 @@ import javafx.stage.Stage;
 
 import static com.amalstack.notebooksfx.AppRouteNames.*;
 
-public class HelloApplication extends Application {
+public class NotebooksFxApplication extends Application {
 
     // Main method removed for exceptions to be caught by Thread.setDefaultUncaughtExceptionHandler()
 
@@ -112,7 +112,7 @@ public class HelloApplication extends Application {
         var nav = container.getService(NavigationManager.class);
 
         nav.addParent(new ParentParameters(Parents.HOME,
-                HelloApplication.class.getResource("notebooks-view.fxml"),
+                NotebooksFxApplication.class.getResource("notebooks-view.fxml"),
                 "Home",
                 container::injectAndConstruct));
 
