@@ -1,4 +1,4 @@
-package com.amalstack.notebooksfx.editor.controller;
+package com.amalstack.notebooksfx.editor.command;
 
 import com.amalstack.notebooksfx.command.Command;
 import com.amalstack.notebooksfx.command.ParameterizedCommand;
@@ -7,7 +7,7 @@ import com.amalstack.notebooksfx.util.controls.GraphicNodeProvider;
 import javafx.scene.control.ToggleButton;
 import org.controlsfx.control.MasterDetailPane;
 
-class ToggleNotebookTreeViewCommand implements Command, ParameterizedCommand<Boolean> {
+public class ToggleNotebookTreeViewCommand implements Command, ParameterizedCommand<Boolean> {
 
     private final MasterDetailPane masterDetailPane;
     private final ToggleButton viewSectionsBtn;

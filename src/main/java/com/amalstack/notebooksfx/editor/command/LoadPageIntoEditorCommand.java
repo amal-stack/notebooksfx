@@ -1,4 +1,4 @@
-package com.amalstack.notebooksfx.editor.controller;
+package com.amalstack.notebooksfx.editor.command;
 
 import com.amalstack.notebooksfx.command.Command;
 import com.amalstack.notebooksfx.editor.nav.PageTreeItemModel;
@@ -9,12 +9,12 @@ import org.fxmisc.richtext.StyleClassedTextArea;
  *
  * @author Amal Krishna
  */
-class LoadPageIntoEditorCommand implements Command {
+public class LoadPageIntoEditorCommand implements Command {
 
     private final StyleClassedTextArea editorTextArea;
     private final PageTreeItemModel page;
 
-    LoadPageIntoEditorCommand(StyleClassedTextArea editorTextArea, PageTreeItemModel page) {
+    public LoadPageIntoEditorCommand(StyleClassedTextArea editorTextArea, PageTreeItemModel page) {
         this.editorTextArea = editorTextArea;
         this.page = page;
     }

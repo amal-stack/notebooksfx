@@ -1,10 +1,10 @@
-package com.amalstack.notebooksfx.editor.controller;
+package com.amalstack.notebooksfx.editor.command;
 
 import com.amalstack.notebooksfx.command.Command;
 import com.amalstack.notebooksfx.editor.EditorContext;
 import javafx.scene.web.WebView;
 
-class PreviewHtmlCommand implements Command {
+public class PreviewHtmlCommand implements Command {
 
     private final EditorContext editorContext;
     private final WebView outputWebView;
