@@ -2,6 +2,8 @@ package com.amalstack.notebooksfx.editor.controller;
 
 import com.amalstack.notebooksfx.command.Commands;
 import com.amalstack.notebooksfx.editor.EditorContext;
+import com.amalstack.notebooksfx.editor.command.PreviewHtmlCommand;
+import com.amalstack.notebooksfx.util.Initializer;
 import com.amalstack.notebooksfx.util.controls.Graphic;
 import com.amalstack.notebooksfx.util.controls.GraphicNodeProvider;
 import javafx.beans.binding.Bindings;

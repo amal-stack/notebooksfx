@@ -2,6 +2,7 @@ package com.amalstack.notebooksfx.editor.controller;
 
 import com.amalstack.notebooksfx.editor.EditorContext;
 import com.amalstack.notebooksfx.editor.command.text.CommandCode;
+import com.amalstack.notebooksfx.util.Initializer;
 import javafx.scene.control.Separator;
 import javafx.scene.control.ToolBar;
 
