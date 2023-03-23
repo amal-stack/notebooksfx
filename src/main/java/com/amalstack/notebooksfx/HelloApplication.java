@@ -44,7 +44,6 @@ public class HelloApplication extends Application {
         container.addService(SectionRepository.class, HttpSectionRepository.class, Lifetime.TRANSIENT);
         container.addService(PageRepository.class, HttpPageRepository.class, Lifetime.TRANSIENT);
         container.addService(UserRepository.class, HttpUserRepository.class, Lifetime.TRANSIENT);
-
         container.addService(DataAccessService.class, HttpDataAccessService.class, Lifetime.TRANSIENT);
     }
 
@@ -132,18 +131,18 @@ public class HelloApplication extends Application {
 
         RouteTable routeTable = RouteTable.builder()
                 .mapGroup(NOTEBOOKS, "/notebooks", group -> {
-                    group.map("", "/");
+                    group.map("", "");
                     group.map(ID, "/{0}");
                     group.map(USER, "/user");
                 })
                 .mapGroup(SECTIONS, "/sections", group -> {
-                    group.map("", "/");
+                    group.map("", "");
                     group.map(ID, "/{0}");
                     group.mapGroup(NOTEBOOK, "/notebook", subgroup
                             -> subgroup.map(ID, "/{0}"));
                 })
                 .mapGroup(PAGES, "/pages", group -> {
-                    group.map("", "/");
+                    group.map("", "");
                     group.map(ID, "/{0}");
                     group.mapGroup(SECTION, "/section", subgroup
                             -> subgroup.map(ID, "/{0}"));
@@ -165,5 +164,3 @@ public class HelloApplication extends Application {
                 .configure(JsonParser.Feature.AUTO_CLOSE_SOURCE, true);
     }
 }
-
-
