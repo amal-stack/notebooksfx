@@ -15,8 +15,8 @@ public class EditorSplitMenuButtonBuilder extends EditorControlBuilder<SplitMenu
         return new EditorSplitMenuButtonBuilder();
     }
 
-    public EditorSplitMenuButtonBuilder addMenuItem(Function<MenuItemBuilder, MenuItem> menuItemBuilder) {
-        menuItems.add(menuItemBuilder.apply(new MenuItemBuilder().forEditor(textArea)));
+    public EditorSplitMenuButtonBuilder addMenuItem(Function<EditorMenuItemBuilder, MenuItem> menuItemBuilder) {
+        menuItems.add(menuItemBuilder.apply(new EditorMenuItemBuilder().forEditor(textArea)));
         return this;
     }
 
