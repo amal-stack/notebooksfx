@@ -1,7 +1,7 @@
-package com.amalstack.notebooksfx.editor.controller;
+package com.amalstack.notebooksfx.util;
 
 @FunctionalInterface
-interface Initializer {
+public interface Initializer {
     static Initializer empty() {
         return () -> {
         };

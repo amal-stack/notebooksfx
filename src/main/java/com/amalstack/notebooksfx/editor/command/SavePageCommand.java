@@ -1,16 +1,16 @@
-package com.amalstack.notebooksfx.editor.controller;
+package com.amalstack.notebooksfx.editor.command;
 
 import com.amalstack.notebooksfx.command.ParameterizedCommand;
 import com.amalstack.notebooksfx.data.DataAccessService;
 import com.amalstack.notebooksfx.editor.EditorContext;
 import com.amalstack.notebooksfx.editor.nav.PageTreeItemModel;
 
-class SavePageCommand implements ParameterizedCommand<PageTreeItemModel> {
+public class SavePageCommand implements ParameterizedCommand<PageTreeItemModel> {
 
     private final DataAccessService dataAccessService;
     private final EditorContext context;
 
-    SavePageCommand(DataAccessService dataAccessService, EditorContext context) {
+    public SavePageCommand(DataAccessService dataAccessService, EditorContext context) {
         this.dataAccessService = dataAccessService;
         this.context = context;
     }

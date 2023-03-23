@@ -3,10 +3,10 @@ package com.amalstack.notebooksfx.editor.builder;
 import javafx.scene.control.MenuItem;
 import org.controlsfx.glyphfont.Glyph;
 
-public class MenuItemBuilder extends EditorControlBuilder<MenuItem, MenuItemBuilder> {
+public class EditorMenuItemBuilder extends EditorControlBuilder<MenuItem, EditorMenuItemBuilder> {
 
     @Override
-    protected MenuItemBuilder self() {
+    protected EditorMenuItemBuilder self() {
         return this;
     }
 

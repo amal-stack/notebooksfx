@@ -1,8 +1,8 @@
 package com.amalstack.notebooksfx.editor;
 
 import com.amalstack.notebooksfx.editor.builder.EditorButtonBuilder;
+import com.amalstack.notebooksfx.editor.builder.EditorMenuItemBuilder;
 import com.amalstack.notebooksfx.editor.builder.EditorSplitMenuButtonBuilder;
-import com.amalstack.notebooksfx.editor.builder.MenuItemBuilder;
 import com.amalstack.notebooksfx.editor.command.text.*;
 import com.amalstack.notebooksfx.util.controls.IdUtil;
 import javafx.scene.Node;
@@ -196,7 +196,7 @@ public class DefaultEditorControlProvider implements EditorControlProvider {
         );
     }
 
-    private Function<MenuItemBuilder, MenuItem> getHeadingForLevel(int level, String containerId) {
+    private Function<EditorMenuItemBuilder, MenuItem> getHeadingForLevel(int level, String containerId) {
         return item -> item.withId(IdUtil.combine(containerId, "H" + level))
                 .withText("Heading " + level)
                 .performs(new HeadingTextEditorCommand(level))

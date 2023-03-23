@@ -2,6 +2,8 @@ package com.amalstack.notebooksfx.editor.nav;
 
 import com.amalstack.notebooksfx.command.Commands;
 import com.amalstack.notebooksfx.data.DataAccessService;
+import com.amalstack.notebooksfx.editor.nav.command.CreateSectionCommand;
+import com.amalstack.notebooksfx.editor.nav.command.RenameTreeItemCommand;
 import com.amalstack.notebooksfx.util.ControllerParameters;
 import com.amalstack.notebooksfx.util.ParameterizedController;
 import com.amalstack.notebooksfx.util.controls.GraphicNodeProvider;

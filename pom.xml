@@ -122,7 +122,8 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>com.amalstack.notebooksfx/com.amalstack.notebooksfx.HelloApplication</mainClass>
+                            <mainClass>com.amalstack.notebooksfx/com.amalstack.notebooksfx.NotebooksFxApplication
+                            </mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
                             <jlinkImageName>app</jlinkImageName>
