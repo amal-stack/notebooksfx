@@ -1,7 +1,9 @@
-package com.amalstack.notebooksfx.editor.nav;
+package com.amalstack.notebooksfx.editor.nav.command;
 
 import com.amalstack.notebooksfx.command.Command;
 import com.amalstack.notebooksfx.data.model.SectionInput;
+import com.amalstack.notebooksfx.editor.nav.NotebookTreeViewContext;
+import com.amalstack.notebooksfx.editor.nav.SectionTreeItemModel;
 
 public class CreateSectionCommand implements Command {
 

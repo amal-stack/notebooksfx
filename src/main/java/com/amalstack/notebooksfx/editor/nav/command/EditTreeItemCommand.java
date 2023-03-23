@@ -1,10 +1,11 @@
-package com.amalstack.notebooksfx.editor.nav;
+package com.amalstack.notebooksfx.editor.nav.command;
 
 import com.amalstack.notebooksfx.command.Command;
+import com.amalstack.notebooksfx.editor.nav.TreeItemModel;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 
-class EditTreeItemCommand implements Command {
+public class EditTreeItemCommand implements Command {
 
     private final TreeView<TreeItemModel> treeView;
 
