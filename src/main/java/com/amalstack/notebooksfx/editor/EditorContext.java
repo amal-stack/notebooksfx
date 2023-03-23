@@ -1,6 +1,6 @@
 package com.amalstack.notebooksfx.editor;
 
-import com.amalstack.notebooksfx.editor.command.CommandCode;
+import com.amalstack.notebooksfx.editor.command.text.CommandCode;
 import com.amalstack.notebooksfx.util.HtmlTemplateWrapper;
 import com.vladsch.flexmark.html.HtmlRenderer;
 import com.vladsch.flexmark.parser.Parser;

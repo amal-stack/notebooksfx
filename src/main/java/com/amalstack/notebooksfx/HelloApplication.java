@@ -12,37 +12,41 @@ import com.amalstack.notebooksfx.data.repository.http.HttpSectionRepository;
 import com.amalstack.notebooksfx.data.repository.http.HttpUserRepository;
 import com.amalstack.notebooksfx.di.Container;
 import com.amalstack.notebooksfx.di.Lifetime;
-import com.amalstack.notebooksfx.editor.Configuration;
+import com.amalstack.notebooksfx.editor.DefaultEditorContextFactory;
 import com.amalstack.notebooksfx.editor.EditorContextFactory;
 import com.amalstack.notebooksfx.nav.*;
 import com.amalstack.notebooksfx.notebook.DefaultNotebookTableViewFactory;
 import com.amalstack.notebooksfx.notebook.NotebookTableViewFactory;
 import com.amalstack.notebooksfx.util.JacksonMapper;
 import com.amalstack.notebooksfx.util.JsonMapper;
+import com.amalstack.notebooksfx.util.controls.DefaultGraphicNodeProvider;
+import com.amalstack.notebooksfx.util.controls.GraphicNodeProvider;
 import com.amalstack.notebooksfx.util.http.*;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.Callback;
-
-import java.io.IOException;
-import java.net.URL;
-import java.util.Objects;
 
 import static com.amalstack.notebooksfx.AppRouteNames.*;
 
 public class HelloApplication extends Application {
-//    public static void main(String[] args) {
-//        launch();
-//    }
+
+    // Main method removed for exceptions to be caught by Thread.setDefaultUncaughtExceptionHandler()
+
+    private static void addDataAccess(Container container) {
+        container.addService(NotebookRepository.class, HttpNotebookRepository.class, Lifetime.TRANSIENT);
+        container.addService(SectionRepository.class, HttpSectionRepository.class, Lifetime.TRANSIENT);
+        container.addService(PageRepository.class, HttpPageRepository.class, Lifetime.TRANSIENT);
+        container.addService(UserRepository.class, HttpUserRepository.class, Lifetime.TRANSIENT);
+
+        container.addService(DataAccessService.class, HttpDataAccessService.class, Lifetime.TRANSIENT);
+    }
 
     @Override
     public void start(Stage stage) {
@@ -69,35 +73,6 @@ public class HelloApplication extends Application {
             alert.setContentText(e.getErrorResponse().orElseThrow().error());
             alert.showAndWait();
         }
-        //        loadScene(
-//                stage,
-//                HelloApplication.class.getResource("editor-view.fxml"),
-//                "Notebooks",
-//                x -> new EditorController(new Configuration.DefaultEditorContextFactory(), new DefaultGraphicNodeProvider())
-//        );
-//        loadScene(stage,
-//                HelloApplication.class.getResource("notebooks-view.fxml"),
-//                "Notebooks",
-//                x -> new NotebooksController(new NotebookRepository() {
-//                    final Random random = new Random();
-//                    @Override
-//                    public Collection<Notebook> findByUserId(Long userId) {
-//                        return List.of(
-//                                new Notebook(1L,
-//                                        "My First Notebook",
-//                                        LocalDateTime.now(),
-//                                        random.nextInt(),
-//                                        random.nextInt()),
-//                                new Notebook(2L,
-//                                        "My Second Notebook",
-//                                        LocalDateTime.now(),
-//                                        random.nextInt(),
-//                                        random.nextInt())
-//                        );
-//                    }
-//                },
-//                        new DefaultNotebookTableViewFactory(),
-//                        new User(0L, "example@example.com")));
     }
 
     private void showError(Thread t, Throwable e) {
@@ -113,27 +88,10 @@ public class HelloApplication extends Application {
 
     }
 
-    //Delete
-    private void loadScene(
-            Stage stage,
-            URL url,
-            String title,
-            Callback<Class<?>, Object> controllerFactory)
-            throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(url);
-        fxmlLoader.setControllerFactory(controllerFactory);
-        Scene scene = new Scene(fxmlLoader.load(), 320, 240);
-        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("appstyle.css")).toString());
-        stage.setTitle(title);
-        stage.setScene(scene);
-        stage.show();
-
-    }
-
     private void initServices(Container container) {
 
         container.addService(GraphicNodeProvider.class, DefaultGraphicNodeProvider.class, Lifetime.SINGLETON);
-        container.addService(EditorContextFactory.class, Configuration.DefaultEditorContextFactory.class, Lifetime.SINGLETON);
+        container.addService(EditorContextFactory.class, DefaultEditorContextFactory.class, Lifetime.SINGLETON);
         container.addService(NotebookTableViewFactory.class, DefaultNotebookTableViewFactory.class, Lifetime.SINGLETON);
 
         container.addService(UrlProvider.class, DefaultUrlProvider.class, Lifetime.SINGLETON, this::createEndpointProvider);
@@ -148,15 +106,6 @@ public class HelloApplication extends Application {
 
         addDataAccess(container);
 
-    }
-
-    private static void addDataAccess(Container container) {
-        container.addService(NotebookRepository.class, HttpNotebookRepository.class, Lifetime.TRANSIENT);
-        container.addService(SectionRepository.class, HttpSectionRepository.class, Lifetime.TRANSIENT);
-        container.addService(PageRepository.class, HttpPageRepository.class, Lifetime.TRANSIENT);
-        container.addService(UserRepository.class, HttpUserRepository.class, Lifetime.TRANSIENT);
-
-        container.addService(DataAccessService.class, HttpDataAccessService.class, Lifetime.TRANSIENT);
     }
 
     private void initNav(Container container, Stage stage) {

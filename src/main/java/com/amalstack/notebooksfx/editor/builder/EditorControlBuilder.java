@@ -1,7 +1,7 @@
 package com.amalstack.notebooksfx.editor.builder;
 
-import com.amalstack.notebooksfx.builder.ControlBuilder;
-import com.amalstack.notebooksfx.editor.command.TextEditorCommand;
+import com.amalstack.notebooksfx.editor.command.text.TextEditorCommand;
+import com.amalstack.notebooksfx.util.controls.builder.ControlBuilder;
 import javafx.event.ActionEvent;
 import org.controlsfx.glyphfont.FontAwesome;
 import org.fxmisc.richtext.StyleClassedTextArea;

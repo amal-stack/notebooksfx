@@ -1,9 +1,9 @@
 package com.amalstack.notebooksfx.editor.controller;
 
-import com.amalstack.notebooksfx.Graphic;
-import com.amalstack.notebooksfx.GraphicNodeProvider;
 import com.amalstack.notebooksfx.command.Commands;
 import com.amalstack.notebooksfx.editor.EditorContext;
+import com.amalstack.notebooksfx.util.controls.Graphic;
+import com.amalstack.notebooksfx.util.controls.GraphicNodeProvider;
 import javafx.beans.binding.Bindings;
 import javafx.scene.control.Button;
 import javafx.scene.control.ProgressBar;

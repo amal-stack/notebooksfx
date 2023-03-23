@@ -1,14 +1,15 @@
 package com.amalstack.notebooksfx.editor.controller;
 
-import com.amalstack.notebooksfx.Graphic;
-import com.amalstack.notebooksfx.GraphicNodeProvider;
 import com.amalstack.notebooksfx.command.CommandExecutor;
-import com.amalstack.notebooksfx.controller.PageTreeItemModel;
 import com.amalstack.notebooksfx.data.DataAccessService;
 import com.amalstack.notebooksfx.editor.EditorContext;
 import com.amalstack.notebooksfx.editor.EditorContextFactory;
+import com.amalstack.notebooksfx.editor.nav.NotebookTreeViewController;
+import com.amalstack.notebooksfx.editor.nav.PageTreeItemModel;
 import com.amalstack.notebooksfx.nav.NavigationManager;
 import com.amalstack.notebooksfx.nav.Parents;
+import com.amalstack.notebooksfx.util.controls.Graphic;
+import com.amalstack.notebooksfx.util.controls.GraphicNodeProvider;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
