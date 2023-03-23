@@ -1,6 +1,6 @@
 package com.amalstack.notebooksfx.nav;
 
-import com.amalstack.notebooksfx.HelloApplication;
+import com.amalstack.notebooksfx.NotebooksFxApplication;
 import com.amalstack.notebooksfx.util.ControllerParameters;
 import com.amalstack.notebooksfx.util.ParameterizedController;
 import javafx.fxml.FXMLLoader;
@@ -66,7 +66,8 @@ public class SimpleNavigationManager implements NavigationManager {
         } catch (IOException e) {
             throw new NavigationException(e);
         }
-        scene.getStylesheets().add(HelloApplication.class.getResource("appstyle.css").toString());
+        //TODO: Provide alternative way to configure stylesheets
+        scene.getStylesheets().add(NotebooksFxApplication.class.getResource("appstyle.css").toString());
         stage.setTitle(parameters.title());
         stage.setScene(scene);
         stage.show();
@@ -86,7 +87,7 @@ public class SimpleNavigationManager implements NavigationManager {
         } catch (IOException e) {
             throw new NavigationException(e);
         }
-        scene.getStylesheets().add(HelloApplication.class.getResource("appstyle.css").toString());
+        scene.getStylesheets().add(NotebooksFxApplication.class.getResource("appstyle.css").toString());
         stage.setTitle(parentParameters.title());
         stage.setScene(scene);
         stage.show();
