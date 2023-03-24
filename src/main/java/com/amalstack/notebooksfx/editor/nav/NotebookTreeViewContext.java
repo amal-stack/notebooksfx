@@ -10,6 +10,9 @@ import com.amalstack.notebooksfx.editor.nav.command.EditTreeItemCommand;
 import com.amalstack.notebooksfx.util.controls.Graphic;
 import com.amalstack.notebooksfx.util.controls.GraphicNodeProvider;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
@@ -24,6 +27,8 @@ public class NotebookTreeViewContext {
 
     private final GraphicNodeProvider graphicNodeProvider;
 
+    private final ReadOnlyObjectWrapper<PageTreeItemModel> currentPage = new ReadOnlyObjectWrapper<>();
+
     public NotebookTreeViewContext(TreeView<TreeItemModel> treeView,
                                    DataAccessService dataAccessService,
                                    GraphicNodeProvider graphicNodeProvider) {
@@ -34,6 +39,9 @@ public class NotebookTreeViewContext {
 
     public void initialize(Long notebookId) {
         treeView.setCellFactory(this::cellFactory);
+        treeView.getSelectionModel()
+                .selectedItemProperty()
+                .addListener(this::onTreeItemSelect);
         NotebookTreeItemModel model = loadModel(notebookId);
         TreeItem<TreeItemModel> root = new TreeItem<>(model, getGraphicNode(Graphic.NOTEBOOK));
         addSections(root, model);
@@ -86,6 +94,18 @@ public class NotebookTreeViewContext {
         return graphicNodeProvider.getNode(graphic);
     }
 
+    public GraphicNodeProvider getGraphicNodeProvider() {
+        return graphicNodeProvider;
+    }
+
+    public PageTreeItemModel getCurrentPage() {
+        return currentPage.get();
+    }
+
+    public ReadOnlyObjectProperty<PageTreeItemModel> currentPageProperty() {
+        return currentPage;
+    }
+
     TreeCell<TreeItemModel> cellFactory(TreeView<TreeItemModel> treeView) {
         var treeCell = new TextFieldTreeCell<>(TreeItemModel.NameStringConverter.forTreeView(treeView));
         treeCell.contextMenuProperty().bind(Bindings.createObjectBinding(() -> {
@@ -104,6 +124,16 @@ public class NotebookTreeViewContext {
             return null;
         }, treeCell.treeItemProperty()));
         return treeCell;
+    }
+
+    private void onTreeItemSelect(
+            ObservableValue<? extends TreeItem<TreeItemModel>> observableValue,
+            TreeItem<TreeItemModel> previousItem,
+            TreeItem<TreeItemModel> currentItem) {
+
+        if (currentItem != null && currentItem.getValue() instanceof PageTreeItemModel page) {
+            currentPage.set(page);
+        }
     }
 
     private NotebookTreeItemModel loadModel(long notebookId) {
