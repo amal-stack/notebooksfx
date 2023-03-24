@@ -7,6 +7,7 @@ import com.vladsch.flexmark.ext.ins.InsExtension;
 import com.vladsch.flexmark.ext.superscript.SuperscriptExtension;
 import com.vladsch.flexmark.ext.tables.TablesExtension;
 import com.vladsch.flexmark.html.HtmlRenderer;
+import javafx.scene.web.WebView;
 import org.fxmisc.richtext.StyleClassedTextArea;
 import org.jetbrains.annotations.NotNull;
 
@@ -31,7 +32,7 @@ public class DefaultEditorContextFactory implements EditorContextFactory {
     }
 
     @Override
-    public EditorContext create(StyleClassedTextArea editorTextArea) {
+    public EditorContext create(StyleClassedTextArea editorTextArea, WebView outputWebView) {
 
         return EditorContext.builder()
                 .addExtensions(
@@ -43,7 +44,7 @@ public class DefaultEditorContextFactory implements EditorContextFactory {
                 )
                 .htmlRenderer(DefaultEditorContextFactory::buildHtmlRenderer
                 )
-                .controlProvider(new DefaultEditorControlProvider(editorTextArea))
+                .controlProvider(new DefaultEditorControlProvider(editorTextArea, outputWebView))
                 .templateWrapper(createHtmlTemplateWrapper())
                 .build();
     }

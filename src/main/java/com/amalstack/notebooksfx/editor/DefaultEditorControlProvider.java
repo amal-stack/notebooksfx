@@ -8,6 +8,7 @@ import com.amalstack.notebooksfx.util.controls.IdUtil;
 import javafx.scene.Node;
 import javafx.scene.control.MenuItem;
 import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.web.WebView;
 import org.controlsfx.control.ToggleSwitch;
 import org.controlsfx.glyphfont.FontAwesome;
 import org.fxmisc.richtext.StyleClassedTextArea;
@@ -28,13 +29,15 @@ public class DefaultEditorControlProvider implements EditorControlProvider {
     private final Map<CommandCode, Node> cmdControlMap;
     private final StyleClassedTextArea editorTextArea;
     private final String rootId;
+    private final WebView outputWebView;
 
-    public DefaultEditorControlProvider(StyleClassedTextArea editorTextArea) {
-        this(editorTextArea, editorTextArea.getId());
+    public DefaultEditorControlProvider(StyleClassedTextArea editorTextArea, WebView outputWebView) {
+        this(editorTextArea, outputWebView, editorTextArea.getId());
     }
 
-    public DefaultEditorControlProvider(StyleClassedTextArea editorTextArea, String rootId) {
+    public DefaultEditorControlProvider(StyleClassedTextArea editorTextArea, WebView outputWebView, String rootId) {
         this.editorTextArea = editorTextArea;
+        this.outputWebView = outputWebView;
         this.rootId = rootId;
         cmdControlMap = createControls();
     }
@@ -52,6 +55,11 @@ public class DefaultEditorControlProvider implements EditorControlProvider {
     @Override
     public StyleClassedTextArea getEditorTextArea() {
         return editorTextArea;
+    }
+
+    @Override
+    public WebView getOutputWebView() {
+        return outputWebView;
     }
 
     protected Map<CommandCode, Node> createControls() {
