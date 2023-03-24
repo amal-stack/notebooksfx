@@ -1,9 +1,10 @@
 package com.amalstack.notebooksfx.util.controls.builder;
 
-import com.amalstack.notebooksfx.command.Command;
-import com.amalstack.notebooksfx.command.Commands;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.MenuItem;
+import javafx.scene.input.KeyCombination;
 
 import java.util.function.Consumer;
 
@@ -12,7 +13,8 @@ public class MenuItemBuilder implements ControlBuilder<MenuItem, MenuItemBuilder
     private Consumer<MenuItem> config;
     private String text;
     private Node graphic;
-    private Command command;
+    private KeyCombination keyCombination;
+    private EventHandler<ActionEvent> eventHandler;
 
 
     public MenuItemBuilder withText(String text) {
@@ -25,8 +27,13 @@ public class MenuItemBuilder implements ControlBuilder<MenuItem, MenuItemBuilder
         return this;
     }
 
-    public MenuItemBuilder performs(Command command) {
-        this.command = command;
+    public MenuItemBuilder withAccelerator(KeyCombination keyCombination) {
+        this.keyCombination = keyCombination;
+        return this;
+    }
+
+    public MenuItemBuilder performs(EventHandler<ActionEvent> eventHandler) {
+        this.eventHandler = eventHandler;
         return this;
     }
 
@@ -45,8 +52,13 @@ public class MenuItemBuilder implements ControlBuilder<MenuItem, MenuItemBuilder
 
     public MenuItem build() {
         var menuItem = new MenuItem(text, graphic);
-        menuItem.setId(id);
-        menuItem.setOnAction(Commands.eventHandler(command));
+        if (id != null) {
+            menuItem.setId(id);
+        }
+        menuItem.setOnAction(eventHandler);
+        if (keyCombination != null) {
+            menuItem.setAccelerator(keyCombination);
+        }
         if (config != null) {
             config.accept(menuItem);
         }
