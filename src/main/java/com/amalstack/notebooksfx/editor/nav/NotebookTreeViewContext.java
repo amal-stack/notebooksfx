@@ -10,11 +10,16 @@ import com.amalstack.notebooksfx.editor.nav.command.EditTreeItemCommand;
 import com.amalstack.notebooksfx.util.controls.Graphic;
 import com.amalstack.notebooksfx.util.controls.GraphicNodeProvider;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTreeCell;
+
+import static com.amalstack.notebooksfx.editor.nav.NotebookTreeViewContext.EventHandlers.*;
 
 public class NotebookTreeViewContext {
 
@@ -23,6 +28,8 @@ public class NotebookTreeViewContext {
     private final DataAccessService dataAccessService;
 
     private final GraphicNodeProvider graphicNodeProvider;
+
+    private final ReadOnlyObjectWrapper<PageTreeItemModel> currentPage = new ReadOnlyObjectWrapper<>();
 
     public NotebookTreeViewContext(TreeView<TreeItemModel> treeView,
                                    DataAccessService dataAccessService,
@@ -34,6 +41,9 @@ public class NotebookTreeViewContext {
 
     public void initialize(Long notebookId) {
         treeView.setCellFactory(this::cellFactory);
+        treeView.getSelectionModel()
+                .selectedItemProperty()
+                .addListener(this::onTreeItemSelect);
         NotebookTreeItemModel model = loadModel(notebookId);
         TreeItem<TreeItemModel> root = new TreeItem<>(model, getGraphicNode(Graphic.NOTEBOOK));
         addSections(root, model);
@@ -86,6 +96,18 @@ public class NotebookTreeViewContext {
         return graphicNodeProvider.getNode(graphic);
     }
 
+    public GraphicNodeProvider getGraphicNodeProvider() {
+        return graphicNodeProvider;
+    }
+
+    public PageTreeItemModel getCurrentPage() {
+        return currentPage.get();
+    }
+
+    public ReadOnlyObjectProperty<PageTreeItemModel> currentPageProperty() {
+        return currentPage;
+    }
+
     TreeCell<TreeItemModel> cellFactory(TreeView<TreeItemModel> treeView) {
         var treeCell = new TextFieldTreeCell<>(TreeItemModel.NameStringConverter.forTreeView(treeView));
         treeCell.contextMenuProperty().bind(Bindings.createObjectBinding(() -> {
@@ -104,6 +126,16 @@ public class NotebookTreeViewContext {
             return null;
         }, treeCell.treeItemProperty()));
         return treeCell;
+    }
+
+    private void onTreeItemSelect(
+            ObservableValue<? extends TreeItem<TreeItemModel>> observableValue,
+            TreeItem<TreeItemModel> previousItem,
+            TreeItem<TreeItemModel> currentItem) {
+
+        if (currentItem != null && currentItem.getValue() instanceof PageTreeItemModel page) {
+            currentPage.set(page);
+        }
     }
 
     private NotebookTreeItemModel loadModel(long notebookId) {
@@ -169,6 +201,16 @@ public class NotebookTreeViewContext {
             );
         }
 
+
+        private static MenuItem createMenuItem(String text, Node graphic, EventHandler<ActionEvent> eventHandler) {
+            MenuItem menuItem = new MenuItem(text);
+            menuItem.setGraphic(graphic);
+            menuItem.setOnAction(eventHandler);
+            return menuItem;
+        }
+    }
+
+    public static class EventHandlers {
         public static EventHandler<ActionEvent> editTreeItem(TreeView<TreeItemModel> treeView, TreeItem<TreeItemModel> treeItem) {
             return event -> CommandExecutor.execute(new EditTreeItemCommand(treeView, treeItem));
         }
@@ -183,13 +225,6 @@ public class NotebookTreeViewContext {
 
         public static EventHandler<ActionEvent> createPage(TreeItem<TreeItemModel> sectionTreeItem, NotebookTreeViewContext context) {
             return event -> CommandExecutor.execute(new CreatePageCommand(sectionTreeItem, context));
-        }
-
-        private static MenuItem createMenuItem(String text, Node graphic, EventHandler<ActionEvent> eventHandler) {
-            MenuItem menuItem = new MenuItem(text);
-            menuItem.setGraphic(graphic);
-            menuItem.setOnAction(eventHandler);
-            return menuItem;
         }
     }
 }

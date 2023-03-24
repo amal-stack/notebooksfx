@@ -21,7 +21,8 @@ public class LoadPageIntoEditorCommand implements Command {
 
     @Override
     public void execute() {
-        editorTextArea.replaceText(page.getContent());
+        String content = page.getContent() == null ? "" : page.getContent();
+        editorTextArea.replaceText(content);
         editorTextArea.setEditable(true);
     }
 }

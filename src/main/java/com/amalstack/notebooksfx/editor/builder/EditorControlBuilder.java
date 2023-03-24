@@ -51,6 +51,9 @@ public abstract class EditorControlBuilder<C, B extends EditorControlBuilder<C, 
     public abstract C build();
 
     protected void handleEditorCommand(ActionEvent ignoredEvent) {
+        if (textArea.isDisabled()) {
+            return;
+        }
         var selection = textArea.getSelection();
         if (selection.getLength() == 0) {
             textArea.appendText(command.execute("Text Here").toString());

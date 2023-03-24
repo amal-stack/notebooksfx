@@ -5,15 +5,19 @@ import com.amalstack.notebooksfx.command.CommandExecutor;
 import com.amalstack.notebooksfx.data.DataAccessService;
 import com.amalstack.notebooksfx.nav.NavigationManager;
 import com.amalstack.notebooksfx.notebook.command.UpdateDetailPaneCommand;
+import com.amalstack.notebooksfx.util.Initializer;
 import com.amalstack.notebooksfx.util.controls.Graphic;
 import com.amalstack.notebooksfx.util.controls.GraphicNodeProvider;
 import com.amalstack.notebooksfx.util.http.AuthenticationContext;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuBar;
 import javafx.scene.control.TextField;
 import org.controlsfx.control.MasterDetailPane;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.ResourceBundle;
 
 public class NotebooksController {
 
@@ -28,7 +32,10 @@ public class NotebooksController {
     private final GraphicNodeProvider graphicNodeProvider;
 
     @FXML
-    public Button searchTextClearButton;
+    private Button searchTextClearButton;
+
+    @FXML
+    private MenuBar notebooksMenuBar;
 
     @FXML
     private MasterDetailPane masterDetailPane;
@@ -53,6 +60,9 @@ public class NotebooksController {
 
     @FXML
     private Label notebookDescLabel;
+
+    @FXML
+    private ResourceBundle resources;
 
 
     public NotebooksController(
@@ -83,6 +93,11 @@ public class NotebooksController {
 
         context.initialize(searchTextField);
 
+        Initializer.initialize(new NotebooksMenuBarInitializer(notebooksMenuBar,
+                context,
+                resources)
+        );
+
         setButtonGraphics();
 
         setButtonEventHandlers(context);
@@ -99,6 +114,7 @@ public class NotebooksController {
         notebookOpenButton.setOnAction(context.eventHandlers().open());
         notebookEditButton.setOnAction(context.eventHandlers().edit());
         notebookDeleteButton.setOnAction(context.eventHandlers().delete());
+        searchTextClearButton.setOnAction(event -> searchTextField.setText(""));
     }
 
     private void setButtonGraphics() {
@@ -106,6 +122,7 @@ public class NotebooksController {
         notebookOpenButton.setGraphic(graphicNodeProvider.getNode(Graphic.OPEN));
         notebookEditButton.setGraphic(graphicNodeProvider.getNode(Graphic.EDIT));
         notebookDeleteButton.setGraphic(graphicNodeProvider.getNode(Graphic.DELETE));
+        searchTextClearButton.setGraphic(graphicNodeProvider.getNode(Graphic.CLEAR));
     }
 
     @NotNull
