@@ -102,5 +102,11 @@ public class SimpleNavigationManager implements NavigationManager {
     public void navigateTo(String parentName, ControllerParameters parameters) {
         navigateTo(parentName, parameters, stage);
     }
+
+    @Override
+    public Stage getStage() {
+        return stage;
+    }
+
 }
 

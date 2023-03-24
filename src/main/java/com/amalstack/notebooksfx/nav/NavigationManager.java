@@ -15,5 +15,7 @@ public interface NavigationManager {
     void navigateTo(String parentName);
 
     void navigateTo(String parentName, ControllerParameters parameters);
+
+    Stage getStage();
 }
 
