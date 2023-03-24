@@ -19,6 +19,8 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTreeCell;
 
+import static com.amalstack.notebooksfx.editor.nav.NotebookTreeViewContext.EventHandlers.*;
+
 public class NotebookTreeViewContext {
 
     private final TreeView<TreeItemModel> treeView;
@@ -199,6 +201,16 @@ public class NotebookTreeViewContext {
             );
         }
 
+
+        private static MenuItem createMenuItem(String text, Node graphic, EventHandler<ActionEvent> eventHandler) {
+            MenuItem menuItem = new MenuItem(text);
+            menuItem.setGraphic(graphic);
+            menuItem.setOnAction(eventHandler);
+            return menuItem;
+        }
+    }
+
+    public static class EventHandlers {
         public static EventHandler<ActionEvent> editTreeItem(TreeView<TreeItemModel> treeView, TreeItem<TreeItemModel> treeItem) {
             return event -> CommandExecutor.execute(new EditTreeItemCommand(treeView, treeItem));
         }
@@ -213,13 +225,6 @@ public class NotebookTreeViewContext {
 
         public static EventHandler<ActionEvent> createPage(TreeItem<TreeItemModel> sectionTreeItem, NotebookTreeViewContext context) {
             return event -> CommandExecutor.execute(new CreatePageCommand(sectionTreeItem, context));
-        }
-
-        private static MenuItem createMenuItem(String text, Node graphic, EventHandler<ActionEvent> eventHandler) {
-            MenuItem menuItem = new MenuItem(text);
-            menuItem.setGraphic(graphic);
-            menuItem.setOnAction(eventHandler);
-            return menuItem;
         }
     }
 }
