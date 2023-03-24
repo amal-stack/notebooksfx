@@ -1,9 +1,9 @@
 package com.amalstack.notebooksfx.notebook;
 
+import com.amalstack.notebooksfx.Parents;
 import com.amalstack.notebooksfx.command.CommandExecutor;
 import com.amalstack.notebooksfx.data.DataAccessService;
 import com.amalstack.notebooksfx.nav.NavigationManager;
-import com.amalstack.notebooksfx.nav.Parents;
 import com.amalstack.notebooksfx.notebook.command.UpdateDetailPaneCommand;
 import com.amalstack.notebooksfx.util.controls.Graphic;
 import com.amalstack.notebooksfx.util.controls.GraphicNodeProvider;
