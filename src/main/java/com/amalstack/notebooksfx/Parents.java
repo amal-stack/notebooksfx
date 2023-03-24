@@ -1,4 +1,4 @@
-package com.amalstack.notebooksfx.nav;
+package com.amalstack.notebooksfx;
 
 
 public final class Parents {
