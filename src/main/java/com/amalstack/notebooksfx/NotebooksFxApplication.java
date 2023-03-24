@@ -14,7 +14,10 @@ import com.amalstack.notebooksfx.di.Container;
 import com.amalstack.notebooksfx.di.Lifetime;
 import com.amalstack.notebooksfx.editor.DefaultEditorContextFactory;
 import com.amalstack.notebooksfx.editor.EditorContextFactory;
-import com.amalstack.notebooksfx.nav.*;
+import com.amalstack.notebooksfx.nav.NavigationManager;
+import com.amalstack.notebooksfx.nav.ParentParameters;
+import com.amalstack.notebooksfx.nav.SimpleNavigationManager;
+import com.amalstack.notebooksfx.nav.SimpleNavigationManagerFactory;
 import com.amalstack.notebooksfx.notebook.DefaultNotebookTableViewFactory;
 import com.amalstack.notebooksfx.notebook.NotebookTableViewFactory;
 import com.amalstack.notebooksfx.util.JacksonMapper;
@@ -32,6 +35,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+
+import java.util.ResourceBundle;
 
 import static com.amalstack.notebooksfx.AppRouteNames.*;
 
@@ -110,21 +115,29 @@ public class NotebooksFxApplication extends Application {
     private void initNav(Container container, Stage stage) {
         container.addService(NavigationManager.class, SimpleNavigationManager.class, Lifetime.SINGLETON, () -> SimpleNavigationManagerFactory.create(stage));
         var nav = container.getService(NavigationManager.class);
+        var resourceBundle = createResourceBundle();
 
-        nav.addParent(new ParentParameters(Parents.HOME,
-                NotebooksFxApplication.class.getResource("notebooks-view.fxml"),
-                "Home",
-                container::injectAndConstruct));
+        nav.addParent(ParentParameters.builder().name(Parents.HOME)
+                .fxmlUrl(NotebooksFxApplication.class.getResource("notebooks-view.fxml"))
+                .title(resourceBundle.getString("parents.notebooks.title"))
+                .resourceBundle(resourceBundle)
+                .controllerFactory(container::injectAndConstruct)
+                .build());
 
-        nav.addParent(new ParentParameters(Parents.EDITOR,
-                getClass().getResource("editor-view.fxml"),
-                "Editor",
-                container::injectAndConstruct));
+        nav.addParent(ParentParameters.builder().name(Parents.EDITOR)
+                .fxmlUrl(getClass().getResource("editor-view.fxml"))
+                .title(resourceBundle.getString("parents.editor.title"))
+                .resourceBundle(resourceBundle)
+                .controllerFactory(container::injectAndConstruct)
+                .build());
 
-        nav.addParent(new ParentParameters(Parents.AUTH,
-                getClass().getResource("auth-view.fxml"),
-                "Login or Sign Up",
-                container::injectAndConstruct));
+        nav.addParent(ParentParameters.builder().name(Parents.AUTH)
+                .fxmlUrl(getClass().getResource("auth-view.fxml"))
+                .title(resourceBundle.getString("parents.auth.title"))
+                .resourceBundle(resourceBundle)
+                .controllerFactory(container::injectAndConstruct)
+                .build());
+
     }
 
     public DefaultUrlProvider createEndpointProvider() {
@@ -162,5 +175,9 @@ public class NotebooksFxApplication extends Application {
                 .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
                 .configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true)
                 .configure(JsonParser.Feature.AUTO_CLOSE_SOURCE, true);
+    }
+
+    private ResourceBundle createResourceBundle() {
+        return ResourceBundle.getBundle("com.amalstack.notebooksfx.labels");
     }
 }
