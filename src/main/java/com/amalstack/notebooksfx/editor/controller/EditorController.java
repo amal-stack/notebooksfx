@@ -9,7 +9,6 @@ import com.amalstack.notebooksfx.editor.command.*;
 import com.amalstack.notebooksfx.editor.nav.NotebookTreeViewController;
 import com.amalstack.notebooksfx.editor.nav.PageTreeItemModel;
 import com.amalstack.notebooksfx.nav.NavigationManager;
-import com.amalstack.notebooksfx.nav.Parents;
 import com.amalstack.notebooksfx.util.Initializer;
 import com.amalstack.notebooksfx.util.controls.Graphic;
 import com.amalstack.notebooksfx.util.controls.GraphicNodeProvider;
