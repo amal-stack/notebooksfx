@@ -7,6 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -16,10 +17,15 @@ public class SimpleNavigationManager implements NavigationManager {
     private final Map<String, ParentParameters> parents = new HashMap<>();
     private final Stage stage;
 
+    private final Callback<Class<?>, Object> defaultControllerFactory;
 
     public SimpleNavigationManager(Stage stage) {
+        this(stage, null);
+    }
 
+    public SimpleNavigationManager(Stage stage, Callback<Class<?>, Object> defaultControllerFactory) {
         this.stage = stage;
+        this.defaultControllerFactory = defaultControllerFactory;
     }
 
     private static void supplyParameters(ControllerParameters parameters, FXMLLoader fxmlLoader) {
@@ -57,9 +63,7 @@ public class SimpleNavigationManager implements NavigationManager {
 
     @Override
     public void navigateTo(String parentName, Stage stage) {
-        ParentParameters parameters = parents.get(parentName);
-        FXMLLoader fxmlLoader = new FXMLLoader(parameters.url());
-        fxmlLoader.setControllerFactory(parameters.controllerFactory());
+        FXMLLoader fxmlLoader = createFXMLLoader(parentName);
         Scene scene = stage.getScene();
         try {
             scene.setRoot(fxmlLoader.load());
@@ -68,27 +72,23 @@ public class SimpleNavigationManager implements NavigationManager {
         }
         //TODO: Provide alternative way to configure stylesheets
         scene.getStylesheets().add(NotebooksFxApplication.class.getResource("appstyle.css").toString());
-        stage.setTitle(parameters.title());
         stage.setScene(scene);
         stage.show();
     }
 
     @Override
     public void navigateTo(String parentName, ControllerParameters parameters, Stage stage) {
-        ParentParameters parentParameters = parents.get(parentName);
-        FXMLLoader fxmlLoader = new FXMLLoader(parentParameters.url());
-        fxmlLoader.setControllerFactory(parentParameters.controllerFactory());
-        Scene scene = stage.getScene();
+        FXMLLoader fxmlLoader = createFXMLLoader(parentName);
+        Parent root;
         try {
-
-            Parent root = fxmlLoader.load();
-            supplyParameters(parameters, fxmlLoader);
-            scene.setRoot(root);
+            root = fxmlLoader.load();
         } catch (IOException e) {
             throw new NavigationException(e);
         }
+        Scene scene = stage.getScene();
+        supplyParameters(parameters, fxmlLoader);
+        scene.setRoot(root);
         scene.getStylesheets().add(NotebooksFxApplication.class.getResource("appstyle.css").toString());
-        stage.setTitle(parentParameters.title());
         stage.setScene(scene);
         stage.show();
     }
@@ -101,6 +101,19 @@ public class SimpleNavigationManager implements NavigationManager {
     @Override
     public void navigateTo(String parentName, ControllerParameters parameters) {
         navigateTo(parentName, parameters, stage);
+    }
+
+    @Override
+    public Stage getStage() {
+        return stage;
+    }
+
+    private FXMLLoader createFXMLLoader(String parentName) {
+        ParentParameters parameters = parents.get(parentName);
+        FXMLLoader fxmlLoader = new FXMLLoader(parameters.fxmlUrl(), parameters.resourceBundle());
+        fxmlLoader.setControllerFactory(parameters.controllerFactory());
+        stage.setTitle(parameters.title());
+        return fxmlLoader;
     }
 }
 

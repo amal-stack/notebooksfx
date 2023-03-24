@@ -1,9 +1,9 @@
 package com.amalstack.notebooksfx.auth;
 
+import com.amalstack.notebooksfx.Parents;
 import com.amalstack.notebooksfx.data.model.ErrorEntry;
 import com.amalstack.notebooksfx.data.model.User;
 import com.amalstack.notebooksfx.nav.NavigationManager;
-import com.amalstack.notebooksfx.nav.Parents;
 import com.amalstack.notebooksfx.util.http.AuthenticationService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -12,6 +12,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+
+import java.util.ResourceBundle;
 
 public class LoginController {
     private final AuthenticationService authenticationService;
@@ -31,6 +33,9 @@ public class LoginController {
 
     @FXML
     private Button loginButton;
+
+    @FXML
+    private ResourceBundle resources;
 
     public LoginController(AuthenticationService authenticationService,
                            NavigationManager navigationManager) {

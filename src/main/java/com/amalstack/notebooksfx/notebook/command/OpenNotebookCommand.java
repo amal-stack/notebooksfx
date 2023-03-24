@@ -1,8 +1,8 @@
 package com.amalstack.notebooksfx.notebook.command;
 
+import com.amalstack.notebooksfx.Parents;
 import com.amalstack.notebooksfx.command.ParameterizedCommand;
 import com.amalstack.notebooksfx.nav.NavigationManager;
-import com.amalstack.notebooksfx.nav.Parents;
 import com.amalstack.notebooksfx.notebook.NotebookViewModel;
 import com.amalstack.notebooksfx.util.ControllerParameters;
 
