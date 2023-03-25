@@ -77,11 +77,11 @@ public class EditorController {
     }
 
     public void initialize() {
-        context = factory.create(editorTextArea, outputWebView);
+        context = factory.create(editorTextArea, outputWebView, resources);
 
         Initializer.initialize(
                 new EditorToolbarInitializer(context, editorToolbar),
-                new OutputWebViewInitializer(context, refreshBtn, webViewProgress, graphic, resources)
+                new OutputWebViewInitializer(context, refreshBtn, webViewProgress, graphic)
         );
 
 
