@@ -9,10 +9,7 @@ import com.vladsch.flexmark.util.data.MutableDataSet;
 import com.vladsch.flexmark.util.misc.Extension;
 import javafx.scene.Node;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.function.Consumer;
 
 public class EditorContext {
@@ -21,18 +18,21 @@ public class EditorContext {
     private final Parser parser;
     private final EditorControlProvider editorControlProvider;
     private final HtmlTemplateWrapper htmlTemplateWrapper;
+    private final ResourceBundle resources;
 
     private EditorContext(
             EditorControlProvider editorControlProvider,
             Parser parser,
             HtmlRenderer htmlRenderer,
             HtmlTemplateWrapper htmlTemplateWrapper,
-            DataHolder options) {
+            DataHolder options,
+            ResourceBundle resources) {
         this.options = options;
         this.htmlRenderer = htmlRenderer;
         this.parser = parser;
         this.editorControlProvider = editorControlProvider;
         this.htmlTemplateWrapper = htmlTemplateWrapper;
+        this.resources = resources;
     }
 
     public static Builder builder() {
@@ -78,6 +78,10 @@ public class EditorContext {
         return options;
     }
 
+    public ResourceBundle getResources() {
+        return resources;
+    }
+
     public static class Builder {
         private final List<Extension> extensions = new ArrayList<>();
         private HtmlTemplateWrapper wrapper;
@@ -85,6 +89,7 @@ public class EditorContext {
         private MutableDataSet options = new MutableDataSet();
         private Consumer<HtmlRenderer.Builder> htmlRendererConfiguration;
         private Consumer<Parser.Builder> parserConfiguration;
+        private ResourceBundle resources;
 
         public Builder htmlRenderer(Consumer<HtmlRenderer.Builder> consumer) {
             htmlRendererConfiguration = consumer;
@@ -108,6 +113,11 @@ public class EditorContext {
 
         public Builder templateWrapper(HtmlTemplateWrapper wrapper) {
             this.wrapper = wrapper;
+            return this;
+        }
+
+        public Builder resourceBundle(ResourceBundle resources) {
+            this.resources = resources;
             return this;
         }
 
@@ -148,7 +158,8 @@ public class EditorContext {
                     parser,
                     htmlRenderer,
                     wrapper,
-                    options);
+                    options,
+                    resources);
         }
     }
 }

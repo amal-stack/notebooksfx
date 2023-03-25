@@ -51,6 +51,8 @@ public class DefaultGraphicNodeProvider implements GraphicNodeProvider {
             case SELECT_ALL -> new Glyph(FONT_FAMILY, FontAwesome.Glyph.CHECK_SQUARE);
             case CLEAR -> new Glyph(FONT_FAMILY, FontAwesome.Glyph.ERASER);
             case EXIT -> new Glyph(FONT_FAMILY, FontAwesome.Glyph.SIGN_OUT);
+            case USER -> new Glyph(FONT_FAMILY, FontAwesome.Glyph.USER);
+            case CLOCK -> new Glyph(FONT_FAMILY, FontAwesome.Glyph.CLOCK_ALT);
             case ERROR -> new Glyph(FONT_FAMILY, FontAwesome.Glyph.EXCLAMATION_TRIANGLE).color(Color.CRIMSON);
         };
     }

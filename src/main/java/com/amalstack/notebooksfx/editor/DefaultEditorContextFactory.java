@@ -11,6 +11,8 @@ import javafx.scene.web.WebView;
 import org.fxmisc.richtext.StyleClassedTextArea;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ResourceBundle;
+
 public class DefaultEditorContextFactory implements EditorContextFactory {
     public static final String BOOTSTRAP_STYLESHEET = "https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css";
     public static final String BOOTSTRAP_SCRIPT = "https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js";
@@ -32,7 +34,7 @@ public class DefaultEditorContextFactory implements EditorContextFactory {
     }
 
     @Override
-    public EditorContext create(StyleClassedTextArea editorTextArea, WebView outputWebView) {
+    public EditorContext create(StyleClassedTextArea editorTextArea, WebView outputWebView, ResourceBundle resources) {
 
         return EditorContext.builder()
                 .addExtensions(
@@ -44,8 +46,9 @@ public class DefaultEditorContextFactory implements EditorContextFactory {
                 )
                 .htmlRenderer(DefaultEditorContextFactory::buildHtmlRenderer
                 )
-                .controlProvider(new DefaultEditorControlProvider(editorTextArea, outputWebView))
+                .controlProvider(new DefaultEditorControlProvider(editorTextArea, outputWebView, resources))
                 .templateWrapper(createHtmlTemplateWrapper())
+                .resourceBundle(resources)
                 .build();
     }
 

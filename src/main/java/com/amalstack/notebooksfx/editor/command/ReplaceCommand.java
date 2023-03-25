@@ -9,22 +9,28 @@ import com.amalstack.notebooksfx.util.controls.GraphicNodeProvider;
 import javafx.event.ActionEvent;
 import javafx.stage.Modality;
 
+import java.text.MessageFormat;
+import java.util.ResourceBundle;
+
 public class ReplaceCommand implements Command {
     private final EditorContext context;
     private final GraphicNodeProvider graphic;
+    private final ResourceBundle resources;
     private int index = 0;
 
     public ReplaceCommand(EditorContext context,
                           GraphicNodeProvider graphic) {
         this.context = context;
         this.graphic = graphic;
+        this.resources = context.getResources();
     }
 
     @Override
     public void execute() {
-        ReplaceDialog dialog = ReplaceDialog.create("Replace",
-                "Replace",
-                graphic.getNode(Graphic.REPLACE));
+        ReplaceDialog dialog = ReplaceDialog.create(resources.getString("editor.command.replace.dialog.title"),
+                resources.getString("editor.command.replace.dialog.header_text"),
+                graphic.getNode(Graphic.REPLACE),
+                context.getResources());
 
         dialog.initModality(Modality.NONE);
 
@@ -39,7 +45,8 @@ public class ReplaceCommand implements Command {
                 .lookupButton(ReplaceDialog.REPLACE_ALL_BUTTON)
                 .addEventFilter(ActionEvent.ACTION, event -> {
                     int count = replaceAll(dialog.getModel());
-                    Alerts.showInformationAlert("Replace All", "Replaced " + count + " occurrences");
+                    Alerts.showInformationAlert(resources.getString("editor.command.replace.all.title"),
+                            MessageFormat.format(resources.getString("editor.command.replace.all.message"), count));
                     event.consume();
                 });
 
@@ -78,7 +85,8 @@ public class ReplaceCommand implements Command {
     protected void replaceNext(ReplaceDialog.ReplaceModel replaceModel) {
         index = replace(replaceModel, index);
         if (index == -1) {
-            Alerts.showInformationAlert("Replace", "No more occurrences found");
+            Alerts.showInformationAlert(resources.getString("editor.command.replace.title"),
+                    resources.getString("editor.command.replace.no_more_occurrences"));
             index = 0;
         }
     }

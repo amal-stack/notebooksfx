@@ -18,6 +18,8 @@ import javafx.scene.control.TreeView;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
+import java.util.ResourceBundle;
+
 public class NotebookTreeViewController implements ParameterizedController {
 
     private final GraphicNodeProvider graphic;
@@ -34,6 +36,9 @@ public class NotebookTreeViewController implements ParameterizedController {
 
     @FXML
     private ToolBar treeToolbar;
+
+    @FXML
+    private ResourceBundle resources;
 
     private NotebookTreeViewContext context;
 
@@ -76,7 +81,8 @@ public class NotebookTreeViewController implements ParameterizedController {
         NotebookTreeViewContext context = new NotebookTreeViewContext(
                 treeView,
                 dataAccessService,
-                graphic);
+                graphic,
+                resources);
 
         context.initialize(notebookId);
 

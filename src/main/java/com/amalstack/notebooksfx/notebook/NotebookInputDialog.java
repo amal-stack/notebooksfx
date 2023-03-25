@@ -6,15 +6,17 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 
+import java.util.ResourceBundle;
+
 public class NotebookInputDialog extends Dialog<NotebookInput> {
 
     private final TextField nameField = new TextField();
 
     private final TextArea descriptionField = new TextArea();
 
-    private final Label nameLabel = new Label("Name");
+    private final Label nameLabel = new Label();
 
-    private final Label descriptionLabel = new Label("Description");
+    private final Label descriptionLabel = new Label();
 
     public NotebookInputDialog(NotebookInput input) {
         DialogPane dialogPane = getDialogPane();
@@ -39,16 +41,18 @@ public class NotebookInputDialog extends Dialog<NotebookInput> {
         this(null);
     }
 
-    public static NotebookInputDialog create(String title, String headerText, Node graphic, NotebookInput input) {
+    public static NotebookInputDialog create(String title, String headerText, Node graphic, ResourceBundle resources, NotebookInput input) {
         NotebookInputDialog createNotebookDialog = new NotebookInputDialog(input);
         createNotebookDialog.setTitle(title);
         createNotebookDialog.setHeaderText(headerText);
         createNotebookDialog.setGraphic(graphic);
+        createNotebookDialog.nameLabel.setText(resources.getString("dialog.notebooks_input.label.title"));
+        createNotebookDialog.descriptionLabel.setText(resources.getString("dialog.notebooks_input.label.description"));
         return createNotebookDialog;
     }
 
-    public static NotebookInputDialog create(String title, String headerText, Node graphic) {
-        return create(title, headerText, graphic, null);
+    public static NotebookInputDialog create(String title, String headerText, Node graphic, ResourceBundle resources) {
+        return create(title, headerText, graphic, resources, null);
     }
 
     private GridPane createForm() {

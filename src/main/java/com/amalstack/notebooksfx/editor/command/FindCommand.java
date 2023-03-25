@@ -9,13 +9,17 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextInputDialog;
 import javafx.stage.Modality;
 
+import java.util.ResourceBundle;
+
 public class FindCommand implements Command {
     private final EditorContext context;
+    private final ResourceBundle resources;
 
     protected int index = 0;
 
     public FindCommand(EditorContext context) {
         this.context = context;
+        this.resources = context.getResources();
     }
 
     @Override
@@ -37,9 +41,9 @@ public class FindCommand implements Command {
             return null;
         });
 
-        dialog.setTitle("Find");
-        dialog.setHeaderText("Find");
-        dialog.setContentText("Enter text to find:");
+        dialog.setTitle(resources.getString("editor.command.find.dialog.title"));
+        dialog.setHeaderText(resources.getString("editor.command.find.dialog.header_text"));
+        dialog.setContentText(resources.getString("editor.command.find.dialog.content_text"));
 
         dialog.getDialogPane()
                 .lookupButton(nextButton)
@@ -66,7 +70,8 @@ public class FindCommand implements Command {
     protected void findNext(String text) {
         index = find(text, index);
         if (index == -1) {
-            Alerts.showInformationAlert("Find", "No more occurrences found");
+            Alerts.showInformationAlert(resources.getString("editor.command.find.title"),
+                    resources.getString("editor.command.find.no_more_occurrences"));
             index = 0;
         }
     }

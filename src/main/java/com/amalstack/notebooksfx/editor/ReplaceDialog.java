@@ -5,6 +5,8 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 
+import java.util.ResourceBundle;
+
 public class ReplaceDialog extends Dialog<ReplaceDialog.ReplaceModel> {
 
     public static final ButtonType REPLACE_BUTTON = new ButtonType("Replace", ButtonBar.ButtonData.NEXT_FORWARD);
@@ -15,9 +17,9 @@ public class ReplaceDialog extends Dialog<ReplaceDialog.ReplaceModel> {
 
     private final TextField replaceField = new TextField();
 
-    private final Label findLabel = new Label("Name");
+    private final Label findLabel = new Label();
 
-    private final Label replaceLabel = new Label("Description");
+    private final Label replaceLabel = new Label();
 
 
     public ReplaceDialog(ReplaceModel model) {
@@ -47,16 +49,18 @@ public class ReplaceDialog extends Dialog<ReplaceDialog.ReplaceModel> {
         return new ReplaceModel(findField.getText(), replaceField.getText(), null);
     }
 
-    public static ReplaceDialog create(String title, String headerText, Node graphic, ReplaceModel model) {
+    public static ReplaceDialog create(String title, String headerText, Node graphic, ResourceBundle resources, ReplaceModel model) {
         ReplaceDialog dialog = new ReplaceDialog(model);
         dialog.setTitle(title);
         dialog.setHeaderText(headerText);
         dialog.setGraphic(graphic);
+        dialog.findLabel.setText(resources.getString("dialog.replace.label.find"));
+        dialog.replaceLabel.setText(resources.getString("dialog.replace.label.replace"));
         return dialog;
     }
 
-    public static ReplaceDialog create(String title, String headerText, Node graphic) {
-        return create(title, headerText, graphic, null);
+    public static ReplaceDialog create(String title, String headerText, Node graphic, ResourceBundle resources) {
+        return create(title, headerText, graphic, resources, null);
     }
 
     private GridPane createForm() {

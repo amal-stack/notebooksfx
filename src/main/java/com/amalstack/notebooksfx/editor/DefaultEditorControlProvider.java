@@ -7,38 +7,35 @@ import com.amalstack.notebooksfx.editor.command.text.*;
 import com.amalstack.notebooksfx.util.controls.IdUtil;
 import javafx.scene.Node;
 import javafx.scene.control.MenuItem;
-import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.web.WebView;
 import org.controlsfx.control.ToggleSwitch;
 import org.controlsfx.glyphfont.FontAwesome;
 import org.fxmisc.richtext.StyleClassedTextArea;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.function.Function;
-
-record EditorOperation(
-        CommandCode commandCode,
-        TextEditorCommand textEditorCommand,
-        Node control,
-        List<KeyCodeCombination> shortcuts) {
-}
 
 public class DefaultEditorControlProvider implements EditorControlProvider {
     private final Map<CommandCode, Node> cmdControlMap;
     private final StyleClassedTextArea editorTextArea;
     private final String rootId;
     private final WebView outputWebView;
+    private final ResourceBundle resources;
 
-    public DefaultEditorControlProvider(StyleClassedTextArea editorTextArea, WebView outputWebView) {
-        this(editorTextArea, outputWebView, editorTextArea.getId());
+    public DefaultEditorControlProvider(StyleClassedTextArea editorTextArea, WebView outputWebView, ResourceBundle resources) {
+        this(editorTextArea, outputWebView, resources, editorTextArea.getId());
     }
 
-    public DefaultEditorControlProvider(StyleClassedTextArea editorTextArea, WebView outputWebView, String rootId) {
+    public DefaultEditorControlProvider(StyleClassedTextArea editorTextArea,
+                                        WebView outputWebView,
+                                        ResourceBundle resources,
+                                        String rootId) {
         this.editorTextArea = editorTextArea;
         this.outputWebView = outputWebView;
         this.rootId = rootId;
+        this.resources = resources;
         cmdControlMap = createControls();
     }
 
@@ -169,19 +166,19 @@ public class DefaultEditorControlProvider implements EditorControlProvider {
                 .withGlyph(FontAwesome.Glyph.CODE)
                 .addMenuItem(item -> item
                         .withId(IdUtil.combine(codeSplitMenuButtonId, "Inline"))
-                        .withText("Inline Code")
+                        .withText(resources.getString("editor.split_menu_button.inline_code"))
                         .performs(new InlineCodeTextEditorCommand())
                         .build()
                 )
                 .addMenuItem(item -> item
                         .withId(IdUtil.combine(codeSplitMenuButtonId, "Block"))
-                        .withText("Block Code")
+                        .withText(resources.getString("editor.split_menu_button.block_code"))
                         .performs(new BlockCodeTextEditorCommand())
                         .build()
                 )
                 .build();
 
-        var wrapToggleSwitch = new ToggleSwitch("Wrap");
+        var wrapToggleSwitch = new ToggleSwitch(resources.getString("editor.toggle_switch.wrap"));
         wrapToggleSwitch.setId(IdUtil.combine(rootId, "wrapToggle"));
         wrapToggleSwitch.selectedProperty().bindBidirectional(editorTextArea.wrapTextProperty());
 
@@ -206,7 +203,7 @@ public class DefaultEditorControlProvider implements EditorControlProvider {
 
     private Function<EditorMenuItemBuilder, MenuItem> getHeadingForLevel(int level, String containerId) {
         return item -> item.withId(IdUtil.combine(containerId, "H" + level))
-                .withText("Heading " + level)
+                .withText(resources.getString("editor.split_menu_button.heading") + " " + level)
                 .performs(new HeadingTextEditorCommand(level))
                 .build();
     }

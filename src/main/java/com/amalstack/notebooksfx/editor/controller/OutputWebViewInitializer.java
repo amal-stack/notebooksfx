@@ -10,32 +10,26 @@ import javafx.beans.binding.Bindings;
 import javafx.scene.control.Button;
 import javafx.scene.control.ProgressBar;
 
-import java.util.ResourceBundle;
-
 
 class OutputWebViewInitializer implements Initializer {
     private final EditorContext editorContext;
     private final Button refreshButton;
     private final GraphicNodeProvider graphic;
-    private final ResourceBundle resources;
     private final ProgressBar webViewProgress;
 
     public OutputWebViewInitializer(EditorContext editorContext,
                                     Button refreshBtn,
                                     ProgressBar webViewProgress,
-                                    GraphicNodeProvider graphic,
-                                    ResourceBundle resources) {
+                                    GraphicNodeProvider graphic) {
         this.editorContext = editorContext;
         this.refreshButton = refreshBtn;
         this.webViewProgress = webViewProgress;
         this.graphic = graphic;
-        this.resources = resources;
     }
 
     public void initialize() {
         refreshButton.setOnAction(Commands.eventHandler(new PreviewHtmlCommand(editorContext)));
         refreshButton.setGraphic(graphic.getNode(Graphic.REFRESH));
-        refreshButton.setText(resources.getString("editor.button.preview"));
 
         var progressProperty = webViewProgress.progressProperty();
 

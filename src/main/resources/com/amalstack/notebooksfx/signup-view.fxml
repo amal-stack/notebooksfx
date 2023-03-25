@@ -13,16 +13,16 @@
         <padding>
             <Insets bottom="25.0" left="25.0" right="25.0" top="25.0"/>
         </padding>
-        <Label text="Name"/>
+        <Label text="%auth.signup.label.name"/>
         <TextField fx:id="nameField" GridPane.columnIndex="1"/>
 
-        <Label text="Email" GridPane.rowIndex="1"/>
+        <Label text="%auth.signup.label.email" GridPane.rowIndex="1"/>
         <TextField fx:id="emailField" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
 
-        <Label text="Password" GridPane.rowIndex="2"/>
+        <Label text="%auth.signup.label.password" GridPane.rowIndex="2"/>
         <PasswordField fx:id="passwordField" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
 
-        <Label text="Confirm Password" GridPane.rowIndex="3"/>
+        <Label text="%auth.signup.label.confirm_password" GridPane.rowIndex="3"/>
         <PasswordField fx:id="confirmPasswordField" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
         <ScrollPane fx:id="signUpErrorScrollPane" fitToWidth="true" visible="false" GridPane.columnSpan="2"
                     GridPane.halignment="LEFT" GridPane.rowIndex="4" GridPane.vgrow="ALWAYS">
@@ -43,6 +43,6 @@
         <VBox.margin>
             <Insets/>
         </VBox.margin>
-        <Button fx:id="signUpButton" mnemonicParsing="false" text="Sign Up"/>
+        <Button fx:id="signUpButton" mnemonicParsing="false" text="%auth.signup.button.signup"/>
     </HBox>
 </VBox>

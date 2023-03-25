@@ -11,7 +11,7 @@ public class DeleteNotebookFromTableCommand extends DeleteNotebookCommand {
 
     public DeleteNotebookFromTableCommand(NotebookTableViewContext context,
                                           NotebookViewModel notebook) {
-        super(notebook.getId(), notebook.getName(), context.getDataAccessService());
+        super(notebook.getId(), notebook.getName(), context.getDataAccessService(), context.getResources());
         this.context = context;
         this.notebook = notebook;
     }
