@@ -20,6 +20,7 @@ import javafx.scene.Node;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 
+import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 public class NotebookTableViewContext {
@@ -27,6 +28,7 @@ public class NotebookTableViewContext {
     private final DataAccessService dataAccessService;
     private final NavigationManager navigationManager;
     private final GraphicNodeProvider graphicNodeProvider;
+    private final ResourceBundle resources;
     private final ReadOnlyObjectWrapper<NotebookViewModel> currentNotebook = new ReadOnlyObjectWrapper<>();
     private TableView<NotebookViewModel> tableView;
     private ObservableList<NotebookViewModel> notebooks;
@@ -34,11 +36,13 @@ public class NotebookTableViewContext {
     public NotebookTableViewContext(NotebookTableViewFactory factory,
                                     DataAccessService dataAccessService,
                                     NavigationManager navigationManager,
-                                    GraphicNodeProvider graphicNodeProvider) {
+                                    GraphicNodeProvider graphicNodeProvider,
+                                    ResourceBundle resources) {
         this.factory = factory;
         this.dataAccessService = dataAccessService;
         this.navigationManager = navigationManager;
         this.graphicNodeProvider = graphicNodeProvider;
+        this.resources = resources;
     }
 
     public void initialize(TextField searchTextField) {
@@ -48,7 +52,11 @@ public class NotebookTableViewContext {
         // which is now part of the changeListener for currentNotebookProperty in NotebooksController.
         // The approach before refactoring also works, but the detail pane contains
         // the information of the deleted notebook even after the deletion.
-        tableView = factory.create(notebooks, searchTextField, null);
+        tableView = factory.create(notebooks,
+                searchTextField,
+                null,
+                resources,
+                graphicNodeProvider);
 
         tableView.getSelectionModel()
                 .selectedItemProperty()
@@ -69,6 +77,10 @@ public class NotebookTableViewContext {
 
     public NavigationManager getNavigationManager() {
         return navigationManager;
+    }
+
+    public ResourceBundle getResources() {
+        return resources;
     }
 
     public EventHandlers eventHandlers() {

@@ -89,7 +89,8 @@ public class NotebooksController {
                 tableFactory,
                 dataAccessService,
                 navigationManager,
-                graphicNodeProvider);
+                graphicNodeProvider,
+                resources);
 
         context.initialize(searchTextField);
 
