@@ -17,7 +17,6 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class ImportTextFileCommand implements Command {
-
     private final EditorContext editorContext;
     private final NotebookTreeViewContext notebookTreeViewContext;
     private final ResourceBundle resources;
@@ -57,7 +56,7 @@ public class ImportTextFileCommand implements Command {
         fileChooser.setTitle(resources.getString("editor.menu.file.import.file_chooser.title"));
         fileChooser.getExtensionFilters()
                 .add(new FileChooser.ExtensionFilter("Text Files", "*.txt"));
-        return Optional.of(fileChooser.showOpenDialog(stage));
+        return Optional.ofNullable(fileChooser.showOpenDialog(stage));
     }
 
     private TreeItemModel getOrCreatePage() {

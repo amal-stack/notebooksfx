@@ -64,6 +64,9 @@ public class EditorController {
     private NotebookTreeViewController notebookTreeViewController;
 
     @FXML
+    private StatusBarController statusBarController;
+
+    @FXML
     private ResourceBundle resources;
 
     public EditorController(EditorContextFactory factory,
@@ -96,14 +99,12 @@ public class EditorController {
         });
 
         notebookTreeViewController.setOnContextCreated(this::onNotebookTreeViewContextCreated);
-
         // default initial state
         //masterDetailPane.setShowDetailNode(true);
         CommandExecutor.execute(new ToggleNotebookTreeViewCommand(masterDetailPane, viewSectionsBtn, graphic), true);
         CommandExecutor.execute(new DisableEditorCommand(editorTextArea));
 
     }
-
 
     private void toggleGraphic(ObservableValue<? extends Boolean> observable,
                                Boolean oldValue,
@@ -151,6 +152,7 @@ public class EditorController {
             loadPage(currentPage);
         }
         notebookTreeViewContext.currentPageProperty().addListener(this::onPageChanged);
+        statusBarController.setContext(context, notebookTreeViewContext);
     }
 }
 
