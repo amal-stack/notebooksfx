@@ -19,6 +19,8 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTreeCell;
 
+import java.util.ResourceBundle;
+
 import static com.amalstack.notebooksfx.editor.nav.NotebookTreeViewContext.EventHandlers.*;
 
 public class NotebookTreeViewContext {
@@ -29,14 +31,18 @@ public class NotebookTreeViewContext {
 
     private final GraphicNodeProvider graphicNodeProvider;
 
+    private final ResourceBundle resources;
+
     private final ReadOnlyObjectWrapper<PageTreeItemModel> currentPage = new ReadOnlyObjectWrapper<>();
 
     public NotebookTreeViewContext(TreeView<TreeItemModel> treeView,
                                    DataAccessService dataAccessService,
-                                   GraphicNodeProvider graphicNodeProvider) {
+                                   GraphicNodeProvider graphicNodeProvider,
+                                   ResourceBundle resources) {
         this.treeView = treeView;
         this.dataAccessService = dataAccessService;
         this.graphicNodeProvider = graphicNodeProvider;
+        this.resources = resources;
     }
 
     public void initialize(Long notebookId) {
@@ -98,6 +104,10 @@ public class NotebookTreeViewContext {
 
     public GraphicNodeProvider getGraphicNodeProvider() {
         return graphicNodeProvider;
+    }
+
+    public ResourceBundle getResources() {
+        return resources;
     }
 
     public PageTreeItemModel getCurrentPage() {
@@ -181,23 +191,23 @@ public class NotebookTreeViewContext {
 
         public static ContextMenu notebookContextMenu(NotebookTreeViewContext context, TreeItem<TreeItemModel> treeItem) {
             return new ContextMenu(
-                    createMenuItem("Edit", context.getGraphicNode(Graphic.EDIT), editTreeItem(context.getTreeView(), treeItem)),
-                    createMenuItem("New Section", context.getGraphicNode(Graphic.SECTION), createSection(context))
+                    createMenuItem(context.getResources().getString("editor.tree.context_menu.edit"), context.getGraphicNode(Graphic.EDIT), editTreeItem(context.getTreeView(), treeItem)),
+                    createMenuItem(context.getResources().getString("editor.tree.context_menu.new_section"), context.getGraphicNode(Graphic.SECTION), createSection(context))
             );
         }
 
         public static ContextMenu sectionContextMenu(NotebookTreeViewContext context, TreeItem<TreeItemModel> treeItem) {
             return new ContextMenu(
-                    createMenuItem("Edit", context.getGraphicNode(Graphic.EDIT), editTreeItem(context.getTreeView(), treeItem)),
-                    createMenuItem("New Page", context.getGraphicNode(Graphic.PAGE), createPage(treeItem, context)),
-                    createMenuItem("Delete", context.getGraphicNode(Graphic.DELETE), deleteTreeItem(context, treeItem))
+                    createMenuItem(context.getResources().getString("editor.tree.context_menu.edit"), context.getGraphicNode(Graphic.EDIT), editTreeItem(context.getTreeView(), treeItem)),
+                    createMenuItem(context.getResources().getString("editor.tree.context_menu.new_page"), context.getGraphicNode(Graphic.PAGE), createPage(treeItem, context)),
+                    createMenuItem(context.getResources().getString("editor.tree.context_menu.delete"), context.getGraphicNode(Graphic.DELETE), deleteTreeItem(context, treeItem))
             );
         }
 
         public static ContextMenu pageContextMenu(NotebookTreeViewContext context, TreeItem<TreeItemModel> treeItem) {
             return new ContextMenu(
-                    createMenuItem("Edit", context.getGraphicNode(Graphic.EDIT), editTreeItem(context.getTreeView(), treeItem)),
-                    createMenuItem("Delete", context.getGraphicNode(Graphic.DELETE), deleteTreeItem(context, treeItem))
+                    createMenuItem(context.getResources().getString("editor.tree.context_menu.edit"), context.getGraphicNode(Graphic.EDIT), editTreeItem(context.getTreeView(), treeItem)),
+                    createMenuItem(context.getResources().getString("editor.tree.context_menu.delete"), context.getGraphicNode(Graphic.DELETE), deleteTreeItem(context, treeItem))
             );
         }
 
