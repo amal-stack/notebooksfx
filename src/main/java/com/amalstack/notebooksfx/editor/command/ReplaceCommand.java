@@ -69,6 +69,9 @@ public class ReplaceCommand implements Command {
     }
 
     public int replaceAll(ReplaceDialog.ReplaceModel replaceModel) {
+        if (replaceModel.find() == null || replaceModel.find().isBlank()) {
+            return 0;
+        }
         int count = 0;
         while (true) {
             index = replace(replaceModel, index);
@@ -83,6 +86,9 @@ public class ReplaceCommand implements Command {
     }
 
     protected void replaceNext(ReplaceDialog.ReplaceModel replaceModel) {
+        if (replaceModel.find() == null || replaceModel.find().isBlank()) {
+            return;
+        }
         index = replace(replaceModel, index);
         if (index == -1) {
             Alerts.showInformationAlert(resources.getString("editor.command.replace.title"),
