@@ -68,6 +68,9 @@ public class FindCommand implements Command {
     }
 
     protected void findNext(String text) {
+        if (text == null || text.isBlank()) {
+            return;
+        }
         index = find(text, index);
         if (index == -1) {
             Alerts.showInformationAlert(resources.getString("editor.command.find.title"),
