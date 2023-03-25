@@ -13,9 +13,9 @@
         <padding>
             <Insets bottom="25.0" left="25.0" right="25.0" top="25.0"/>
         </padding>
-        <Label text="Email"/>
+        <Label text="%auth.login.label.email"/>
         <TextField fx:id="emailField" GridPane.columnIndex="1"/>
-        <Label text="Password" GridPane.rowIndex="1"/>
+        <Label text="%auth.login.label.password" GridPane.rowIndex="1"/>
         <PasswordField fx:id="passwordField" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
         <ScrollPane fx:id="loginErrorScrollPane" fitToWidth="true" visible="false" GridPane.columnSpan="2"
                     GridPane.halignment="LEFT" GridPane.rowIndex="2" GridPane.vgrow="ALWAYS">
@@ -37,6 +37,6 @@
         <VBox.margin>
             <Insets/>
         </VBox.margin>
-        <Button fx:id="loginButton" mnemonicParsing="false" text="Login"/>
+        <Button fx:id="loginButton" mnemonicParsing="false" text="%auth.login.button.login"/>
     </HBox>
 </VBox>

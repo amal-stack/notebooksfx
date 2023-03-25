@@ -15,10 +15,10 @@
 
     </MenuBar>
     <ToolBar prefHeight="40.0" prefWidth="200.0">
-        <Button fx:id="notebookCreateButton" mnemonicParsing="false" text="New..."/>
+        <Button fx:id="notebookCreateButton" mnemonicParsing="false" text="%notebooks.list.button.new"/>
         <Separator orientation="VERTICAL"/>
-        <TextField fx:id="searchTextField" promptText="Search notebooks..."/>
-        <Button fx:id="searchTextClearButton" mnemonicParsing="false" text="Clear"/>
+        <TextField fx:id="searchTextField" promptText="%notebooks.list.search.prompt"/>
+        <Button fx:id="searchTextClearButton" mnemonicParsing="false" text="%notebooks.list.button.search.clear"/>
         <Separator orientation="VERTICAL"/>
         <TextFlow/>
     </ToolBar>
@@ -30,7 +30,7 @@
             <VBox xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
                   minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0"
                   xmlns="http://javafx.com/javafx/18">
-                <Label fx:id="notebookTitleLabel" text="Label">
+                <Label fx:id="notebookTitleLabel">
                     <font>
                         <Font name="System Bold" size="48.0"/>
                     </font>
@@ -40,9 +40,10 @@
                 </Label>
                 <ButtonBar prefHeight="40.0" prefWidth="200.0">
                     <buttons>
-                        <Button fx:id="notebookOpenButton" mnemonicParsing="false" text="Open"/>
-                        <Button fx:id="notebookEditButton" mnemonicParsing="false" text="Edit"/>
-                        <Button fx:id="notebookDeleteButton" mnemonicParsing="false" text="Delete"/>
+                        <Button fx:id="notebookOpenButton" mnemonicParsing="false" text="%notebooks.list.button.open"/>
+                        <Button fx:id="notebookEditButton" mnemonicParsing="false" text="%notebooks.list.button.edit"/>
+                        <Button fx:id="notebookDeleteButton" mnemonicParsing="false"
+                                text="%notebooks.list.button.delete"/>
                     </buttons>
                     <padding>
                         <Insets bottom="25.0" left="25.0" right="25.0" top="25.0"/>
