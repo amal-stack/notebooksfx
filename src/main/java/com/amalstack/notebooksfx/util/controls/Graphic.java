@@ -40,5 +40,7 @@ public enum Graphic {
     CODE,
     SELECT_ALL,
     CLEAR,
+    USER,
+    CLOCK,
     EXIT
 }
