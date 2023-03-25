@@ -19,9 +19,11 @@ public class CreateNotebookCommand implements Command {
     @Override
     public void execute() {
         NotebookInputDialog
-                .create("Create Notebook",
-                        "Create a new notebook",
-                        context.getGraphicNode(Graphic.CREATE))
+                .create(context.getResources().getString("notebooks.dialog.new.title"),
+                        context.getResources().getString("notebooks.dialog.new.header_text"),
+                        context.getGraphicNode(Graphic.CREATE),
+                        context.getResources()
+                )
                 .showAndWait()
                 .ifPresent(this::createNotebook);
     }

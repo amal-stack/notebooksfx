@@ -21,9 +21,10 @@ public class EditNotebookCommand implements Command {
     @Override
     public void execute() {
         NotebookInputDialog
-                .create("Create Notebook",
-                        "Create a new notebook",
+                .create(context.getResources().getString("notebooks.dialog.edit.title"),
+                        context.getResources().getString("notebooks.dialog.edit.header_text"),
                         context.getGraphicNode(Graphic.CREATE),
+                        context.getResources(),
                         new NotebookInput(notebook.getName(), notebook.getDescription()))
                 .showAndWait()
                 .ifPresent(this::editNotebook);
