@@ -1,0 +1,16 @@
+on:
+  workflow_call:
+  
+  
+jobs:
+  setup_jdk:
+    runs-on: ubuntu_latest
+    steps:
+    - name: Set up JDK 20
+      uses: actions/setup-java@v3
+      with:
+        java-version: '20'
+        distribution: 'temurin'
+        cache: maven
+    
+    
