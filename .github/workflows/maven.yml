@@ -20,7 +20,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Set up JDK
-      uses: .github/workflows/jdk.yml@master
+      uses: ./.github/workflows/jdk.yml@master
     - name: Build with Maven
       run: mvn -B package --file pom.xml
     - name: Make mvnw executable
