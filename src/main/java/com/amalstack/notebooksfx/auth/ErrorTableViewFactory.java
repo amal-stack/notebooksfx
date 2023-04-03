@@ -24,7 +24,11 @@ public class ErrorTableViewFactory {
                 .withId(IdUtil.combine(parentId, "errorTableView"))
                 .addColumns(getColumns())
                 .withData(errorEntries)
-                .configure(tv -> tv.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY))
+                .configure(tv -> {
+                    tv.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
+                    tv.setPadding(new javafx.geometry.Insets(25));
+
+                })
                 .build();
     }
 }

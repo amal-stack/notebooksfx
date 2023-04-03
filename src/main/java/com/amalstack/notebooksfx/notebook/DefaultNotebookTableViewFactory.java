@@ -63,7 +63,7 @@ public class DefaultNotebookTableViewFactory implements NotebookTableViewFactory
                 .onRowClick(rowClickCommand)
                 .filter(searchTextField.textProperty(), SEARCH_PREDICATE)
                 .sort()
-                .configure(tv -> tv.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY))
+                .configure(tv -> tv.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN))
                 .build();
     }
 }
