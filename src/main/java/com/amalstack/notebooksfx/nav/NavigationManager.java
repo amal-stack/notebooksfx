@@ -3,6 +3,8 @@ package com.amalstack.notebooksfx.nav;
 import com.amalstack.notebooksfx.util.ControllerParameters;
 import javafx.stage.Stage;
 
+import java.util.Optional;
+
 public interface NavigationManager {
     void addParent(ParentParameters parameters);
 
@@ -17,5 +19,7 @@ public interface NavigationManager {
     void navigateTo(String parentName, ControllerParameters parameters);
 
     Stage getStage();
+
+    Optional<?> getController();
 }
 
