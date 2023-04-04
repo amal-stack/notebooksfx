@@ -115,26 +115,26 @@ public class NotebooksFxApplication extends Application {
     private void initNav(Container container, Stage stage) {
         container.addService(NavigationManager.class, SimpleNavigationManager.class, Lifetime.SINGLETON, () -> SimpleNavigationManagerFactory.create(stage));
         var nav = container.getService(NavigationManager.class);
-        var resourceBundle = createResourceBundle();
+        var navResources = ResourceBundle.getBundle(ResourceNames.NAV);
 
         nav.addParent(ParentParameters.builder().name(Parents.HOME)
                 .fxmlUrl(NotebooksFxApplication.class.getResource("notebooks-view.fxml"))
-                .title(resourceBundle.getString("parents.notebooks.title"))
-                .resourceBundle(resourceBundle)
+                .title(navResources.getString("nav.parents.notebooks.title"))
+                .resourceBundle(ResourceNames.NOTEBOOKS)
                 .controllerFactory(container::injectAndConstruct)
                 .build());
 
         nav.addParent(ParentParameters.builder().name(Parents.EDITOR)
                 .fxmlUrl(getClass().getResource("editor-view.fxml"))
-                .title(resourceBundle.getString("parents.editor.title"))
-                .resourceBundle(resourceBundle)
+                .title(navResources.getString("nav.parents.editor.title"))
+                .resourceBundle(ResourceNames.EDITOR)
                 .controllerFactory(container::injectAndConstruct)
                 .build());
 
         nav.addParent(ParentParameters.builder().name(Parents.AUTH)
                 .fxmlUrl(getClass().getResource("auth-view.fxml"))
-                .title(resourceBundle.getString("parents.auth.title"))
-                .resourceBundle(resourceBundle)
+                .title(navResources.getString("nav.parents.auth.title"))
+                .resourceBundle(ResourceNames.AUTH)
                 .controllerFactory(container::injectAndConstruct)
                 .build());
 

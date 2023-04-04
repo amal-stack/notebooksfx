@@ -12,12 +12,16 @@ import javafx.util.Callback;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
+import java.util.ResourceBundle;
 
 public class SimpleNavigationManager implements NavigationManager {
     private final Map<String, ParentParameters> parents = new HashMap<>();
     private final Stage stage;
 
-    private final Callback<Class<?>, Object> defaultControllerFactory;
+    private Callback<Class<?>, Object> defaultControllerFactory;
+    private Object controller;
+    private ResourceBundleFactory resourceBundleFactory;
 
     public SimpleNavigationManager(Stage stage) {
         this(stage, null);
@@ -70,6 +74,7 @@ public class SimpleNavigationManager implements NavigationManager {
         } catch (IOException e) {
             throw new NavigationException(e);
         }
+        controller = fxmlLoader.getController();
         //TODO: Provide alternative way to configure stylesheets
         scene.getStylesheets().add(NotebooksFxApplication.class.getResource("appstyle.css").toString());
         stage.setScene(scene);
@@ -85,6 +90,7 @@ public class SimpleNavigationManager implements NavigationManager {
         } catch (IOException e) {
             throw new NavigationException(e);
         }
+        controller = fxmlLoader.getController();
         Scene scene = stage.getScene();
         supplyParameters(parameters, fxmlLoader);
         scene.setRoot(root);
@@ -108,12 +114,48 @@ public class SimpleNavigationManager implements NavigationManager {
         return stage;
     }
 
+    @Override
+    public Optional<?> getController() {
+        return Optional.ofNullable(controller);
+    }
+
+    public void setResourceBundleFactory(ResourceBundleFactory factory) {
+        this.resourceBundleFactory = factory;
+    }
+
+    public void setDefaultControllerFactory(Callback<Class<?>, Object> defaultControllerFactory) {
+        this.defaultControllerFactory = defaultControllerFactory;
+    }
+
     private FXMLLoader createFXMLLoader(String parentName) {
         ParentParameters parameters = parents.get(parentName);
-        FXMLLoader fxmlLoader = new FXMLLoader(parameters.fxmlUrl(), parameters.resourceBundle());
-        fxmlLoader.setControllerFactory(parameters.controllerFactory());
+        FXMLLoader fxmlLoader = new FXMLLoader(parameters.fxmlUrl(),
+                createResourceBundle(parameters.resourceBundleBaseName()));
+        setControllerFactory(parameters, fxmlLoader);
         stage.setTitle(parameters.title());
         return fxmlLoader;
+    }
+
+    private void setControllerFactory(ParentParameters parameters, FXMLLoader fxmlLoader) {
+        if (parameters.controllerFactory() != null) {
+            fxmlLoader.setControllerFactory(parameters.controllerFactory());
+            return;
+        }
+        if (defaultControllerFactory != null) {
+            fxmlLoader.setControllerFactory(defaultControllerFactory);
+            return;
+        }
+        throw new NavigationException("No controller factory was provided for controller of parent " + parameters.name() + " and no default controller factory was set");
+    }
+
+    private ResourceBundle createResourceBundle(String resourceBundleBaseName) {
+        if (resourceBundleBaseName == null) {
+            return null;
+        }
+        if (resourceBundleFactory == null) {
+            resourceBundleFactory = ResourceBundleFactory.defaultFactory();
+        }
+        return resourceBundleFactory.createResourceBundle(resourceBundleBaseName);
     }
 }
 

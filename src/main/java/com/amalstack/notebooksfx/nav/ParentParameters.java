@@ -3,14 +3,13 @@ package com.amalstack.notebooksfx.nav;
 import javafx.util.Callback;
 
 import java.net.URL;
-import java.util.ResourceBundle;
 
 public record ParentParameters(
         String name,
         URL fxmlUrl,
         String title,
         Callback<Class<?>, Object> controllerFactory,
-        ResourceBundle resourceBundle
+        String resourceBundleBaseName
 ) {
     public static ParentParametersBuilder builder() {
         return new ParentParametersBuilder();
@@ -21,7 +20,7 @@ public record ParentParameters(
         private URL fxmlUrl;
         private String title;
         private Callback<Class<?>, Object> controllerFactory;
-        private ResourceBundle resourceBundle;
+        private String resourceBundleBaseName;
 
         ParentParametersBuilder() {
         }
@@ -46,13 +45,13 @@ public record ParentParameters(
             return this;
         }
 
-        public ParentParametersBuilder resourceBundle(ResourceBundle resourceBundle) {
-            this.resourceBundle = resourceBundle;
+        public ParentParametersBuilder resourceBundle(String baseName) {
+            this.resourceBundleBaseName = baseName;
             return this;
         }
 
         public ParentParameters build() {
-            return new ParentParameters(name, fxmlUrl, title, controllerFactory, resourceBundle);
+            return new ParentParameters(name, fxmlUrl, title, controllerFactory, resourceBundleBaseName);
         }
 
     }
