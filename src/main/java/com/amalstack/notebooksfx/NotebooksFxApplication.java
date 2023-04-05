@@ -20,6 +20,7 @@ import com.amalstack.notebooksfx.nav.SimpleNavigationManager;
 import com.amalstack.notebooksfx.nav.SimpleNavigationManagerFactory;
 import com.amalstack.notebooksfx.notebook.DefaultNotebookTableViewFactory;
 import com.amalstack.notebooksfx.notebook.NotebookTableViewFactory;
+import com.amalstack.notebooksfx.util.BodyMapper;
 import com.amalstack.notebooksfx.util.JacksonMapper;
 import com.amalstack.notebooksfx.util.JsonMapper;
 import com.amalstack.notebooksfx.util.controls.DefaultGraphicNodeProvider;
@@ -50,6 +51,59 @@ public class NotebooksFxApplication extends Application {
         container.addService(PageRepository.class, HttpPageRepository.class, Lifetime.TRANSIENT);
         container.addService(UserRepository.class, HttpUserRepository.class, Lifetime.TRANSIENT);
         container.addService(DataAccessService.class, HttpDataAccessService.class, Lifetime.TRANSIENT);
+    }
+
+    private static void addAuthentication(Container container) {
+        container.addService(AuthenticationContext.class, DefaultAuthenticationContext.class, Lifetime.SINGLETON);
+        container.addService(AuthenticationService.class, HttpBasicAuthenticationService.class, Lifetime.SINGLETON);
+    }
+
+    private static void addHttpClient(Container container) {
+        container.addService(UrlProvider.class, DefaultUrlProvider.class, Lifetime.SINGLETON, NotebooksFxApplication::createEndpointProvider);
+        //container.addService(JsonMapper.class, GsonMapper.class, Lifetime.TRANSIENT, () -> GsonMapper.Factory.create(builder -> {}));
+        container.addService(BodyMapper.class, JacksonMapper.class, Lifetime.TRANSIENT, () -> new JacksonMapper(createObjectMapper()));
+        container.addService(ErrorResponseFactory.class, DefaultErrorResponseFactory.class, Lifetime.SINGLETON);
+        container.addService(HttpRequestInitializer.class, BasicAuthorizationHeaderRequestInitializer.class, Lifetime.SINGLETON);
+        container.addService(HttpClientService.class, BasicHttpClientService.class, Lifetime.SINGLETON);
+        //TODO: Allow factory without implementation
+        container.addService(HttpClientInitializer.class, DefaultHttpClientInitializer.class, Lifetime.SINGLETON);
+    }
+
+    public static DefaultUrlProvider createEndpointProvider() {
+
+        RouteTable routeTable = RouteTable.builder()
+                .mapGroup(NOTEBOOKS, "/notebooks", group -> {
+                    group.map("", "");
+                    group.map(ID, "/{0}");
+                    group.map(USER, "/user");
+                })
+                .mapGroup(SECTIONS, "/sections", group -> {
+                    group.map("", "");
+                    group.map(ID, "/{0}");
+                    group.mapGroup(NOTEBOOK, "/notebook", subgroup
+                            -> subgroup.map(ID, "/{0}"));
+                })
+                .mapGroup(PAGES, "/pages", group -> {
+                    group.map("", "");
+                    group.map(ID, "/{0}");
+                    group.mapGroup(SECTION, "/section", subgroup
+                            -> subgroup.map(ID, "/{0}"));
+                })
+                .map(USERS, "/users")
+                .build();
+
+
+        return new DefaultUrlProvider(
+                "http://localhost:8080",
+                routeTable);
+    }
+
+    private static ObjectMapper createObjectMapper() {
+        return new ObjectMapper()
+                .configure(DeserializationFeature.FAIL_ON_MISSING_CREATOR_PROPERTIES, false)
+                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+                .configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true)
+                .configure(JsonParser.Feature.AUTO_CLOSE_SOURCE, true);
     }
 
     @Override
@@ -98,7 +152,7 @@ public class NotebooksFxApplication extends Application {
         container.addService(EditorContextFactory.class, DefaultEditorContextFactory.class, Lifetime.SINGLETON);
         container.addService(NotebookTableViewFactory.class, DefaultNotebookTableViewFactory.class, Lifetime.SINGLETON);
 
-        container.addService(UrlProvider.class, DefaultUrlProvider.class, Lifetime.SINGLETON, this::createEndpointProvider);
+        addHttpClient(container);
 
         //container.addService(JsonMapper.class, GsonMapper.class, Lifetime.TRANSIENT, () -> GsonMapper.Factory.create(builder -> {}));
         container.addService(JsonMapper.class, JacksonMapper.class, Lifetime.TRANSIENT, () -> new JacksonMapper(createObjectMapper()));
