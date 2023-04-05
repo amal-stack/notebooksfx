@@ -1,4 +1,4 @@
-package com.amalstack.notebooksfx;
+package com.amalstack.notebooksfx.views;
 
 
 public final class ViewNames {

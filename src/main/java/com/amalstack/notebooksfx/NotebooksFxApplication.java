@@ -28,6 +28,7 @@ import com.amalstack.notebooksfx.util.controls.DefaultGraphicNodeProvider;
 import com.amalstack.notebooksfx.util.controls.GraphicNodeProvider;
 import com.amalstack.notebooksfx.util.http.*;
 import com.amalstack.notebooksfx.views.FxmlLocator;
+import com.amalstack.notebooksfx.views.ViewNames;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;

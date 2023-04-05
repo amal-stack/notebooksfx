@@ -8,7 +8,6 @@ public final class AppRouteNames {
     public static final String PAGES = "pages";
     public static final String USERS = "users";
     public static final String USER = "user";
-
     public static final String ID = "id";
 
     private AppRouteNames() {

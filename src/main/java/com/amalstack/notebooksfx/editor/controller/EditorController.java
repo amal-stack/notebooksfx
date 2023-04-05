@@ -1,6 +1,5 @@
 package com.amalstack.notebooksfx.editor.controller;
 
-import com.amalstack.notebooksfx.ViewNames;
 import com.amalstack.notebooksfx.command.CommandExecutor;
 import com.amalstack.notebooksfx.data.DataAccessService;
 import com.amalstack.notebooksfx.editor.EditorContext;
@@ -13,6 +12,7 @@ import com.amalstack.notebooksfx.nav.NavigationManager;
 import com.amalstack.notebooksfx.util.Initializer;
 import com.amalstack.notebooksfx.util.controls.Graphic;
 import com.amalstack.notebooksfx.util.controls.GraphicNodeProvider;
+import com.amalstack.notebooksfx.views.ViewNames;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;

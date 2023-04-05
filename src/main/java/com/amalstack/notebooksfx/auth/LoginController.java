@@ -1,12 +1,12 @@
 package com.amalstack.notebooksfx.auth;
 
-import com.amalstack.notebooksfx.ViewNames;
 import com.amalstack.notebooksfx.css.StylesheetLocator;
 import com.amalstack.notebooksfx.css.Stylesheets;
 import com.amalstack.notebooksfx.data.model.User;
 import com.amalstack.notebooksfx.nav.NavigationManager;
 import com.amalstack.notebooksfx.util.controls.Alerts;
 import com.amalstack.notebooksfx.util.http.AuthenticationService;
+import com.amalstack.notebooksfx.views.ViewNames;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;

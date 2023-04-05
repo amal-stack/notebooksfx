@@ -1,10 +1,10 @@
 package com.amalstack.notebooksfx.notebook.command;
 
-import com.amalstack.notebooksfx.ViewNames;
 import com.amalstack.notebooksfx.command.ParameterizedCommand;
 import com.amalstack.notebooksfx.nav.NavigationManager;
 import com.amalstack.notebooksfx.notebook.NotebookViewModel;
 import com.amalstack.notebooksfx.util.ControllerParameters;
+import com.amalstack.notebooksfx.views.ViewNames;
 
 public class OpenNotebookCommand implements ParameterizedCommand<NotebookViewModel> {
     private final NavigationManager navigationManager;
