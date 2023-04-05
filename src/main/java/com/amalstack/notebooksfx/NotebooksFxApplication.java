@@ -186,41 +186,4 @@ public class NotebooksFxApplication extends Application {
                 .build());
 
     }
-
-    public DefaultUrlProvider createEndpointProvider() {
-
-        RouteTable routeTable = RouteTable.builder()
-                .mapGroup(NOTEBOOKS, "/notebooks", group -> {
-                    group.map("", "");
-                    group.map(ID, "/{0}");
-                    group.map(USER, "/user");
-                })
-                .mapGroup(SECTIONS, "/sections", group -> {
-                    group.map("", "");
-                    group.map(ID, "/{0}");
-                    group.mapGroup(NOTEBOOK, "/notebook", subgroup
-                            -> subgroup.map(ID, "/{0}"));
-                })
-                .mapGroup(PAGES, "/pages", group -> {
-                    group.map("", "");
-                    group.map(ID, "/{0}");
-                    group.mapGroup(SECTION, "/section", subgroup
-                            -> subgroup.map(ID, "/{0}"));
-                })
-                .map(USERS, "/users")
-                .build();
-
-
-        return new DefaultUrlProvider(
-                "http://localhost:8080",
-                routeTable);
-    }
-
-    private ObjectMapper createObjectMapper() {
-        return new ObjectMapper()
-                .configure(DeserializationFeature.FAIL_ON_MISSING_CREATOR_PROPERTIES, false)
-                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-                .configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true)
-                .configure(JsonParser.Feature.AUTO_CLOSE_SOURCE, true);
-    }
 }
