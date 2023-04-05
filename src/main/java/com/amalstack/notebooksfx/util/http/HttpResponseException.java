@@ -1,7 +1,5 @@
 package com.amalstack.notebooksfx.util.http;
 
-import com.amalstack.notebooksfx.data.model.ErrorResponse;
-
 import java.util.Optional;
 
 public class HttpResponseException extends RuntimeException {
@@ -16,7 +14,7 @@ public class HttpResponseException extends RuntimeException {
     }
 
     public HttpResponseException(ErrorResponse errorResponse) {
-        super(errorResponse.message());
+        super(createMessage(errorResponse));
         this.errorResponse = errorResponse;
     }
 
@@ -25,12 +23,28 @@ public class HttpResponseException extends RuntimeException {
         this.errorResponse = errorResponse;
     }
 
+    public HttpResponseException(ErrorResponse errorResponse, Throwable cause) {
+        super(createMessage(errorResponse), cause);
+        this.errorResponse = errorResponse;
+    }
+
     public HttpResponseException(ErrorResponse errorResponse, String message, Throwable cause) {
         super(message, cause);
         this.errorResponse = errorResponse;
     }
 
+    private static String createMessage(ErrorResponse errorResponse) {
+        return String.format("%d: %s",
+                errorResponse.status(),
+                errorResponse.message()
+                        .orElse(errorResponse.error()));
+    }
+
     public Optional<ErrorResponse> getErrorResponse() {
         return Optional.ofNullable(errorResponse);
+    }
+
+    public int getStatusCode() {
+        return errorResponse.status();
     }
 }
