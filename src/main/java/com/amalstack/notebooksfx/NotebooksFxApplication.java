@@ -21,7 +21,6 @@ import com.amalstack.notebooksfx.nav.SimpleNavigationManagerFactory;
 import com.amalstack.notebooksfx.notebook.DefaultNotebookTableViewFactory;
 import com.amalstack.notebooksfx.notebook.NotebookTableViewFactory;
 import com.amalstack.notebooksfx.util.JacksonMapper;
-import com.amalstack.notebooksfx.util.JsonMapper;
 import com.amalstack.notebooksfx.util.controls.DefaultGraphicNodeProvider;
 import com.amalstack.notebooksfx.util.controls.GraphicNodeProvider;
 import com.amalstack.notebooksfx.util.http.*;
