@@ -147,20 +147,13 @@ public class NotebooksFxApplication extends Application {
     }
 
     private void initServices(Container container) {
-
         container.addService(GraphicNodeProvider.class, DefaultGraphicNodeProvider.class, Lifetime.SINGLETON);
         container.addService(EditorContextFactory.class, DefaultEditorContextFactory.class, Lifetime.SINGLETON);
         container.addService(NotebookTableViewFactory.class, DefaultNotebookTableViewFactory.class, Lifetime.SINGLETON);
 
         addHttpClient(container);
 
-        //container.addService(JsonMapper.class, GsonMapper.class, Lifetime.TRANSIENT, () -> GsonMapper.Factory.create(builder -> {}));
-        container.addService(JsonMapper.class, JacksonMapper.class, Lifetime.TRANSIENT, () -> new JacksonMapper(createObjectMapper()));
-        container.addService(HttpClientService.class, BasicHttpClientService.class, Lifetime.SINGLETON);
-        container.addService(ErrorResponseTypeProvider.class, DefaultErrorResponseTypeProvider.class, Lifetime.SINGLETON);
-
-        container.addService(AuthenticationContext.class, DefaultAuthenticationContext.class, Lifetime.SINGLETON);
-        container.addService(AuthenticationService.class, HttpBasicAuthenticationService.class, Lifetime.SINGLETON);
+        addAuthentication(container);
 
         addDataAccess(container);
 

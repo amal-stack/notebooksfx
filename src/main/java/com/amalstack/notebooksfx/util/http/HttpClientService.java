@@ -1,7 +1,5 @@
 package com.amalstack.notebooksfx.util.http;
 
-import com.amalstack.notebooksfx.data.model.ErrorResponse;
-
 import java.net.http.HttpRequest;
 
 public interface HttpClientService {
