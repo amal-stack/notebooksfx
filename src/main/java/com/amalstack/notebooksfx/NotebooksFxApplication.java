@@ -223,8 +223,4 @@ public class NotebooksFxApplication extends Application {
                 .configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true)
                 .configure(JsonParser.Feature.AUTO_CLOSE_SOURCE, true);
     }
-
-    private ResourceBundle createResourceBundle() {
-        return ResourceBundle.getBundle("com.amalstack.notebooksfx.labels");
-    }
 }
