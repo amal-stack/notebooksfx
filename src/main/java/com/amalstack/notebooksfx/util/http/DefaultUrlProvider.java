@@ -4,11 +4,10 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 public class DefaultUrlProvider implements UrlProvider {
-    private final RouteTable routeTable;
-    private final String baseUrl;
-
     private static final String EMPTY_BASE_URL = "";
     private static UrlProvider empty;
+    private final RouteTable routeTable;
+    private final String baseUrl;
 
     public DefaultUrlProvider(String baseUrl, RouteTable routeTable) {
         this.baseUrl = baseUrl;
@@ -21,6 +20,13 @@ public class DefaultUrlProvider implements UrlProvider {
 
     public DefaultUrlProvider(RouteTable routeTable) {
         this(EMPTY_BASE_URL, routeTable);
+    }
+
+    public static UrlProvider empty() {
+        if (empty == null) {
+            empty = new DefaultUrlProvider(EMPTY_BASE_URL, RouteTable.empty());
+        }
+        return empty;
     }
 
     @Override
@@ -52,12 +58,5 @@ public class DefaultUrlProvider implements UrlProvider {
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    public static UrlProvider empty() {
-        if (empty == null) {
-            empty = new DefaultUrlProvider(EMPTY_BASE_URL, RouteTable.empty());
-        }
-        return empty;
     }
 }
