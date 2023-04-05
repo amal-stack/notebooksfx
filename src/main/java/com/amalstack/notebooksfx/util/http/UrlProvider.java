@@ -9,5 +9,4 @@ public interface UrlProvider {
 
     URI getEndpoint(Endpoint endpoint);
 
-    URI getEndpoint(String endpoint);
 }
