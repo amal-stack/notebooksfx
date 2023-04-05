@@ -1,6 +1,6 @@
-package com.amalstack.notebooksfx;
+package localization;
 
-class ResourceNames {
+public class ResourceNames {
 
     public static final String BASE = "com.amalstack.notebooksfx.localization.base";
 
