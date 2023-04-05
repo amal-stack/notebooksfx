@@ -7,6 +7,12 @@ public class RelativeEndpoint extends EndpointBase<RelativeEndpoint> {
         this.path = path;
     }
 
+    static void throwIfInvalid(String baseUrl, RouteTable routeTable) {
+        if (baseUrl == null || baseUrl.isBlank()) {
+            throw new EndpointException("Relative endpoints require a base URL. Only absolute and named absolute endpoints can be used without a base URL.");
+        }
+    }
+
     @Override
     public String get(String baseUrl, RouteTable routeTable) {
         throwIfInvalid(baseUrl, routeTable);
@@ -17,11 +23,5 @@ public class RelativeEndpoint extends EndpointBase<RelativeEndpoint> {
         path = appendQueryParameters(path);
 
         return baseUrl + path;
-    }
-
-    static void throwIfInvalid(String baseUrl, RouteTable routeTable) {
-        if (baseUrl == null || baseUrl.isBlank()) {
-            throw new EndpointException("Relative endpoints require a base URL. Only absolute and named absolute endpoints can be used without a base URL.");
-        }
     }
 }

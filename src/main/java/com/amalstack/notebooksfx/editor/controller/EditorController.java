@@ -99,9 +99,10 @@ public class EditorController {
         });
 
         notebookTreeViewController.setOnContextCreated(this::onNotebookTreeViewContextCreated);
-        // default initial state
-        //masterDetailPane.setShowDetailNode(true);
-        CommandExecutor.execute(new ToggleNotebookTreeViewCommand(masterDetailPane, viewSectionsBtn, graphic), true);
+
+        CommandExecutor.execute(
+                new ToggleNotebookTreeViewCommand(masterDetailPane, viewSectionsBtn, graphic),
+                true);
         CommandExecutor.execute(new DisableEditorCommand(editorTextArea));
 
     }

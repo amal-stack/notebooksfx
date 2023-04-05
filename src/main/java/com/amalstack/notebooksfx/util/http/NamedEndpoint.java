@@ -7,6 +7,15 @@ public final class NamedEndpoint extends EndpointBase<NamedEndpoint> {
         this.routeName = routeName;
     }
 
+    static void throwIfInvalid(String baseUrl, RouteTable routeTable) {
+        if (baseUrl == null || baseUrl.isBlank()) {
+            throw new EndpointException("Named relative endpoints require a base URL. Only absolute and named absolute endpoints can be used without a base URL.");
+        }
+        if (RouteTable.isNullOrEmpty(routeTable)) {
+            throw new EndpointException("Named endpoints require a route table. Only absolute and relative endpoints can be used without a route table.");
+        }
+    }
+
     @Override
     public String get(String baseUrl, RouteTable routeTable) {
         throwIfInvalid(baseUrl, routeTable);
@@ -17,15 +26,6 @@ public final class NamedEndpoint extends EndpointBase<NamedEndpoint> {
         path = appendQueryParameters(path);
 
         return baseUrl + path;
-    }
-
-    static void throwIfInvalid(String baseUrl, RouteTable routeTable) {
-        if (baseUrl == null || baseUrl.isBlank()) {
-            throw new EndpointException("Named relative endpoints require a base URL. Only absolute and named absolute endpoints can be used without a base URL.");
-        }
-        if (RouteTable.isNullOrEmpty(routeTable)) {
-            throw new EndpointException("Named endpoints require a route table. Only absolute and relative endpoints can be used without a route table.");
-        }
     }
 }
 

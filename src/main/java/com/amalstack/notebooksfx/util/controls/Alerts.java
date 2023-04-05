@@ -35,4 +35,17 @@ public class Alerts {
 
         alert.showAndWait();
     }
+
+    public static void showWarningAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.WARNING,
+                message,
+                ButtonType.OK);
+        alert.setTitle(title);
+
+        alert.showAndWait();
+    }
+
+    public static AlertBuilder builder() {
+        return new AlertBuilder();
+    }
 }

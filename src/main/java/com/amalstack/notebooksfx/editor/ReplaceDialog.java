@@ -45,10 +45,6 @@ public class ReplaceDialog extends Dialog<ReplaceDialog.ReplaceModel> {
         this(null);
     }
 
-    public ReplaceModel getModel() {
-        return new ReplaceModel(findField.getText(), replaceField.getText(), null);
-    }
-
     public static ReplaceDialog create(String title, String headerText, Node graphic, ResourceBundle resources, ReplaceModel model) {
         ReplaceDialog dialog = new ReplaceDialog(model);
         dialog.setTitle(title);
@@ -61,6 +57,10 @@ public class ReplaceDialog extends Dialog<ReplaceDialog.ReplaceModel> {
 
     public static ReplaceDialog create(String title, String headerText, Node graphic, ResourceBundle resources) {
         return create(title, headerText, graphic, resources, null);
+    }
+
+    public ReplaceModel getModel() {
+        return new ReplaceModel(findField.getText(), replaceField.getText(), null);
     }
 
     private GridPane createForm() {

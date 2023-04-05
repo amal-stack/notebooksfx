@@ -4,11 +4,11 @@ import java.net.http.HttpClient;
 
 @FunctionalInterface
 public interface HttpClientInitializer {
-    void initialize(HttpClient.Builder builder);
-
     static HttpClientInitializer empty() {
         return builder -> {
         };
     }
+
+    void initialize(HttpClient.Builder builder);
 }
 

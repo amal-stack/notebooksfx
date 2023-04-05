@@ -10,6 +10,7 @@ import javafx.scene.control.TableView;
 
 import java.util.List;
 
+// Not used anymore
 public class ErrorTableViewFactory {
 
     private static List<TableColumnConfig<ErrorEntry, ?>> getColumns() {
@@ -27,7 +28,6 @@ public class ErrorTableViewFactory {
                 .configure(tv -> {
                     tv.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
                     tv.setPadding(new javafx.geometry.Insets(25));
-
                 })
                 .build();
     }

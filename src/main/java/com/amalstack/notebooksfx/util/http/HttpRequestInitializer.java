@@ -5,13 +5,6 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 public interface HttpRequestInitializer {
-    default void initialize(HttpRequest.Builder builder) {
-    }
-
-    default Map<String, String> headers() {
-        return Map.of();
-    }
-
     static HttpRequestInitializer empty() {
         return new HttpRequestInitializer() {
         };
@@ -52,6 +45,13 @@ public interface HttpRequestInitializer {
                 return headers;
             }
         };
+    }
+
+    default void initialize(HttpRequest.Builder builder) {
+    }
+
+    default Map<String, String> headers() {
+        return Map.of();
     }
 }
 
