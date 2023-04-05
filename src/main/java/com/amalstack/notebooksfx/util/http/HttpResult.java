@@ -1,7 +1,5 @@
 package com.amalstack.notebooksfx.util.http;
 
-import com.amalstack.notebooksfx.data.model.ErrorResponse;
-
 import java.net.http.HttpResponse;
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -52,10 +50,7 @@ public class HttpResult<T, E extends ErrorResponse> {
     }
 
     public T getObjectOrThrow() {
-        if (isSuccess()) {
-            return object;
-        }
-        throw new HttpResponseException(getError().orElseThrow());
+        return getObjectOrThrow(this::createHttpResponseException);
     }
 
     public T getObjectOrThrow(Supplier<RuntimeException> exceptionSupplier) {
@@ -66,14 +61,19 @@ public class HttpResult<T, E extends ErrorResponse> {
     }
 
     public void throwIfFailure() {
-        if (!isSuccess()) {
-            throw new HttpResponseException(getError().orElseThrow());
-        }
+        throwIfFailure(this::createHttpResponseException);
     }
 
     public void throwIfFailure(Supplier<RuntimeException> exceptionSupplier) {
         if (!isSuccess()) {
             throw exceptionSupplier.get();
         }
+    }
+
+    private HttpResponseException createHttpResponseException() {
+        getError().ifPresent(e -> {
+            throw new HttpResponseException(e);
+        });
+        throw new HttpResponseException(String.valueOf(response.statusCode()));
     }
 }
