@@ -1,42 +1,31 @@
 package com.amalstack.notebooksfx.util.http;
 
-import java.text.MessageFormat;
-import java.util.Arrays;
-
-public final class NamedEndpoint extends Endpoint {
+public final class NamedEndpoint extends EndpointBase<NamedEndpoint> {
     private final RouteName routeName;
-    private QueryParameterMap queryParameterMap;
-    private Object[] pathParameters;
 
     NamedEndpoint(RouteName routeName) {
         this.routeName = routeName;
     }
 
-    public NamedEndpoint pathParameters(Object... pathParameters) {
-        this.pathParameters = Arrays.stream(pathParameters).map(Object::toString).toArray();
-        return this;
-    }
-
-    public NamedEndpoint queryParameters(String... queryParameters) {
-        this.queryParameterMap = QueryParameterMap.of(queryParameters);
-        return this;
-    }
-
-    public NamedEndpoint queryParameters(QueryParameterMap queryParameterMap) {
-        this.queryParameterMap = queryParameterMap;
-        return this;
-    }
-
     @Override
-    public String get(RouteTable routeTable) {
-        String path = routeTable.get(routeName);
-        if (pathParameters != null && pathParameters.length != 0) {
-            path = MessageFormat.format(path, pathParameters);
-        }
-        if (queryParameterMap != null) {
-            path += queryParameterMap.toString();
-        }
+    public String get(String baseUrl, RouteTable routeTable) {
+        throwIfInvalid(baseUrl, routeTable);
 
-        return path;
+        String path = routeTable.get(routeName);
+
+        path = appendPathParameters(path);
+        path = appendQueryParameters(path);
+
+        return baseUrl + path;
+    }
+
+    static void throwIfInvalid(String baseUrl, RouteTable routeTable) {
+        if (baseUrl == null || baseUrl.isBlank()) {
+            throw new EndpointException("Named relative endpoints require a base URL. Only absolute and named absolute endpoints can be used without a base URL.");
+        }
+        if (RouteTable.isNullOrEmpty(routeTable)) {
+            throw new EndpointException("Named endpoints require a route table. Only absolute and relative endpoints can be used without a route table.");
+        }
     }
 }
+
