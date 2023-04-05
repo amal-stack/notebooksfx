@@ -16,6 +16,7 @@ import com.amalstack.notebooksfx.di.Container;
 import com.amalstack.notebooksfx.di.Lifetime;
 import com.amalstack.notebooksfx.editor.DefaultEditorContextFactory;
 import com.amalstack.notebooksfx.editor.EditorContextFactory;
+import com.amalstack.notebooksfx.localization.ResourceNames;
 import com.amalstack.notebooksfx.nav.NavigationManager;
 import com.amalstack.notebooksfx.nav.ParentParameters;
 import com.amalstack.notebooksfx.nav.SimpleNavigationManager;
@@ -36,7 +37,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import localization.ResourceNames;
 
 import java.util.ResourceBundle;
 import java.util.function.Supplier;
