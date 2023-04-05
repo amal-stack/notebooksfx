@@ -6,10 +6,13 @@ import javafx.scene.control.TabPane;
 import javafx.scene.layout.VBox;
 
 public class AuthController {
+
     @FXML
     private VBox signUpView;
+
     @FXML
     private VBox loginView;
+
     @FXML
     private Tab signUpTab;
 
@@ -23,8 +26,14 @@ public class AuthController {
     private LoginController loginViewController;
 
     @FXML
-    private SignupController signupViewController;
+    private SignupController signUpViewController;
 
     public void initialize() {
+        signUpViewController.setOnSignUpSuccess(this::onSignUpSuccess);
+    }
+
+    private void onSignUpSuccess() {
+        // Se,ect Login tab
+        actionTabPane.getSelectionModel().select(loginTab);
     }
 }
