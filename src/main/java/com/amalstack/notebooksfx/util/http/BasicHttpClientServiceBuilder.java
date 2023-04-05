@@ -95,7 +95,18 @@ public class BasicHttpClientServiceBuilder {
     static class Defaults {
 
         static UrlProvider urlProvider(String baseUri, RouteTable routeTable) {
-            return new DefaultUrlProvider(baseUri, routeTable);
+            if (baseUri == null && RouteTable.isNullOrEmpty(routeTable)) {
+                System.out.println("Warning: Using empty UrlProvider since base URI is null and RouteTable is null or is empty. Only absolute URLs are available.");
+                return DefaultUrlProvider.empty();
+            } else if (baseUri == null) {
+                System.out.println("Base URI is null. Relative URLs are not available.");
+                return new DefaultUrlProvider(routeTable);
+            } else if (RouteTable.isNullOrEmpty(routeTable)) {
+                System.out.println("Warning: RouteTable is null or is empty. Named endpoints are not available.");
+                return new DefaultUrlProvider(baseUri);
+            } else {
+                return new DefaultUrlProvider(baseUri, routeTable);
+            }
         }
 
         static HttpClientInitializer clientInitializer() {

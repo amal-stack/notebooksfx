@@ -29,7 +29,7 @@ public class QueryParameterMap {
         return parameters.getOrDefault(key, defaultValue);
     }
 
-    public boolean containsKey(String key) {
+    public boolean containsQuery(String key) {
         return parameters.containsKey(key);
     }
 

@@ -1,6 +1,6 @@
 package com.amalstack.notebooksfx.util.http;
 
-import java.net.http.HttpRequest;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BinaryOperator;
@@ -21,6 +21,14 @@ public class RouteTable {
 
     public static Builder builder(BinaryOperator<String> nameCombiner) {
         return new Builder(nameCombiner);
+    }
+
+    public static RouteTable empty() {
+        return EmptyRouteTable.getInstance();
+    }
+
+    public static boolean isNullOrEmpty(RouteTable routeTable) {
+        return routeTable == null || EmptyRouteTable.getInstance() == routeTable || routeTable.routeMap.isEmpty();
     }
 
     public String get(String routeName) {
@@ -48,10 +56,6 @@ public class RouteTable {
 
     public String combineNames(RouteName routeName) {
         return combineNames(routeName.asArray());
-    }
-
-    public HttpRequest.Builder getHttpRequestBuilder(String routeName) {
-        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -111,6 +115,31 @@ public class RouteTable {
                 return name1;
             }
             return name1 + "." + name2;
+        }
+    }
+
+    private static class EmptyRouteTable extends RouteTable {
+        private static RouteTable instance;
+
+        EmptyRouteTable() {
+            super(Collections.emptyMap(), new DotNameCombiner());
+        }
+
+        public static RouteTable getInstance() {
+            if (instance == null) {
+                instance = new EmptyRouteTable();
+            }
+            return instance;
+        }
+
+        @Override
+        public String get(String routeName) {
+            throw new RouteNotFoundException(routeName);
+        }
+
+        @Override
+        public String toString() {
+            return "Empty Route Table";
         }
     }
 }
