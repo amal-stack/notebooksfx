@@ -41,4 +41,18 @@ public enum ResponseStatus {
         return UNKNOWN_ERROR;
     }
 
+    public String label() {
+        return switch (this) {
+            case UNKNOWN_ERROR -> "Unknown Error";
+            case INFORMATIONAL -> "Informational";
+            case SUCCESS -> "Success";
+            case REDIRECTION -> "Redirection";
+            case BAD_REQUEST -> "Bad Request";
+            case UNAUTHORIZED -> "Unauthorized";
+            case FORBIDDEN -> "Forbidden";
+            case NOT_FOUND -> "Not Found";
+            case CLIENT_ERROR -> "Client Error";
+            case SERVER_ERROR -> "Server Error";
+        };
+    }
 }
