@@ -3,7 +3,7 @@ package com.amalstack.notebooksfx.util;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class JacksonMapper implements JsonMapper {
+public class JacksonMapper implements BodyMapper {
     private final ObjectMapper mapper;
 
     public JacksonMapper(ObjectMapper mapper) {
@@ -15,16 +15,16 @@ public class JacksonMapper implements JsonMapper {
     }
 
     @Override
-    public <T> T fromJson(String json, Class<T> type) {
+    public <T> T fromBody(String body, Class<T> type) {
         try {
-            return mapper.readValue(json, type);
+            return mapper.readValue(body, type);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public <T> String toJson(T object) {
+    public <T> String toBody(T object) {
         try {
             return mapper.writeValueAsString(object);
         } catch (JsonProcessingException e) {
