@@ -1,8 +1,7 @@
 package com.amalstack.notebooksfx.util.http;
 
 import com.amalstack.notebooksfx.AppRouteNames;
-import com.amalstack.notebooksfx.data.model.ErrorResponse;
-import com.amalstack.notebooksfx.util.JsonMapper;
+import com.amalstack.notebooksfx.util.BodyMapper;
 
 import java.net.http.HttpRequest;
 import java.util.Arrays;
@@ -12,17 +11,17 @@ public class HttpBasicAuthenticationService implements AuthenticationService {
     private final AuthenticationContext authenticationContext;
     private final HttpClientService httpClient;
     private final UrlProvider urlProvider;
-    private final JsonMapper jsonMapper;
+    private final BodyMapper bodyMapper;
 
     public HttpBasicAuthenticationService(
             AuthenticationContext authenticationContext,
             HttpClientService httpClient,
             UrlProvider urlProvider,
-            JsonMapper jsonMapper) {
+            BodyMapper bodyMapper) {
         this.authenticationContext = authenticationContext;
         this.httpClient = httpClient;
         this.urlProvider = urlProvider;
-        this.jsonMapper = jsonMapper;
+        this.bodyMapper = bodyMapper;
     }
 
 
@@ -30,7 +29,7 @@ public class HttpBasicAuthenticationService implements AuthenticationService {
         var request = HttpRequest.newBuilder()
                 .uri(urlProvider.getEndpoint(Endpoint.named(AppRouteNames.USERS)))
                 .header("Content-Type", "application/json")
-                .POST(HttpRequest.BodyPublishers.ofString(jsonMapper.toJson(user)))
+                .POST(HttpRequest.BodyPublishers.ofString(bodyMapper.toBody(user)))
                 .build();
 
         HttpResult<U, ? extends ErrorResponse> result = httpClient.send(request, userType);
@@ -56,7 +55,7 @@ public class HttpBasicAuthenticationService implements AuthenticationService {
 
         HttpResult<U, ? extends ErrorResponse> result = httpClient.send(request, userType);
         if (result.isSuccess()) {
-            U user = result.getObject().orElseThrow();
+            U user = result.getObjectOrThrow();
             authenticationContext.setAuthentication(Authentication.forUser(user, authorizationHeader));
             return Result.success(user);
         }

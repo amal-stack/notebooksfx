@@ -1,5 +1,6 @@
 package com.amalstack.notebooksfx.data.model;
 
+import com.amalstack.notebooksfx.util.http.ErrorResponse;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -21,18 +22,18 @@ public class ErrorEntry {
                 errorEntries.add(new ErrorEntry(errorEntry.getKey(), errorEntry.getValue()));
             }
         }
-
-        if (error.timestamp() != null) {
-            errorEntries.add(new ErrorEntry("timestamp", error.timestamp()));
-        }
         errorEntries.add(new ErrorEntry("status", String.valueOf(error.status())));
+
         if (error.error() != null) {
             errorEntries.add(new ErrorEntry("error", error.error()));
         }
-        errorEntries.add(new ErrorEntry("message", error.message()));
-        if (error.path() != null) {
-            errorEntries.add(new ErrorEntry("path", error.path()));
-        }
+
+        error.timestamp()
+                .ifPresent(ts -> errorEntries.add(new ErrorEntry("timestamp", ts)));
+        error.message()
+                .ifPresent(m -> errorEntries.add(new ErrorEntry("message", m)));
+        error.path()
+                .ifPresent(p -> errorEntries.add(new ErrorEntry("path", p)));
 
         return errorEntries;
     }

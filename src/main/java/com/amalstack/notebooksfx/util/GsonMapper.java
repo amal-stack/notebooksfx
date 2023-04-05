@@ -5,7 +5,7 @@ import com.google.gson.GsonBuilder;
 
 import java.util.function.Consumer;
 
-public class GsonMapper implements JsonMapper {
+public class GsonMapper implements BodyMapper {
 
     private final Gson gson;
 
@@ -17,21 +17,19 @@ public class GsonMapper implements JsonMapper {
         this(new Gson());
     }
 
-    @Override
-    public <T> T fromJson(String json, Class<T> type) {
-        return gson.fromJson(json, type);
+    public static GsonMapper create(Consumer<GsonBuilder> config) {
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        config.accept(gsonBuilder);
+        return new GsonMapper(gsonBuilder.create());
     }
 
     @Override
-    public <T> String toJson(T object) {
+    public <T> T fromBody(String body, Class<T> type) {
+        return gson.fromJson(body, type);
+    }
+
+    @Override
+    public <T> String toBody(T object) {
         return gson.toJson(object);
-    }
-
-    public static class Factory {
-        public static GsonMapper create(Consumer<GsonBuilder> config) {
-            GsonBuilder gsonBuilder = new GsonBuilder();
-            config.accept(gsonBuilder);
-            return new GsonMapper(gsonBuilder.create());
-        }
     }
 }
