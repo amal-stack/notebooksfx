@@ -3,7 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<VBox xmlns:fx="http://javafx.com/fxml/1" VBox.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/19"
+<VBox xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/19"
       fx:controller="com.amalstack.notebooksfx.auth.SignupController">
     <GridPane hgap="25.0" vgap="25.0" VBox.vgrow="ALWAYS">
         <columnConstraints>
@@ -24,17 +24,6 @@
 
         <Label text="%auth.signup.label.confirm_password" GridPane.rowIndex="3"/>
         <PasswordField fx:id="confirmPasswordField" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
-        <ScrollPane fx:id="signUpErrorScrollPane" fitToWidth="true" visible="false" GridPane.columnSpan="2"
-                    GridPane.halignment="LEFT" GridPane.rowIndex="4" GridPane.vgrow="ALWAYS">
-            <!--            <Label fx:id="errorMessageLabel" textFill="crimson">-->
-            <!--                <font>-->
-            <!--                    <Font name="Monospaced Regular" size="16.0" />-->
-            <!--                </font>-->
-            <!--                <padding>-->
-            <!--                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />-->
-            <!--                </padding>-->
-            <!--            </Label>-->
-        </ScrollPane>
     </GridPane>
     <HBox alignment="CENTER">
         <padding>
