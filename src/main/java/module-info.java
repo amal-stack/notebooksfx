@@ -57,4 +57,5 @@ module com.amalstack.notebooksfx {
     opens com.amalstack.notebooksfx.notebook.command to javafx.fxml;
     opens com.amalstack.notebooksfx.editor.nav.command to javafx.fxml;
     opens com.amalstack.notebooksfx.editor.command to javafx.fxml;
+    opens com.amalstack.notebooksfx.util.http to com.fasterxml.jackson.databind;
 }
