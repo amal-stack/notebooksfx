@@ -113,4 +113,29 @@ public class RouteTable {
             return name1 + "." + name2;
         }
     }
+
+    private static class EmptyRouteTable extends RouteTable {
+        private static RouteTable instance;
+
+        EmptyRouteTable() {
+            super(Collections.emptyMap(), new DotNameCombiner());
+        }
+
+        public static RouteTable getInstance() {
+            if (instance == null) {
+                instance = new EmptyRouteTable();
+            }
+            return instance;
+        }
+
+        @Override
+        public String get(String routeName) {
+            throw new RouteNotFoundException(routeName);
+        }
+
+        @Override
+        public String toString() {
+            return "Empty Route Table";
+        }
+    }
 }
