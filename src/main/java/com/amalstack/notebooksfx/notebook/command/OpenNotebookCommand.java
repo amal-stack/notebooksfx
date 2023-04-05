@@ -1,6 +1,6 @@
 package com.amalstack.notebooksfx.notebook.command;
 
-import com.amalstack.notebooksfx.Parents;
+import com.amalstack.notebooksfx.ViewNames;
 import com.amalstack.notebooksfx.command.ParameterizedCommand;
 import com.amalstack.notebooksfx.nav.NavigationManager;
 import com.amalstack.notebooksfx.notebook.NotebookViewModel;
@@ -18,6 +18,6 @@ public class OpenNotebookCommand implements ParameterizedCommand<NotebookViewMod
         long id = notebook.getId();
         ControllerParameters parameters = new ControllerParameters();
         parameters.set("notebook.id", id);
-        navigationManager.navigateTo(Parents.EDITOR, parameters);
+        navigationManager.navigateTo(ViewNames.EDITOR, parameters);
     }
 }

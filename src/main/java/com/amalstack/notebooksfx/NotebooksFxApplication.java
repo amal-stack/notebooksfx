@@ -126,7 +126,7 @@ public class NotebooksFxApplication extends Application {
             initServices(container);
             initNav(container, stage);
             container.getService(NavigationManager.class)
-                    .navigateTo(Parents.AUTH, stage);
+                    .navigateTo(ViewNames.AUTH, stage);
 
             var endpointProvider = container.getService(UrlProvider.class);
             System.out.println("Notebooks::" + endpointProvider.getEndpoint(Endpoint.named(NOTEBOOKS)));
@@ -183,19 +183,19 @@ public class NotebooksFxApplication extends Application {
 
             nav.setDefaultControllerFactory(container::injectAndConstruct);
 
-            nav.addParent(ParentParameters.builder().name(Parents.HOME)
+            nav.addParent(ParentParameters.builder().name(ViewNames.HOME)
                     .fxmlUrl(FxmlLocator.getFxmlUrl("notebooks-view.fxml"))
                     .title(navResources.getString("nav.parents.notebooks.title"))
                     .resourceBundle(ResourceNames.NOTEBOOKS)
                     .build());
 
-            nav.addParent(ParentParameters.builder().name(Parents.EDITOR)
+            nav.addParent(ParentParameters.builder().name(ViewNames.EDITOR)
                     .fxmlUrl(FxmlLocator.getFxmlUrl("editor-view.fxml"))
                     .title(navResources.getString("nav.parents.editor.title"))
                     .resourceBundle(ResourceNames.EDITOR)
                     .build());
 
-            nav.addParent(ParentParameters.builder().name(Parents.AUTH)
+            nav.addParent(ParentParameters.builder().name(ViewNames.AUTH)
                     .fxmlUrl(FxmlLocator.getFxmlUrl("auth-view.fxml"))
                     .title(navResources.getString("nav.parents.auth.title"))
                     .resourceBundle(ResourceNames.AUTH)

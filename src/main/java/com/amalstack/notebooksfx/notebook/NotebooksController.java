@@ -1,6 +1,6 @@
 package com.amalstack.notebooksfx.notebook;
 
-import com.amalstack.notebooksfx.Parents;
+import com.amalstack.notebooksfx.ViewNames;
 import com.amalstack.notebooksfx.command.CommandExecutor;
 import com.amalstack.notebooksfx.data.DataAccessService;
 import com.amalstack.notebooksfx.nav.NavigationManager;
@@ -82,7 +82,7 @@ public class NotebooksController {
     public void initialize() {
 
         if (!authenticationContext.isAuthenticated()) {
-            navigationManager.navigateTo(Parents.AUTH);
+            navigationManager.navigateTo(ViewNames.AUTH);
         }
 
         NotebookTableViewContext context = new NotebookTableViewContext(

@@ -1,6 +1,6 @@
 package com.amalstack.notebooksfx.editor.controller;
 
-import com.amalstack.notebooksfx.Parents;
+import com.amalstack.notebooksfx.ViewNames;
 import com.amalstack.notebooksfx.command.CommandExecutor;
 import com.amalstack.notebooksfx.data.DataAccessService;
 import com.amalstack.notebooksfx.editor.EditorContext;
@@ -95,7 +95,7 @@ public class EditorController {
         backToNotebooksBtn.setGraphic(graphic.getNode(Graphic.BACK));
         backToNotebooksBtn.setOnAction(event -> {
             savePage(notebookTreeViewController.getContext().getCurrentPage());
-            navigationManager.navigateTo(Parents.HOME);
+            navigationManager.navigateTo(ViewNames.HOME);
         });
 
         notebookTreeViewController.setOnContextCreated(this::onNotebookTreeViewContextCreated);

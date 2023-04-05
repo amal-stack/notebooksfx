@@ -1,6 +1,6 @@
 package com.amalstack.notebooksfx.auth;
 
-import com.amalstack.notebooksfx.Parents;
+import com.amalstack.notebooksfx.ViewNames;
 import com.amalstack.notebooksfx.css.StylesheetLocator;
 import com.amalstack.notebooksfx.css.Stylesheets;
 import com.amalstack.notebooksfx.data.model.User;
@@ -52,7 +52,7 @@ public class LoginController {
         var result = authenticationService.authenticate(email, password, User.class);
 
         if (result.isSuccess()) {
-            navigationManager.navigateTo(Parents.HOME);
+            navigationManager.navigateTo(ViewNames.HOME);
             return;
         }
 
