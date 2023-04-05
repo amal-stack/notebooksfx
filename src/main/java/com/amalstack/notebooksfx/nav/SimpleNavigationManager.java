@@ -1,6 +1,5 @@
 package com.amalstack.notebooksfx.nav;
 
-import com.amalstack.notebooksfx.NotebooksFxApplication;
 import com.amalstack.notebooksfx.util.ControllerParameters;
 import com.amalstack.notebooksfx.util.ParameterizedController;
 import javafx.fxml.FXMLLoader;
@@ -32,7 +31,7 @@ public class SimpleNavigationManager implements NavigationManager {
         this.defaultControllerFactory = defaultControllerFactory;
     }
 
-    private static void supplyParameters(ControllerParameters parameters, FXMLLoader fxmlLoader) {
+    private static void setControllerParameters(ControllerParameters parameters, FXMLLoader fxmlLoader) {
         boolean set = false;
         if (fxmlLoader.getController() instanceof ParameterizedController controller) {
             controller.setParameters(parameters);
@@ -75,8 +74,6 @@ public class SimpleNavigationManager implements NavigationManager {
             throw new NavigationException(e);
         }
         controller = fxmlLoader.getController();
-        //TODO: Provide alternative way to configure stylesheets
-        scene.getStylesheets().add(NotebooksFxApplication.class.getResource("appstyle.css").toString());
         stage.setScene(scene);
         stage.show();
     }
@@ -92,9 +89,8 @@ public class SimpleNavigationManager implements NavigationManager {
         }
         controller = fxmlLoader.getController();
         Scene scene = stage.getScene();
-        supplyParameters(parameters, fxmlLoader);
+        setControllerParameters(parameters, fxmlLoader);
         scene.setRoot(root);
-        scene.getStylesheets().add(NotebooksFxApplication.class.getResource("appstyle.css").toString());
         stage.setScene(scene);
         stage.show();
     }
