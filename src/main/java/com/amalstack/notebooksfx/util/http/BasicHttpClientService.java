@@ -1,33 +1,33 @@
 package com.amalstack.notebooksfx.util.http;
 
-import com.amalstack.notebooksfx.data.model.ErrorResponse;
-import com.amalstack.notebooksfx.util.JsonMapper;
+import com.amalstack.notebooksfx.util.BodyMapper;
 
 import java.io.IOException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.function.Function;
 
 
 public class BasicHttpClientService implements HttpClientService {
-    private final AuthenticationContext authenticationContext;
-    private final UrlProvider urlProvider;
-    private final JsonMapper jsonMapper;
-    private final ErrorResponseTypeProvider errorResponseTypeProvider;
+    protected final HttpClientInitializer httpClientInitializer;
+    protected final UrlProvider urlProvider;
+    protected final BodyMapper bodyMapper;
+    protected final ErrorResponseFactory errorResponseFactory;
+    protected final HttpRequestInitializer httpRequestBuilderInitializer;
 
     public BasicHttpClientService(
-            AuthenticationContext authenticationContext,
+            HttpRequestInitializer httpRequestBuilderInitializer,
+            HttpClientInitializer httpClientInitializer,
             UrlProvider urlProvider,
-            JsonMapper jsonMapper,
-            ErrorResponseTypeProvider errorResponseTypeProvider
+            BodyMapper bodyMapper,
+            ErrorResponseFactory errorResponseFactory
     ) {
-        this.authenticationContext = authenticationContext;
+        this.httpRequestBuilderInitializer = httpRequestBuilderInitializer;
+        this.httpClientInitializer = httpClientInitializer;
         this.urlProvider = urlProvider;
-        this.jsonMapper = jsonMapper;
-        this.errorResponseTypeProvider = errorResponseTypeProvider;
+        this.bodyMapper = bodyMapper;
+        this.errorResponseFactory = errorResponseFactory;
     }
-
 
     @Override
     public <T> HttpResult<T, ? extends ErrorResponse> send(Endpoint endpoint, String method) {
@@ -43,8 +43,6 @@ public class BasicHttpClientService implements HttpClientService {
 
     @Override
     public <T> HttpResult<T, ? extends ErrorResponse> send(Endpoint endpoint, String method, T object) {
-//        Class<T> type = (Class<T>) object.getClass();
-//        return send(endpoint, method, object, type);
         HttpRequest request = createHttpRequest(endpoint, method, object);
         return send(request);
     }
@@ -60,8 +58,7 @@ public class BasicHttpClientService implements HttpClientService {
     public <T> HttpResult<T, ? extends ErrorResponse> send(HttpRequest request, Class<T> responseClass) {
         try {
             return createHttpResult(
-                    HttpClient
-                            .newHttpClient()
+                    createHttpClient()
                             .send(request, HttpResponse.BodyHandlers.ofString()),
                     responseClass);
         } catch (IOException | InterruptedException e) {
@@ -73,8 +70,7 @@ public class BasicHttpClientService implements HttpClientService {
     public <T> HttpResult<T, ? extends ErrorResponse> send(HttpRequest request) {
         try {
             return createHttpResult(
-                    HttpClient
-                            .newHttpClient()
+                    createHttpClient()
                             .send(request, HttpResponse.BodyHandlers.ofString()));
 
         } catch (IOException | InterruptedException e) {
@@ -84,7 +80,7 @@ public class BasicHttpClientService implements HttpClientService {
 
     protected <T> HttpRequest createHttpRequest(Endpoint endpoint, String method, T object) {
         return createRequestBuilder(endpoint)
-                .method(method, HttpRequest.BodyPublishers.ofString(jsonMapper.toJson(object)))
+                .method(method, HttpRequest.BodyPublishers.ofString(bodyMapper.toBody(object)))
                 .build();
     }
 
@@ -99,51 +95,37 @@ public class BasicHttpClientService implements HttpClientService {
                 .uri(urlProvider.getEndpoint(endpoint))
                 .header("Content-Type", "application/json");
 
-        Authentication<?> auth = authenticationContext.getAuthentication();
-        auth.getAuthorizationHeader()
-                .ifPresent(header -> builder
-                        .header("Authorization", header));
+        httpRequestBuilderInitializer.headers().forEach(builder::header);
+        httpRequestBuilderInitializer.initialize(builder);
 
         return builder;
     }
 
-    private <T> HttpResult<T, ? extends ErrorResponse> createHttpResult(HttpResponse<String> response) {
-        ResponseStatus status = ResponseStatus.of(response.statusCode());
+    protected HttpClient createHttpClient() {
+        var builder = HttpClient.newBuilder();
+        httpClientInitializer.initialize(builder);
+        return builder.build();
+    }
 
-        if (status != ResponseStatus.SUCCESS) {
-            return createErrorResult(response,
-                    errorResponseTypeProvider.errorType(),
-                    errorResponseTypeProvider.errorFactory());
+    protected <T> HttpResult<T, ? extends ErrorResponse> createHttpResult(HttpResponse<String> response) {
+        if (ResponseStatus.of(response.statusCode()) != ResponseStatus.SUCCESS) {
+            return HttpResult.ofError(response, errorResponseFactory.createErrorResponse(response));
         }
         return HttpResult.empty(response);
     }
 
-    private <T> HttpResult<T, ? extends ErrorResponse> createHttpResult(
+    protected <T> HttpResult<T, ? extends ErrorResponse> createHttpResult(
             HttpResponse<String> response,
             Class<T> type) {
         String body = response.body();
         ResponseStatus status = ResponseStatus.of(response.statusCode());
 
         if (status == ResponseStatus.SUCCESS) {
-            if (body != null && !body.isBlank()) {
-                return HttpResult.ofObject(response, jsonMapper.fromJson(body, type));
-            }
-            return HttpResult.empty(response);
-        } else return createErrorResult(response,
-                errorResponseTypeProvider.errorType(),
-                errorResponseTypeProvider.errorFactory());
-    }
-
-    private <T> HttpResult<T, ? extends ErrorResponse> createErrorResult(
-            HttpResponse<String> response,
-            Class<? extends ErrorResponse> errorType,
-            Function<HttpResponse<String>, ? extends ErrorResponse> errorFactory) {
-
-        String body = response.body();
-        if (body == null || body.isBlank()) {
-            return HttpResult.ofError(response, errorFactory.apply(response));
+            return body != null && !body.isBlank()
+                    ? HttpResult.ofObject(response, bodyMapper.fromBody(body, type))
+                    : HttpResult.empty(response);
         }
-        return HttpResult.ofError(response, jsonMapper.fromJson(body, errorType));
+        return HttpResult.ofError(response, errorResponseFactory.createErrorResponse(response));
     }
 }
 
