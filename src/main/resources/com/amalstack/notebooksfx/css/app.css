@@ -3,6 +3,6 @@
 }
 
 .editor-rich-text-area {
-    -fx-font-family: monospace;
+    -fx-font-family: 'Roboto Mono', monospace;
     -fx-font-size: 14px;
 }
