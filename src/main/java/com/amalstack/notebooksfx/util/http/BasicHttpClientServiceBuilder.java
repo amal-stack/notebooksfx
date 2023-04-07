@@ -64,7 +64,7 @@ public class BasicHttpClientServiceBuilder {
         return this;
     }
 
-    public HttpClientService build() {
+    public BasicHttpClientService build() {
 
         UrlProvider urlProvider = Defaults.urlProvider(baseUri, routeTable);
 
