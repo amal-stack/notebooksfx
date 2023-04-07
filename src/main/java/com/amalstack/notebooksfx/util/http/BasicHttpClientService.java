@@ -6,9 +6,10 @@ import java.io.IOException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.concurrent.CompletableFuture;
 
 
-public class BasicHttpClientService implements HttpClientService {
+public class BasicHttpClientService implements HttpClientService, AsyncHttpClientService {
     protected final HttpClientInitializer httpClientInitializer;
     protected final UrlProvider urlProvider;
     protected final BodyMapper bodyMapper;
@@ -53,6 +54,17 @@ public class BasicHttpClientService implements HttpClientService {
         return send(request, responseClass);
     }
 
+    @Override
+    public <T> HttpResult<T, ? extends ErrorResponse> send(HttpRequest request) {
+        try {
+            return createHttpResult(
+                    createHttpClient()
+                            .send(request, HttpResponse.BodyHandlers.ofString()));
+
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     @Override
     public <T> HttpResult<T, ? extends ErrorResponse> send(HttpRequest request, Class<T> responseClass) {
@@ -67,15 +79,37 @@ public class BasicHttpClientService implements HttpClientService {
     }
 
     @Override
-    public <T> HttpResult<T, ? extends ErrorResponse> send(HttpRequest request) {
-        try {
-            return createHttpResult(
-                    createHttpClient()
-                            .send(request, HttpResponse.BodyHandlers.ofString()));
+    public <T> CompletableFuture<HttpResult<T, ? extends ErrorResponse>> sendAsync(Endpoint endpoint, String method) {
+        return sendAsync(createHttpRequest(endpoint, method));
+    }
 
-        } catch (IOException | InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+    @Override
+    public <T> CompletableFuture<HttpResult<T, ? extends ErrorResponse>> sendAsync(Endpoint endpoint, String method, T object) {
+        return sendAsync(createHttpRequest(endpoint, method, object));
+    }
+
+    @Override
+    public <T> CompletableFuture<HttpResult<T, ? extends ErrorResponse>> sendAsync(Endpoint endpoint, String method, Class<T> responseClass) {
+        return sendAsync(createHttpRequest(endpoint, method), responseClass);
+    }
+
+    @Override
+    public <S, T> CompletableFuture<HttpResult<T, ? extends ErrorResponse>> sendAsync(Endpoint endpoint, String method, S object, Class<T> responseClass) {
+        return sendAsync(createHttpRequest(endpoint, method, object), responseClass);
+    }
+
+    @Override
+    public <T> CompletableFuture<HttpResult<T, ? extends ErrorResponse>> sendAsync(HttpRequest request) {
+        return createHttpClient()
+                .sendAsync(request, HttpResponse.BodyHandlers.ofString())
+                .thenApply(this::createHttpResult);
+    }
+
+    @Override
+    public <T> CompletableFuture<HttpResult<T, ? extends ErrorResponse>> sendAsync(HttpRequest request, Class<T> responseClass) {
+        return createHttpClient()
+                .sendAsync(request, HttpResponse.BodyHandlers.ofString())
+                .thenApply(response -> createHttpResult(response, responseClass));
     }
 
     protected <T> HttpRequest createHttpRequest(Endpoint endpoint, String method, T object) {
@@ -92,8 +126,7 @@ public class BasicHttpClientService implements HttpClientService {
 
     private HttpRequest.Builder createRequestBuilder(Endpoint endpoint) {
         var builder = HttpRequest.newBuilder()
-                .uri(urlProvider.getEndpoint(endpoint))
-                .header("Content-Type", "application/json");
+                .uri(urlProvider.getEndpoint(endpoint));
 
         httpRequestBuilderInitializer.headers().forEach(builder::header);
         httpRequestBuilderInitializer.initialize(builder);
