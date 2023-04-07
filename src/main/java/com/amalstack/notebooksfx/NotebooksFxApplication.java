@@ -16,6 +16,7 @@ import com.amalstack.notebooksfx.di.Container;
 import com.amalstack.notebooksfx.di.Lifetime;
 import com.amalstack.notebooksfx.editor.DefaultEditorContextFactory;
 import com.amalstack.notebooksfx.editor.EditorContextFactory;
+import com.amalstack.notebooksfx.localization.ResourceNames;
 import com.amalstack.notebooksfx.nav.NavigationManager;
 import com.amalstack.notebooksfx.nav.ParentParameters;
 import com.amalstack.notebooksfx.nav.SimpleNavigationManager;
@@ -27,6 +28,7 @@ import com.amalstack.notebooksfx.util.controls.DefaultGraphicNodeProvider;
 import com.amalstack.notebooksfx.util.controls.GraphicNodeProvider;
 import com.amalstack.notebooksfx.util.http.*;
 import com.amalstack.notebooksfx.views.FxmlLocator;
+import com.amalstack.notebooksfx.views.ViewNames;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -36,7 +38,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import localization.ResourceNames;
 
 import java.util.ResourceBundle;
 import java.util.function.Supplier;
@@ -126,7 +127,7 @@ public class NotebooksFxApplication extends Application {
             initServices(container);
             initNav(container, stage);
             container.getService(NavigationManager.class)
-                    .navigateTo(Parents.AUTH, stage);
+                    .navigateTo(ViewNames.AUTH, stage);
 
             var endpointProvider = container.getService(UrlProvider.class);
             System.out.println("Notebooks::" + endpointProvider.getEndpoint(Endpoint.named(NOTEBOOKS)));
@@ -183,19 +184,19 @@ public class NotebooksFxApplication extends Application {
 
             nav.setDefaultControllerFactory(container::injectAndConstruct);
 
-            nav.addParent(ParentParameters.builder().name(Parents.HOME)
+            nav.addParent(ParentParameters.builder().name(ViewNames.HOME)
                     .fxmlUrl(FxmlLocator.getFxmlUrl("notebooks-view.fxml"))
                     .title(navResources.getString("nav.parents.notebooks.title"))
                     .resourceBundle(ResourceNames.NOTEBOOKS)
                     .build());
 
-            nav.addParent(ParentParameters.builder().name(Parents.EDITOR)
+            nav.addParent(ParentParameters.builder().name(ViewNames.EDITOR)
                     .fxmlUrl(FxmlLocator.getFxmlUrl("editor-view.fxml"))
                     .title(navResources.getString("nav.parents.editor.title"))
                     .resourceBundle(ResourceNames.EDITOR)
                     .build());
 
-            nav.addParent(ParentParameters.builder().name(Parents.AUTH)
+            nav.addParent(ParentParameters.builder().name(ViewNames.AUTH)
                     .fxmlUrl(FxmlLocator.getFxmlUrl("auth-view.fxml"))
                     .title(navResources.getString("nav.parents.auth.title"))
                     .resourceBundle(ResourceNames.AUTH)
