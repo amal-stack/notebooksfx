@@ -67,53 +67,6 @@ public class HttpBasicAuthenticationService implements AuthenticationService {
     }
 
 
-//    @Override
-//    public Result registerUser(UserRegistration user) {
-//        var request = HttpRequest.newBuilder()
-//                .uri(endpointProvider.getEndpoint(RouteNames.USERS))
-//                .header("Content-Type", "application/json")
-//                .POST(HttpRequest.BodyPublishers.ofString(jsonMapper.toJson(user)))
-//                .build();
-//
-//        var response = httpClient.send(request, User.class);
-//        if (HttpResponseUtil.isSuccessful(response)) {
-//            User createdUser = jsonMapper.fromJson(response.body(), User.class);
-//            return Result.success(createdUser);
-//        }
-//
-//        ErrorResponse error = jsonMapper.fromJson(response.body(), ErrorResponse.class);
-//        return Result.failure(error);
-//    }
-
-//    @Override
-//    public Result authenticate(String username, char[] password) {
-//        String authorizationHeader = HttpBasicAuthorizationHeader.create(username, password);
-//        Arrays.fill(password, ' ');
-//
-//        var request = HttpRequest.newBuilder()
-//                .uri(endpointProvider.getEndpoint(RouteName.of(RouteNames.USERS)))
-//                .header("Authorization", authorizationHeader)
-//                .GET()
-//                .build();
-//
-//        HttpResponse<String> response = sendHttpRequest(request);
-//        if (HttpResponseUtil.isSuccessful(response)) {
-//            User user = jsonMapper.fromJson(response.body(), User.class);
-//            authentication = Authentication.forUser(user, authorizationHeader);
-//
-//            return Result.success(user);
-//        }
-//        String body = response.body();
-//        if (body == null || body.isBlank()) {
-//
-//        }
-//        authentication = Authentication.ANONYMOUS;
-//
-//        ErrorResponse error = jsonMapper.fromJson(response.body(), ErrorResponse.class);
-//        return Result.failure(error);
-//    }
-
-
     static class HttpBasicAuthorizationHeader {
         public static String PREFIX = "Basic ";
 
@@ -127,4 +80,3 @@ public class HttpBasicAuthenticationService implements AuthenticationService {
         }
     }
 }
-
