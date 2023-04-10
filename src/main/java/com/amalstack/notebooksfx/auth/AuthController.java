@@ -1,6 +1,7 @@
 package com.amalstack.notebooksfx.auth;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.VBox;
@@ -23,6 +24,9 @@ public class AuthController {
     private TabPane actionTabPane;
 
     @FXML
+    private ProgressIndicator authProgressIndicator;
+
+    @FXML
     private LoginController loginViewController;
 
     @FXML
@@ -30,10 +34,13 @@ public class AuthController {
 
     public void initialize() {
         signUpViewController.setOnSignUpSuccess(this::onSignUpSuccess);
+        authProgressIndicator.visibleProperty()
+                .bind(loginViewController.taskInProgressProperty()
+                        .or(signUpViewController.taskInProgressProperty()));
     }
 
     private void onSignUpSuccess() {
-        // Se,ect Login tab
+        // Select Login tab
         actionTabPane.getSelectionModel().select(loginTab);
     }
 }
