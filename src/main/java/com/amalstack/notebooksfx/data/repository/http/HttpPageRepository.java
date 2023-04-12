@@ -58,7 +58,7 @@ public class HttpPageRepository implements PageRepository {
     public Page create(PageInput pageInput) {
         Endpoint endpoint = Endpoint.named(PAGES);
 
-        return httpClient.send(endpoint, "POST", pageInput, Page.class)
+        return httpClient.post(endpoint, pageInput, Page.class)
                 .getObjectOrThrow();
     }
 

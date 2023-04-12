@@ -52,7 +52,7 @@ public class HttpNotebookRepository implements NotebookRepository {
     @Override
     public Notebook create(NotebookInput notebookInput) {
         var endpoint = Endpoint.named(NOTEBOOKS);
-        return httpClient.send(endpoint, "POST", notebookInput, Notebook.class)
+        return httpClient.post(endpoint, notebookInput, Notebook.class)
                 .getObjectOrThrow();
     }
 
